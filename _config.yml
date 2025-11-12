@@ -4,8 +4,8 @@ remote_theme: just-the-docs/just-the-docs
 title: SK Rookies AI 보안 학습 로드맵
 description: AI 기반 사이버 보안 전문가를 위한 심화 학습 과정
 
-# 다크 모드 적용
-color_scheme: dark
+# 보안 커스텀 색상 테마 적용
+color_scheme: security
 
 # 검색 기능 활성화
 search_enabled: true
@@ -18,6 +18,14 @@ aux_links:
 # 페이지 하단 설정
 footer_content: "Copyright &copy; 2025 SK Rookies AI Security. All rights reserved."
 
+# 커스텀 CSS 파일 포함
+sass:
+  style: compressed
+
 # 네비게이션 설정
 just_the_docs:
   navigation_style: "just_the_docs"
+
+# 커스텀 CSS 경로 추가 (Jekyll이 이 파일을 로드하도록 설정)
+plugins:
+  - jekyll-remote-theme
