@@ -1,3 +1,9 @@
+---
+layout: default
+title: SK Rookies 생성형 AI 사이버보안 마스터 로드맵
+nav_order: 1
+---
+
 # SK Rookies 생성형 AI 사이버보안 마스터 로드맵
 
 ## Ⅰ. 과정 목표 및 개요
