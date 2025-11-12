@@ -1,7 +1,23 @@
 remote_theme: just-the-docs/just-the-docs
 
-title: 나의 학습 로드맵
-description: Gemini와 함께하는 개발 공부
+# 보안 테마 설정
+title: SK Rookies AI 보안 학습 로드맵
+description: AI 기반 사이버 보안 전문가를 위한 심화 학습 과정
 
+# 다크 모드 적용
+color_scheme: dark
+
+# 검색 기능 활성화
+search_enabled: true
+
+# 보조 링크 (GitHub 등)
+aux_links:
+  "GitHub Repository":
+    - "//github.com/suabaek/study"
+
+# 페이지 하단 설정
+footer_content: "Copyright &copy; 2025 SK Rookies AI Security. All rights reserved."
+
+# 네비게이션 설정
 just_the_docs:
   navigation_style: "just_the_docs"
