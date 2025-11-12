@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "[마스터 프롬프트: 'SK쉴더스 루키즈' 전문가 과정 콘텐츠 생성]"
-nav_order: 2
+nav_exclude: true
 ---
 
 # [마스터 프롬프트: 'SK쉴더스 루키즈' 전문가 과정 콘텐츠 생성]

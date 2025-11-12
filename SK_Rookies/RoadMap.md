@@ -1,7 +1,7 @@
 ---
 layout: default
 title: SK Rookies 생성형 AI 사이버보안 마스터 로드맵
-nav_order: 1
+nav_exclude: true
 ---
 
 # SK Rookies 생성형 AI 사이버보안 마스터 로드맵

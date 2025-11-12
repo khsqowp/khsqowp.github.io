@@ -1,7 +1,7 @@
 remote_theme: just-the-docs/just-the-docs
 
 # 보안 테마 설정
-title: SK Rookies AI 보안 학습 로드맵
+title: 에브리DAI
 description: AI 기반 사이버 보안 전문가를 위한 심화 학습 과정
 
 # 보안 커스텀 색상 테마 적용
@@ -16,7 +16,7 @@ aux_links:
     - "//github.com/suabaek/study"
 
 # 페이지 하단 설정
-footer_content: "Copyright &copy; 2025 SK Rookies AI Security. All rights reserved."
+footer_content: "Copyright &copy; 2025 에브리DAI. All rights reserved."
 
 # 커스텀 CSS 파일 포함
 sass:
