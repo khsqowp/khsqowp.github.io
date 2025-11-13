@@ -122,7 +122,7 @@ GitHub Discussions를 통한 질문과 토론
 
 ## 🏆 학습 경로
 
-```mermaid
+<div class="mermaid">
 graph TD
     A[시작] --> B[1. AI 기본 역량]
     B --> C[2. 보안 기본 역량]
@@ -145,7 +145,7 @@ graph TD
     style A fill:#cba6f7
     style F fill:#a6e3a1
     style E fill:#f9e2af
-```
+</div>
 
 ---
 
