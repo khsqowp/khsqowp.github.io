@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://khsqowp.github.io/sitemap.xml
+
+# 크롤링 제외할 경로들
+Disallow: /assets/
+Disallow: /_sass/
+Disallow: /add_frontmatter.py

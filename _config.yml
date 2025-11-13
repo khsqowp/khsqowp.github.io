@@ -29,3 +29,10 @@ just_the_docs:
 # 커스텀 CSS 경로 추가 (Jekyll이 이 파일을 로드하도록 설정)
 plugins:
   - jekyll-remote-theme
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO 설정
+url: "https://khsqowp.github.io"
+baseurl: ""
+lang: ko_KR
