@@ -120,35 +120,6 @@ GitHub Discussions를 통한 질문과 토론
 
 ---
 
-## 🏆 학습 경로
-
-<div class="mermaid">
-graph TD
-    A["시작"] --> B["1. AI 기본 역량"]
-    B --> C["2. 보안 기본 역량"]
-    C --> D["3. 응용 기술 심화"]
-    D --> E["4. 실무 프로젝트"]
-    E --> F["보안 전문가"]
-
-    B --> B1["파이썬"]
-    B --> B2["ML/DL"]
-
-    C --> C1["네트워크"]
-    C --> C2["클라우드"]
-    C --> C3["애플리케이션"]
-    C --> C4["개인정보보호"]
-
-    D --> D1["AI 보안관제"]
-    D --> D2["악성코드 분석"]
-    D --> D3["취약점 진단"]
-
-    style A fill:#cba6f7
-    style F fill:#a6e3a1
-    style E fill:#f9e2af
-</div>
-
----
-
 <div style="text-align: center; padding: 3rem 0; background: var(--ctp-surface0); border-radius: 12px; margin: 2rem 0;">
   <h2 style="color: var(--ctp-mauve);">🚀 지금 바로 시작하세요!</h2>
   <p style="color: var(--ctp-subtext0); margin: 1rem 0 2rem 0;">AI와 보안의 융합, 함께 성장하는 여정</p>
