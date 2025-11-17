@@ -1,0 +1,260 @@
+import keyword
+
+
+month = 10
+year = 2025
+keywordList = keyword.kwlist
+
+print(keywordList)
+
+# 기본 변수 바인딩
+
+year = "2025"
+month = 10
+
+#함수 호출
+print(year, month)
+
+#변수 타입 확인을 위한 함수 - type()
+print('year type - ', type(year))
+
+name = "김한수"
+
+print(name, type(name))
+
+print('010' , '1234' , '5678', sep="-")
+
+print('kknd03255' , 'gamail.com', sep='@')
+
+#Sequence = list type
+#[] - 순서가 있는 열거형 (Array는 안됨)
+#indexing, slicing, concatenation, 반복
+
+print('indexing - ', keywordList[0])
+print('slicing = ', keywordList[0:5])
+
+#text sequence
+print(name)
+print('indexing - ', name[0], type(name[0]))
+print('slicing - ', name[0:2], type(name[0:2]))
+
+#Mapping(key, value)
+# dict, {}
+# 파이썬에서는 dict이지만, 웹으로 나가면 json이 된다.
+#key와 분류를 구분하는 기호 : (콜론)
+#인덱싱이 불가능하고 key를 통해서 데이터에 접근
+
+log = {
+    'SQL Injection' : {
+        "정의" : "사용자 입력을 적절히 검증하지 않고 데이터베이스 쿼리에 직접 포함하는것",
+        "용어" : [
+            "입력검증", "파라미터화", "블라인드", "에러기반"
+        ],
+        "취약 코드 예시" :"query = select * from table",
+        "공격 예시" : "user = admin or 1=1",
+        "탐지" : [
+            "웹 취약점 스캐너 사용", "비정상적인 쿼리", "오류 모니터링"
+        ]
+    }
+}
+print(log)
+print('type - ' , type(log))
+print(log["SQL Injection"]["용어"], type(log["SQL Injection"]["용어"]))
+
+#집합(tuple)
+# 기본적으로 () 사용
+# 불변성 (immutable)
+
+tupleTemp = (1)
+print('type - ', type(tupleTemp))
+#이렇게 하면 int 타입이 된다.
+#튜플로 나오기 위해서는
+tupleTemp = (1,)
+tupleTemp2 = "a","b","c" #소괄호에 대한 생략도 가능(packing)
+print(tupleTemp)
+print(tupleTemp2)
+print('type - ', type(tupleTemp2))
+print('type - ', type(tupleTemp))
+
+a, b, c = tupleTemp2
+print('unpacking - ', a, b, c)
+
+#indexing, slicing 가능
+print('indexing - ', tupleTemp2[0])
+print('slicing - ', tupleTemp2[0:2])
+
+tupleTemp2 = "a","b","c","d","e"
+print('slicing - ', tupleTemp2[0 : : 2]) #2칸씩 건너뛰기
+
+
+#Text Sequence
+#문자열
+
+strTemp = 'Talk is cheap. Show me the code.'
+print(strTemp)
+#시퀀스로 표현하는 이유 -> 인덱싱과 슬라이싱이 가능하기 때문
+
+print(strTemp, type(strTemp))
+print('indexing - ', strTemp[0])
+listTemp = strTemp.split(' ')
+print('indexing - ', listTemp[-1])
+print(listTemp)
+print(type(listTemp))
+
+print(listTemp[0 : : 2])
+
+strEx = '홀짝홀짝홀짝홀짝홀짝홀짝홀짝홀짝홀짝홀짝'
+print(strEx[::2])  #홀수번째 문자만 출력
+print(strEx[1::2]) #짝수번째 문자만 출력
+
+#집합(set)
+# {}
+# dict와 비슷하게 생겼지만, key와 value가 없다.
+# 순서가 없고, 중복을 허용하지 않는다.
+
+userRoles ={"admin", "user", "guest"}
+print(userRoles)
+print('type - ', type(userRoles))
+userRoles.add("user")
+print(userRoles)
+
+
+empSet = set()
+print( dir (empSet))
+print('type - ', type(empSet))
+
+#add method 데이터 추가
+empSet.add("user")
+empSet.add("guest")
+empSet.add("admin")
+print('data - ', empSet)
+empSet.discard('guest')
+print('data - ', empSet)
+empSet.remove('admin')
+print('data - ', empSet)
+
+#집합은 연산도 가능하다(합집합, 교집합, 차집합)
+adminRoles = {"read", "write", "delete", "update"}
+userroles = {"read", "comment"}
+print('type - ', type(adminRoles))
+print('type - ', type(userroles))
+print('합집합 - ', adminRoles | userroles)
+print('교집합 - ', adminRoles & userroles)
+print('차집합 - ', adminRoles - userroles)
+print('대칭 차집합 - ', adminRoles ^ userroles)
+
+#보안 관점에서 set() 활용할 방안을 생각해본다면?
+# 중복 로그인 감지( 토큰 또는 세션을 관리)
+
+userTokens = set()
+
+def login(token):
+    if token in userTokens:
+        raise ValueError(f"[보안경고] 이미 로그인중 : {token}")
+    userTokens.add(token)
+    print(f"{token} 로그인 성공")
+
+userTokens.add('jslim')
+userTokens.add('sk')
+userTokens.add('jslim') #중복 허용 X
+# 연산자(oprator) : in, not in
+
+fruits = ['apple', 'banana', 'durian', 'orange']
+
+print('orange' in fruits)  #True
+if 'apple' in fruits:    #내부적으로 리스트를 전체 스캔 -> 맨 끝에 있을 경우 시간이 오래 걸린다(리소스를 많이 먹음) / 따라서 사용자 중복 로그인 방지는 set으로 처리하는게 좋다.
+    print('apple 있음')
+else:
+    print('apple 없음')
+
+
+
+#출력 형식 정리
+userInfo = {
+    'name' : "jslim",
+    'age' : '20'
+}
+
+print('name ', userInfo['name'])
+print('age ', userInfo['age'])
+
+role = "admin"
+print('문자열 연결(+) ', "Hello " + role + "!!")
+
+# f - string() -> 버전별 문제 가능 3.6버전부터 출시
+# {} 안에 변수나 표현식을 넣어서 사용
+
+name = "sk"
+score = 95.1234
+print(f"name : {name}")
+print(f"score : {score}", type(score))
+print(f"name : {name} , score : {score:.2f}") #소수점 두자리까지 출력
+
+#str.format() 지원
+lang = 'python'
+version = 3.13
+
+print("language : {}, version : {}".format(lang, version))
+print("language : {0}, version : {1}".format(lang, version))
+print("language : {a}, version : {b}".format(a = lang, b = version))
+
+#서식 지정 연산자
+print('language : %s, version : %.2fcm' % (lang, version))
+
+data = "Hello \n Python"
+print(data)
+print(str(data))
+print(repr(data))
+
+#형변환 함수
+strTemp = '100'
+print(strTemp, 'type - ', type(int(strTemp)))
+
+# 다중 라인 출력
+query = f"""select *
+        from table
+        shere id = admin or 1=1 """
+
+print(query)
+
+# 숫자 포맷
+
+num = 1234567.8912
+print(f"{num:,}") #천단위로 구분
+print("-------")
+print(f"{num:20.2f}")
+
+print(f"{num:>20.2f}")
+print(f"{num:<20.2f}")
+print(f"{num:020.2f}")
+
+
+#보안 관점에서 로그를 적용
+
+loginUser = {
+    'type' : 'guest',
+    'ip' : '192.168.0.10',
+    'event' : 'LOGIN_ACCESS'
+}
+
+logLst = []
+print('type - ', type(logLst))
+print('dir - ', dir(logLst))
+
+logLst.append(loginUser)
+logLst.append(loginUser)
+print(logLst)
+
+logMsg = f"[ALTER] User={logLst[0]['type']}, IP={logLst[0]['ip']}, event = {logLst[0]['event']}"
+print(logMsg)
+logMsg = f"[ALTER] User={logLst[1]['type']}, IP={logLst[1]['ip']}, event = {logLst[1]['event']}"
+print(logMsg)
+
+# boolean 또는 bool 참(true), 거짓(false)
+
+isLoggedIn = True
+print(isLoggedIn)
+hasPermission = False
+print(hasPermission)
+
+print(int(hasPermission))
