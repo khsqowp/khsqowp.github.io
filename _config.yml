@@ -1,30 +1,14 @@
-remote_theme: just-the-docs/just-the-docs
+remote_theme: nielsenramon/chalk
 
 # 보안 테마 설정
 title: 에브리DAI
 description: AI 기반 사이버 보안 전문가를 위한 심화 학습 과정
-
-# 보안 커스텀 색상 테마 적용
-color_scheme: security
-
-# 검색 기능 활성화
-search_enabled: true
-
-# 보조 링크 (GitHub 등)
-aux_links:
-  "GitHub Repository":
-    - "//github.com/suabaek/study"
-
-# 페이지 하단 설정
-footer_content: "Copyright &copy; 2025 에브리DAI. All rights reserved."
 
 # 커스텀 CSS 파일 포함
 sass:
   style: compressed
 
 # 네비게이션 설정
-just_the_docs:
-  navigation_style: "just_the_docs"
 
 # 커스텀 CSS 경로 추가 (Jekyll이 이 파일을 로드하도록 설정)
 plugins:
