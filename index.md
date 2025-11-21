@@ -25,31 +25,52 @@ nav_exclude: true
 
 ## 📚 목차
 
-### 🤖 1. AI 기본 역량
+### 📖 SK_Rookies (예측)
+**체계화된 학습 로드맵 - 전체 커리큘럼 예상 구조**
+
+#### 🤖 1. AI 기본 역량
 Python, 머신러닝/딥러닝 기초부터 보안 데이터 분석까지
 
-- **[1-1. 파이썬](SK_Rookies/1_AI_기본_역량/1-1_파이썬/)** - 보안 자동화와 데이터 처리 기초
-- **[1-2. 머신러닝/딥러닝](SK_Rookies/1_AI_기본_역량/1-2_머신러닝_딥러닝/)** - AI 기반 위협 탐지 모델 구축
+- **[1-1. 파이썬](SK_Rookies/SK_Rookies/1_AI_기본_역량/1-1_파이썬/)** - 보안 자동화와 데이터 처리 기초
+- **[1-2. 머신러닝/딥러닝](SK_Rookies/SK_Rookies/1_AI_기본_역량/1-2_머신러닝_딥러닝/)** - AI 기반 위협 탐지 모델 구축
 
-### 🛡️ 2. 보안 기본 역량
+#### 🛡️ 2. 보안 기본 역량
 네트워크부터 클라우드, 애플리케이션 보안까지 핵심 지식 체계
 
-- **[2-1. 네트워크 보안](SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/)** - 프로토콜 분석, 공격/방어, 보안 솔루션
-- **[2-2. 클라우드 보안](SK_Rookies/2_보안_기본_역량/2-2_클라우드_보안/)** - IAM, VPC, 위협 대응
-- **[2-3. 애플리케이션 보안](SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/)** - OWASP TOP 10, 시큐어 코딩, SAST/DAST
-- **[2-4. 개인정보보호](SK_Rookies/2_보안_기본_역량/2-4_개인정보보호/)** - 법규 준수와 보호조치
+- **[2-1. 네트워크 보안](SK_Rookies/SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/)** - 프로토콜 분석, 공격/방어, 보안 솔루션
+- **[2-2. 클라우드 보안](SK_Rookies/SK_Rookies/2_보안_기본_역량/2-2_클라우드_보안/)** - IAM, VPC, 위협 대응
+- **[2-3. 애플리케이션 보안](SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/)** - OWASP TOP 10, 시큐어 코딩, SAST/DAST
+- **[2-4. 개인정보보호](SK_Rookies/SK_Rookies/2_보안_기본_역량/2-4_개인정보보호/)** - 법규 준수와 보호조치
 
-### 🚀 3. 응용 기술 심화
+#### 🚀 3. 응용 기술 심화
 AI와 보안 기술을 실전 문제에 적용
 
-- **[3-1. AI 보안관제](SK_Rookies/3_응용_기술_심화/3-1_AI_보안관제_및_로그_분석/)** - SIEM, 로그 분석, 자연어 질의응답
-- **[3-2. 악성코드 분석](SK_Rookies/3_응용_기술_심화/3-2_악성코드_분석_및_대응/)** - 리버스 엔지니어링, AI 분류, Yara Rule 생성
-- **[3-3. 취약점 진단](SK_Rookies/3_응용_기술_심화/3-3_취약점_진단_및_모의해킹/)** - AI 모의해킹, 공격/방어 코드 생성
+- **[3-1. AI 보안관제](SK_Rookies/SK_Rookies/3_응용_기술_심화/3-1_AI_보안관제_및_로그_분석/)** - SIEM, 로그 분석, 자연어 질의응답
+- **[3-2. 악성코드 분석](SK_Rookies/SK_Rookies/3_응용_기술_심화/3-2_악성코드_분석_및_대응/)** - 리버스 엔지니어링, AI 분류, Yara Rule 생성
+- **[3-3. 취약점 진단](SK_Rookies/SK_Rookies/3_응용_기술_심화/3-3_취약점_진단_및_모의해킹/)** - AI 모의해킹, 공격/방어 코드 생성
 
-### 💼 4. 실무 프로젝트
+#### 💼 4. 실무 프로젝트
 종합 프로젝트 수행과 전문가 멘토링
 
-- **[4-1. 최종 프로젝트](SK_Rookies/4_실무_프로젝트/4-1_최종_프로젝트/)** - 기획부터 발표까지 전 과정 실습
+- **[4-1. 최종 프로젝트](SK_Rookies/SK_Rookies/4_실무_프로젝트/4-1_최종_프로젝트/)** - 기획부터 발표까지 전 과정 실습
+- **[4-2. 모듈 프로젝트](SK_Rookies/SK_Rookies/4_실무_프로젝트/)** - AI 기본 역량 통합 실습
+
+---
+
+### 🔥 SK_Rookies (현재)
+**실제 수강 중인 강의 내용 정리**
+
+#### 🐍 Python
+실시간 강의 노트 및 실습 자료
+
+- **[보안 파이썬 (Secure Python)](SK_Rookies_Now/python/)** - 10/24 ~ 10/31 강의 노트
+- **[NumPy & Pandas 데이터 분석](SK_Rookies_Now/python/)** - 11/3 ~ 11/7 강의 노트
+- **[LLM & LangChain](SK_Rookies_Now/python/)** - 11/10 ~ 11/12 강의 노트
+
+#### 🐧 Linux & Network
+네트워크 및 시스템 보안 기초
+
+- **[Linux & Network 기초](SK_Rookies_Now/linux:network/)** - 실습 자료 및 노트
 
 ---
 
@@ -123,7 +144,7 @@ GitHub Discussions를 통한 질문과 토론
 <div style="text-align: center; padding: 3rem 0; background: var(--ctp-surface0); border-radius: 12px; margin: 2rem 0;">
   <h2 style="color: var(--ctp-mauve);">🚀 지금 바로 시작하세요!</h2>
   <p style="color: var(--ctp-subtext0); margin: 1rem 0 2rem 0;">AI와 보안의 융합, 함께 성장하는 여정</p>
-  <a href="SK_Rookies/1_AI_기본_역량/1-1_파이썬/1. 파이썬 기초 문법.html" style="display: inline-block; padding: 1rem 2rem; background: var(--ctp-mauve); color: var(--ctp-base); border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;">
+  <a href="SK_Rookies/SK_Rookies/1_AI_기본_역량/1-1_파이썬/1. 파이썬 기초 문법.html" style="display: inline-block; padding: 1rem 2rem; background: var(--ctp-mauve); color: var(--ctp-base); border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;">
     학습 시작하기 →
   </a>
 </div>
