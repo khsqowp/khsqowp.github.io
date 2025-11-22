@@ -2,6 +2,9 @@
 title: 에브리DAI
 description: AI 기반 사이버 보안 전문가를 위한 심화 학습 과정
 
+# GitHub repository 설정
+repository: khsqowp/khsqowp.github.io
+
 # 커스텀 CSS 파일 포함
 sass:
   style: compressed
