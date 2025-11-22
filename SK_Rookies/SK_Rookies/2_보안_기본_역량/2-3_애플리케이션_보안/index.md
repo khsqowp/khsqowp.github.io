@@ -13,13 +13,13 @@ has_children: true
 ## 학습 내용
 
 ### 기초 과정
-1. [웹 취약점 (OWASP TOP 10)_기초](1.%20웹%20취약점%20(OWASP%20TOP%2010)_기초.md)
-2. [시큐어 코딩_기초](2.%20시큐어%20코딩_기초.md)
-3. [보안 분석 (SAST, DAST)_기초](3.%20보안%20분석%20(SAST,%20DAST)_기초.md)
-4. [모의해킹 실습_기초](4.%20모의해킹_실습_기초.md)
+1. [웹 취약점 (OWASP TOP 10) (기초편)]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/1. 웹 취약점 (OWASP TOP 10)_기초.md %})
+2. [시큐어 코딩 (기초편)]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/2. 시큐어 코딩_기초.md %})
+3. [보안 분석 (SAST, DAST) (기초편)]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/3. 보안 분석 (SAST, DAST)_기초.md %})
+4. [모의해킹 실습 (기초편)]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/4. 모의해킹_실습_기초.md %})
 
 ### 심화 과정
-1. [웹 취약점 (OWASP TOP 10)](1.%20웹%20취약점%20(OWASP%20TOP%2010).md)
-2. [시큐어 코딩](2.%20시큐어%20코딩.md)
-3. [보안 분석 (SAST, DAST)](3.%20보안%20분석%20(SAST,%20DAST).md)
-4. [모의해킹 실습](4.%20모의해킹_실습.md)
+1. [웹 취약점 (OWASP TOP 10)]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/1. 웹 취약점 (OWASP TOP 10).md %})
+2. [시큐어 코딩]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/2. 시큐어 코딩.md %})
+3. [보안 분석 (SAST, DAST)]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/3. 보안 분석 (SAST, DAST).md %})
+4. [모의해킹 실습]({% link SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/4. 모의해킹_실습.md %})
