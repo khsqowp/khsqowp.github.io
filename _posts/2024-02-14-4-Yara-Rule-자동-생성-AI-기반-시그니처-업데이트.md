@@ -1,9 +1,11 @@
 ---
+
 layout: post
 title: " 4. Yara Rule 자동 생성: AI 기반 시그니처 업데이트"
 date: 2024-02-14 09:00:00 +0900
-categories: 응용 기술 심화 2 악성코드 분석 및 대응
+categories: [ai-fundamentals, ml-dl]
 tags: [AI, Cybersecurity, SK-Rookies]
+
 ---
 
 # 📄 4. Yara Rule 자동 생성: AI 기반 시그니처 업데이트

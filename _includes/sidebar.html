@@ -34,16 +34,11 @@
 
 <div class="sidebar-item sidebar-nav">
   	<ul class="nav">
-			<li class="nav-title">Categories</li>
-	    {% for category in site.categories %}
-	    <li>
-	    	<a class="nav-item" href="{{ root_url }}/{{ site.category_dir }}#{{ category | first }}">
-				<span class="name">{{ category | first }}</span>
-				<span class="badge">{{ category | last | size }}</span>
-	    	</a>
- 		</li>
-	    {% endfor %}
-	  </nav>
+		<li class="nav-title">Categories</li>
+		<li><a class="nav-item" href="/category/ai-fundamentals/">AI 기본 역량</a></li>
+		<li><a class="nav-item" href="/category/security-fundamentals/">보안 기본 역량</a></li>
+		<li><a class="nav-item" href="/category/advanced-applications/">응용 기술 심화</a></li>
+		<li><a class="nav-item" href="/category/projects/">실무 프로젝트</a></li>
 	</ul>
 </div>
 
