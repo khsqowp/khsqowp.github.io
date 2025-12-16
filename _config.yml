@@ -1,16 +1,29 @@
 # 사이트 설정
 title: 에브리DAI
 description: AI 기반 사이버 보안 전문가를 위한 심화 학습 과정
+email: your-email@example.com
 
 # GitHub repository 설정
 repository: khsqowp/khsqowp.github.io
+github_username: khsqowp
 
-# 빌드에서 제외할 파일 (Liquid 구문 충돌)
+# SEO 설정
+url: "https://khsqowp.github.io"
+baseurl: ""
+lang: ko_KR
+
+# Monos 테마 설정
+highlighter: rouge
+highlighter-theme: monokai
+date_format: "%Y-%m-%d"
+
+# 빌드에서 제외할 파일
 exclude:
   - SK_Rookies_Now/
   - vendor/
   - Gemfile
   - Gemfile.lock
+  - jekyll-theme-monos-master/
 
 # 커스텀 CSS 파일 포함
 sass:
@@ -18,10 +31,14 @@ sass:
 
 # 플러그인
 plugins:
+  - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
 
-# SEO 설정
-url: "https://khsqowp.github.io"
-baseurl: ""
-lang: ko_KR
+# 카테고리 및 태그 디렉토리
+category_dir: category/
+tag_dir: tag/
+
+# SVG 최적화
+svg:
+  optimize: true
