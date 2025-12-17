@@ -1,6 +1,6 @@
 ---
 layout: category
-title: 파이썬
+title: Python
 category: python
 permalink: /category/python/
 ---

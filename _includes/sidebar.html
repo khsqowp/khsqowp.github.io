@@ -35,28 +35,53 @@
 <div class="sidebar-item sidebar-nav">
   	<ul class="nav">
 		<li class="nav-title">Categories</li>
-		{%- assign ai_count = 0 -%}
+		{%- assign python_count = 0 -%}
+		{%- assign llm_count = 0 -%}
+		{%- assign data_count = 0 -%}
+		{%- assign cloud_count = 0 -%}
+		{%- assign aws_count = 0 -%}
+		{%- assign linux_count = 0 -%}
+		{%- assign network_count = 0 -%}
 		{%- assign security_count = 0 -%}
-		{%- assign advanced_count = 0 -%}
-		{%- assign project_count = 0 -%}
+		{%- assign course_count = 0 -%}
 		{%- for post in site.posts -%}
-		  {%- if post.categories contains 'ai-fundamentals' or post.categories contains 'python' or post.categories contains 'ml-dl' -%}
-		    {%- assign ai_count = ai_count | plus: 1 -%}
+		  {%- if post.categories contains 'python' or post.categories contains 'basics' -%}
+		    {%- assign python_count = python_count | plus: 1 -%}
 		  {%- endif -%}
-		  {%- if post.categories contains 'security-fundamentals' or post.categories contains 'network-security' or post.categories contains 'cloud-security' or post.categories contains 'application-security' or post.categories contains 'privacy' -%}
+		  {%- if post.categories contains 'llm' -%}
+		    {%- assign llm_count = llm_count | plus: 1 -%}
+		  {%- endif -%}
+		  {%- if post.categories contains 'data-analysis' -%}
+		    {%- assign data_count = data_count | plus: 1 -%}
+		  {%- endif -%}
+		  {%- if post.categories contains 'cloud' or post.categories contains 'networking' -%}
+		    {%- assign cloud_count = cloud_count | plus: 1 -%}
+		  {%- endif -%}
+		  {%- if post.categories contains 'aws' -%}
+		    {%- assign aws_count = aws_count | plus: 1 -%}
+		  {%- endif -%}
+		  {%- if post.categories contains 'linux' or post.categories contains 'system-security' -%}
+		    {%- assign linux_count = linux_count | plus: 1 -%}
+		  {%- endif -%}
+		  {%- if post.categories contains 'network' or post.categories contains 'fundamentals' -%}
+		    {%- assign network_count = network_count | plus: 1 -%}
+		  {%- endif -%}
+		  {%- if post.categories contains 'security' -%}
 		    {%- assign security_count = security_count | plus: 1 -%}
 		  {%- endif -%}
-		  {%- if post.categories contains 'advanced-applications' or post.categories contains 'ai-soc-logs' or post.categories contains 'malware-analysis' or post.categories contains 'pentesting' -%}
-		    {%- assign advanced_count = advanced_count | plus: 1 -%}
-		  {%- endif -%}
-		  {%- if post.categories contains 'projects' or post.categories contains 'final-project' -%}
-		    {%- assign project_count = project_count | plus: 1 -%}
+		  {%- if post.categories contains 'course' or post.categories contains 'orientation' -%}
+		    {%- assign course_count = course_count | plus: 1 -%}
 		  {%- endif -%}
 		{%- endfor -%}
-		<li><a class="nav-item" href="/category/ai-fundamentals/">AI 기본 역량 <span class="badge">({{ ai_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/security-fundamentals/">보안 기본 역량 <span class="badge">({{ security_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/advanced-applications/">응용 기술 심화 <span class="badge">({{ advanced_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/projects/">실무 프로젝트 <span class="badge">({{ project_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/python/">Python <span class="badge">({{ python_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/llm/">LLM & AI <span class="badge">({{ llm_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/data-analysis/">데이터 분석 <span class="badge">({{ data_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/cloud/">클라우드 <span class="badge">({{ cloud_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/aws/">AWS <span class="badge">({{ aws_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/linux/">Linux <span class="badge">({{ linux_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/network/">네트워크 <span class="badge">({{ network_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/security/">보안 <span class="badge">({{ security_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/course/">과정 안내 <span class="badge">({{ course_count }})</span></a></li>
 	</ul>
 </div>
 
