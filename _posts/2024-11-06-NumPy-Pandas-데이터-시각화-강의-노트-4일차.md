@@ -2,7 +2,7 @@
 layout: post
 title: "NumPy & Pandas 데이터 시각화 강의 노트 (4일차)"
 date: 2024-11-06 09:00:00 +0900
-categories: [python, data-analysis]
+categories: [python]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

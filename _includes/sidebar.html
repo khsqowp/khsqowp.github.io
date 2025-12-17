@@ -17,18 +17,6 @@
 	  <li>
 	  	<a class="nav-item" href="/">Articles</a>
 	  </li>
-	  {% assign pages_list = site.pages %}
-	  {% for node in pages_list %}
-	    {% if node.title != null %}
-	      {% if node.layout == "page" %}
-	        <li>
-	        	<a class="nav-item" href="{{ node.url }}">
-	            	{{ node.title }}
-	            </a>
-	        </li>
-	      {% endif %}
-	    {% endif %}
-	  {% endfor %}
 	</ul>
 </div>
 
@@ -36,52 +24,29 @@
   	<ul class="nav">
 		<li class="nav-title">Categories</li>
 		{%- assign python_count = 0 -%}
-		{%- assign llm_count = 0 -%}
-		{%- assign data_count = 0 -%}
-		{%- assign cloud_count = 0 -%}
-		{%- assign aws_count = 0 -%}
-		{%- assign linux_count = 0 -%}
-		{%- assign network_count = 0 -%}
-		{%- assign security_count = 0 -%}
-		{%- assign course_count = 0 -%}
+		{%- assign linux_network_count = 0 -%}
+		{%- assign linux_network_additional_count = 0 -%}
+		{%- assign application_security_count = 0 -%}
+
 		{%- for post in site.posts -%}
-		  {%- if post.categories contains 'python' or post.categories contains 'basics' -%}
+		  {%- if post.categories contains 'python' -%}
 		    {%- assign python_count = python_count | plus: 1 -%}
 		  {%- endif -%}
-		  {%- if post.categories contains 'llm' -%}
-		    {%- assign llm_count = llm_count | plus: 1 -%}
+		  {%- if post.categories contains 'linux-network' -%}
+		    {%- assign linux_network_count = linux_network_count | plus: 1 -%}
 		  {%- endif -%}
-		  {%- if post.categories contains 'data-analysis' -%}
-		    {%- assign data_count = data_count | plus: 1 -%}
+		  {%- if post.categories contains 'linux-network-추가학습' -%}
+		    {%- assign linux_network_additional_count = linux_network_additional_count | plus: 1 -%}
 		  {%- endif -%}
-		  {%- if post.categories contains 'cloud' or post.categories contains 'networking' -%}
-		    {%- assign cloud_count = cloud_count | plus: 1 -%}
-		  {%- endif -%}
-		  {%- if post.categories contains 'aws' -%}
-		    {%- assign aws_count = aws_count | plus: 1 -%}
-		  {%- endif -%}
-		  {%- if post.categories contains 'linux' or post.categories contains 'system-security' -%}
-		    {%- assign linux_count = linux_count | plus: 1 -%}
-		  {%- endif -%}
-		  {%- if post.categories contains 'network' or post.categories contains 'fundamentals' -%}
-		    {%- assign network_count = network_count | plus: 1 -%}
-		  {%- endif -%}
-		  {%- if post.categories contains 'security' -%}
-		    {%- assign security_count = security_count | plus: 1 -%}
-		  {%- endif -%}
-		  {%- if post.categories contains 'course' or post.categories contains 'orientation' -%}
-		    {%- assign course_count = course_count | plus: 1 -%}
+		  {%- if post.categories contains 'application-security' -%}
+		    {%- assign application_security_count = application_security_count | plus: 1 -%}
 		  {%- endif -%}
 		{%- endfor -%}
+
 		<li><a class="nav-item" href="/category/python/">Python <span class="badge">({{ python_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/llm/">LLM & AI <span class="badge">({{ llm_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/data-analysis/">데이터 분석 <span class="badge">({{ data_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/cloud/">클라우드 <span class="badge">({{ cloud_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/aws/">AWS <span class="badge">({{ aws_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/linux/">Linux <span class="badge">({{ linux_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/network/">네트워크 <span class="badge">({{ network_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/security/">보안 <span class="badge">({{ security_count }})</span></a></li>
-		<li><a class="nav-item" href="/category/course/">과정 안내 <span class="badge">({{ course_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/linux-network/">Linux & Network <span class="badge">({{ linux_network_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/linux-network-추가학습/">Linux & Network 추가학습 <span class="badge">({{ linux_network_additional_count }})</span></a></li>
+		<li><a class="nav-item" href="/category/application-security/">Application Security <span class="badge">({{ application_security_count }})</span></a></li>
 	</ul>
 </div>
 

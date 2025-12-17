@@ -2,7 +2,7 @@
 layout: post
 title: "LLM & LangChain 정규표현식 및 보안 대시보드 개발 강의 노트 (3일차)"
 date: 2024-11-12 09:00:00 +0900
-categories: [general]
+categories: [python]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 
