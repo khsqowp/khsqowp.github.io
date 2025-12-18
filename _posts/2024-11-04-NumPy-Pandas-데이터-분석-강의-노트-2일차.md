@@ -1438,6 +1438,7 @@ print("\n--- AI 요약 요청 페이로드 ---")
 print(ai_request_payload)
 
 # AI의 응답을 가정하고 파싱 (실제로는 API 호출)
+{% raw %}
 ai_response_json = f'''
 {{
     "summary": "Key insights from recent sales data:",
@@ -1446,6 +1447,7 @@ ai_response_json = f'''
     "recommendation": "Focus marketing efforts on top spenders and ensure adequate stock of best-selling products."
 }}
 '''
+{% endraw %}
 
 summary_report = json.loads(ai_response_json)
 

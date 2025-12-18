@@ -518,6 +518,7 @@ reservation = """
 
 ### 해결 방법 1: 프롬프트 엔지니어링
 
+{% raw %}
 ```python
 chat = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
 
@@ -536,6 +537,7 @@ chain = LLMChain(llm=chat, prompt=prompt)
 response = chain.run(reservation=reservation)
 print('response -', response)
 ```
+{% endraw %}
 
 #### 💻 코드 실행 상세 분석
 
@@ -552,7 +554,7 @@ print('response -', response)
 **3단계 (출력 예시 제공)**:
 - 구체적인 JSON 구조를 예시로 보여줍니다.
 - 이렇게 하면 AI가 원하는 형식을 정확히 이해할 수 있습니다.
-- 중괄호를 이중으로 `{{` 쓰는 이유는 Python 문자열 포맷팅에서 중괄호가 특수 문자이므로 이스케이프하기 위함입니다.
+- 중괄호를 이중으로 {% raw %}`{{`{% endraw %} 쓰는 이유는 Python 문자열 포맷팅에서 중괄호가 특수 문자이므로 이스케이프하기 위함입니다.
 
 **4단계 (변수 주입)**:
 - `{reservation}` 자리에 실제 예약 데이터가 삽입됩니다.
