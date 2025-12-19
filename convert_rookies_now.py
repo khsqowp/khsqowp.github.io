@@ -10,15 +10,30 @@ from pathlib import Path
 
 def extract_date_from_filename(filename):
     """파일명에서 날짜 추출"""
-    # 10-23), 11-24), 12-01) 형식 찾기
+    # 1. 10-23), 11-24) 형식 찾기
     match = re.search(r'(\d{1,2})[:-](\d{1,2})\)', filename)
     if match:
         month = int(match.group(1))
         day = int(match.group(2))
-        # 2024년으로 고정
         year = 2024
         return datetime(year, month, day, 9, 0, 0)
-    return None
+    
+    # 2. ChapterXX, PhaseXX 처리 (임의의 날짜 할당)
+    # AWS 추가학습 (Chapter) -> 2024-12-20 부터
+    match_ch = re.search(r'Chapter(\d+)', filename)
+    if match_ch:
+        num = int(match_ch.group(1))
+        # 1~11일까지 가능 (31일)
+        return datetime(2024, 12, 20 + num, 9, 0, 0)
+
+    # Phase (Phase) -> 2024-12-30 부터
+    match_ph = re.search(r'Phase(\d+)', filename)
+    if match_ph:
+        num = int(match_ph.group(1))
+        return datetime(2024, 12, 30, 9, 0, num) # 시간으로 구분
+
+    # 3. 기타 파일 (기본값 또는 현재 날짜)
+    return datetime(2025, 1, 1, 9, 0, 0)
 
 def extract_title_from_content(content):
     """파일 내용에서 제목 추출"""

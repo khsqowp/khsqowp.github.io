@@ -2,7 +2,7 @@
 layout: post
 title: "Secure Python Day 04 강의 노트 (4일차)"
 date: 2024-10-30 09:00:00 +0900
-categories: [python]
+categories: [python, basics]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

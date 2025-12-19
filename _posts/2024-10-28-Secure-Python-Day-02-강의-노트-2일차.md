@@ -2,7 +2,7 @@
 layout: post
 title: "Secure Python Day 02 강의 노트 (2일차)"
 date: 2024-10-28 09:00:00 +0900
-categories: [python]
+categories: [python, data-analysis]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

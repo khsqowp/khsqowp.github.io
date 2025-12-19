@@ -2,7 +2,7 @@
 layout: post
 title: "LLM & Langchain 강의 노트 (1일차)"
 date: 2024-11-10 09:00:00 +0900
-categories: [python]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

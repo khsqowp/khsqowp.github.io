@@ -2,7 +2,7 @@
 layout: post
 title: "NumPy & Pandas Day 3 강의 노트 (11월 5일)"
 date: 2024-11-05 09:00:00 +0900
-categories: [python]
+categories: [python, data-analysis]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 
