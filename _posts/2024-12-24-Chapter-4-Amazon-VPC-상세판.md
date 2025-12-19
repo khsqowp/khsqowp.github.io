@@ -2,7 +2,7 @@
 layout: post
 title: "Chapter 4: Amazon VPC (상세판)"
 date: 2024-12-24 09:00:00 +0900
-categories: [cloud, networking]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

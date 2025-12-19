@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 4-2: 네트워크 모니터링 (Network Monitoring)"
 date: 2024-12-30 09:00:04 +0900
-categories: [network, security]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

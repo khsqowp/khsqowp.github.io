@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 1-1: 네트워크 아키텍처 (Network Architecture)"
 date: 2024-12-30 09:00:01 +0900
-categories: [network, fundamentals]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

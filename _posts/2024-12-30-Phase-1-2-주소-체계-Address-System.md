@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 1-2: 주소 체계 (Address System)"
 date: 2024-12-30 09:00:01 +0900
-categories: [network, security]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

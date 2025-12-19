@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 3-1: 방화벽 (Firewall)"
 date: 2024-12-30 09:00:03 +0900
-categories: [network, security]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

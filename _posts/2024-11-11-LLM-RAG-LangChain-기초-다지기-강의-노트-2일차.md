@@ -2,7 +2,7 @@
 layout: post
 title: "LLM, RAG, LangChain 기초 다지기 강의 노트 (2일차)"
 date: 2024-11-11 09:00:00 +0900
-categories: [general]
+categories: [python]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

@@ -2,7 +2,7 @@
 layout: post
 title: "NumPy & Pandas 데이터 분석 강의 노트 (2일차)"
 date: 2024-11-04 09:00:00 +0900
-categories: [python, data-analysis]
+categories: [python]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 
@@ -1439,12 +1439,12 @@ print(ai_request_payload)
 
 # AI의 응답을 가정하고 파싱 (실제로는 API 호출)
 ai_response_json = f'''
-{% raw %}{{
+{{
     "summary": "Key insights from recent sales data:",
     "top_customer_insight": "User #{ai_request_data['top_spender_id']} is the highest spender with ${ai_request_data['top_spender_amount']:.2f}.",
     "top_product_insight": "The product '{ai_request_data['top_product_name']}' is the best-seller with {ai_request_data['top_product_quantity']} units sold.",
     "recommendation": "Focus marketing efforts on top spenders and ensure adequate stock of best-selling products."
-}}{% endraw %}
+}}
 '''
 
 summary_report = json.loads(ai_response_json)

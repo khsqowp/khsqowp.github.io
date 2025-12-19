@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 4-1: 패킷 분석 (Packet Analysis)"
 date: 2024-12-30 09:00:04 +0900
-categories: [network, fundamentals]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

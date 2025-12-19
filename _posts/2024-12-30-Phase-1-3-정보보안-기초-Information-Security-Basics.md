@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 1-3: 정보보안 기초 (Information Security Basics)"
 date: 2024-12-30 09:00:01 +0900
-categories: [network, security]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

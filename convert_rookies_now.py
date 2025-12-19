@@ -56,68 +56,19 @@ def sanitize_slug(title):
     title = re.sub(r'\s+', '-', title.strip())
     return title[:100]  # 너무 길면 자르기
 
-def determine_category(filename, content):
-    """파일명과 내용으로 카테고리 결정"""
-    filename_lower = filename.lower()
-    content_lower = content.lower()[:1000]
-
-    # Python 관련
-    if 'python' in filename_lower or 'secure python' in content_lower or 'numpy' in content_lower or 'pandas' in content_lower:
-        if 'llm' in content_lower or 'langchain' in content_lower or 'rag' in content_lower:
-            return ['python', 'llm']
-        elif 'numpy' in content_lower or 'pandas' in content_lower or '데이터' in content_lower:
-            return ['python', 'data-analysis']
-        elif 'streamlit' in content_lower or '시각화' in content_lower:
-            return ['python', 'visualization']
-        else:
-            return ['python', 'basics']
-
-    # Linux & Network 관련
-    elif 'linux' in filename_lower or '리눅스' in content_lower:
-        if 'aws' in content_lower or '클라우드' in content_lower:
-            return ['cloud', 'aws']
-        elif 'vpc' in content_lower or 'iam' in content_lower:
-            return ['cloud', 'aws-security']
-        else:
-            return ['linux', 'system-security']
-
-    # Network 관련
-    elif 'network' in filename_lower or '네트워크' in content_lower or 'tcp' in content_lower:
-        if 'aws' in content_lower:
-            return ['cloud', 'networking']
-        elif '보안' in content_lower or 'security' in content_lower:
-            return ['network', 'security']
-        else:
-            return ['network', 'fundamentals']
-
-    # AWS 관련
-    elif 'aws' in filename_lower or 'aws' in content_lower:
-        if 'vpc' in content_lower or '네트워킹' in content_lower:
-            return ['cloud', 'networking']
-        elif 'iam' in content_lower or '보안' in content_lower:
-            return ['cloud', 'security']
-        elif 's3' in content_lower or 'rds' in content_lower or '데이터' in content_lower:
-            return ['cloud', 'services']
-        else:
-            return ['cloud', 'aws']
-
-    # 보안 공격 관련
-    elif 'spoofing' in filename_lower or 'dos' in filename_lower or 'ddos' in filename_lower:
-        return ['security', 'attacks']
-
-    # 보안 방어 관련
-    elif 'firewall' in filename_lower or 'ids' in filename_lower or 'ips' in filename_lower or 'vpn' in filename_lower:
-        return ['security', 'defense']
-
-    # 패킷 분석
-    elif 'packet' in filename_lower or '패킷' in content_lower or 'wireshark' in content_lower:
-        return ['network', 'analysis']
-
-    # 오리엔테이션
-    elif '오리엔테이션' in content_lower or 'orientation' in filename_lower:
-        return ['course', 'orientation']
-
-    # 기본
+def determine_category(filename, content, parent_dir_name):
+    """상위 디렉토리명을 기반으로 카테고리 결정"""
+    
+    if parent_dir_name == '01_python':
+        return ['python']
+    elif parent_dir_name == '02_linux-network':
+        return ['linux-network']
+    elif parent_dir_name == '추가학습': # 02_linux-network/추가학습
+        return ['linux-network-study']
+    elif parent_dir_name == '03_application-security':
+        return ['application-security']
+    
+    # 기본값 (매칭되지 않는 경우)
     return ['general']
 
 def convert_file_to_post(source_file, posts_dir):
@@ -141,7 +92,8 @@ def convert_file_to_post(source_file, posts_dir):
             title = re.sub(r'\(\d+일차\)', '', title).strip()
 
         # 카테고리 결정
-        categories = determine_category(source_file.name, content)
+        parent_dir_name = source_file.parent.name
+        categories = determine_category(source_file.name, content, parent_dir_name)
 
         # Slug 생성
         slug = sanitize_slug(title)

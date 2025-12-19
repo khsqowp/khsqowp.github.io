@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 2-3: 세션 하이재킹 (Session Hijacking)"
 date: 2024-12-30 09:00:02 +0900
-categories: [network, security]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

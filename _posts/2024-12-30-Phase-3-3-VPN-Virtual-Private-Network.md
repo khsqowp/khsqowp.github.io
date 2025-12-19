@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 3-3: VPN (Virtual Private Network)"
 date: 2024-12-30 09:00:03 +0900
-categories: [network, security]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

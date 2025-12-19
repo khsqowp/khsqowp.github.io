@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 2-4: 서비스 거부 공격 (DoS/DDoS)"
 date: 2024-12-30 09:00:02 +0900
-categories: [network, fundamentals]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

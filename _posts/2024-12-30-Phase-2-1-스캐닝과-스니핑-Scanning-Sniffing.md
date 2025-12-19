@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 2-1: 스캐닝과 스니핑 (Scanning & Sniffing)"
 date: 2024-12-30 09:00:02 +0900
-categories: [network, security]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 

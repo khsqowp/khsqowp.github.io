@@ -2,7 +2,7 @@
 layout: post
 title: "Phase 3-2: 침입 탐지/차단 시스템 (IDS/IPS)"
 date: 2024-12-30 09:00:03 +0900
-categories: [network, fundamentals]
+categories: [general]
 tags: [SK-Rookies, Lecture-Notes]
 ---
 
