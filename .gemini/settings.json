@@ -1,0 +1,31 @@
+{
+  "general": {
+    "previewFeatures": true
+  },
+  "context": {
+    "project_overview": "This project is a Jekyll-based technical blog hosted on GitHub Pages. It serves as a repository for lecture notes and study materials covering Python, Linux, Network Security, AWS, and Application Security. The content is primarily derived from the 'SK Rookies' training program.",
+    "current_status": "The blog structure has been recently updated. New lecture notes from the 'SK_Rookies_Now' directory have been converted and added to '_posts'. Categories have been fixed to resolve 404 errors, and post dates have been normalized to ensure correct sorting.",
+    "recent_changes": [
+      "Converted all markdown files from 'SK_Rookies_Now' to '_posts' using 'convert_rookies_now.py'.",
+      "Fixed 404 errors on category pages by adding permalinks to 'category/*.md' files.",
+      "Updated 'category.md' to list all available categories.",
+      "Normalized post dates for 'Chapter' and 'Phase' files to ensure proper chronological order.",
+      "Fixed a Liquid syntax error in '_posts/2024-11-04-NumPy-Pandas-데이터-분석-강의-노트-2일차.md' caused by double curly braces in a Python f-string.",
+      "Fixed additional Liquid syntax errors in multiple files ('2024-11-12', '2024-12-10', '2024-10-24') where double curly braces were used in code blocks or explanations, preventing Jekyll build failures."
+    ],
+    "file_structure_insights": {
+      "_posts": "Contains all blog posts. Filenames must follow 'YYYY-MM-DD-title.md' format.",
+      "category": "Contains individual markdown files for each category (e.g., 'python.md', 'linux-network.md'). These define the category pages.",
+      "SK_Rookies_Now": "Source directory for raw lecture notes. These should be processed and moved to '_posts'.",
+      "convert_rookies_now.py": "Script to automate the conversion of notes from 'SK_Rookies_Now' to '_posts', handling date extraction and front matter generation."
+    },
+    "gemini_handover": {
+      "instructions": [
+        "When adding new content from 'SK_Rookies_Now', always use 'convert_rookies_now.py' or similar logic to ensure consistent formatting and date assignment.",
+        "If creating a new category, ensure a corresponding file exists in the 'category/' directory with the correct 'permalink'.",
+        "Be cautious with double curly braces '{{ }}' in markdown files, especially within code blocks, as Jekyll's Liquid engine may misinterpret them. Use '{% raw %}' and '{% endraw %}' to escape them if necessary.",
+        "When encountering Liquid syntax errors, check for unescaped '{{' or '}}' patterns, especially in Python f-strings, JSON examples, or GitHub Actions YAML snippets."
+      ]
+    }
+  }
+}

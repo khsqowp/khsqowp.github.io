@@ -1,0 +1,188 @@
+{
+  "main": {
+    "id": "7b64e08b9af0bce6",
+    "type": "split",
+    "children": [
+      {
+        "id": "e69817fb3f4a8c5c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4741e2369acbc7c4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/1. 웹 취약점 (OWASP TOP 10).md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "1. 웹 취약점 (OWASP TOP 10)"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5725d7c577e07915",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "7a9b70fd89c61a15",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": true
+          },
+          "icon": "lucide-folder-closed",
+          "title": "파일 탐색기"
+        }
+      },
+      {
+        "id": "6c3a2facfe96c046",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "검색"
+        }
+      },
+      {
+        "id": "43020ec781302221",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-tags",
+          "title": "태그"
+        }
+      },
+      {
+        "id": "7661893c5c623067",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {},
+          "icon": "lucide-bookmark",
+          "title": "북마크"
+        }
+      }
+    ],
+    "currentTab": 0,
+    "pinned": true
+  },
+  "right": {
+    "id": "19284ba3f031b1fb",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "0ebb61dcdc1b57c6",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/1. 웹 취약점 (OWASP TOP 10).md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "백링크"
+        }
+      },
+      {
+        "id": "6c6d3cabe7d812ab",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "2025_10_15/My_Knowledge_Vault/SK_Shieldus/대단원 1: 인공지능 및 프로그래밍 기반 역량/중단원 1.1: Python 기반 프로그래밍 심화/소단원 1.1.2: 객체 지향 프로그래밍(OOP) 및 고급 문법.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-going-out",
+          "title": "나가는 링크"
+        }
+      },
+      {
+        "id": "e7ae74a24820db21",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "2025_10_15/My_Knowledge_Vault/SK_Shieldus/대단원 1: 인공지능 및 프로그래밍 기반 역량/중단원 1.1: Python 기반 프로그래밍 심화/소단원 1.1.2: 객체 지향 프로그래밍(OOP) 및 고급 문법.md",
+            "followCursor": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-list",
+          "title": "개요"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "4741e2369acbc7c4",
+  "lastOpenFiles": [
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-2_클라우드_보안/3. 네트워크 격리 (VPC).md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-2_클라우드_보안/3. 네트워크 격리 (VPC)_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-2_클라우드_보안/2. 계정 및 접근 관리 (IAM).md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-2_클라우드_보안/1. 클라우드 컴퓨팅과 보안_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-2_클라우드_보안/1. 클라우드 컴퓨팅과 보안.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/4. 보안 솔루션_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/3. 네트워크 공격과 방어_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/2. 주요 프로토콜 분석_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/1. 네트워크 기초_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/2. 주요 프로토콜 분석.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-1_네트워크_보안/1. 네트워크 기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/4. 모의해킹_실습_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/4. 모의해킹_실습.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/3. 보안 분석 (SAST, DAST)_기초.md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/3. 보안 분석 (SAST, DAST).md",
+    "SK_Rookies/SK_Rookies/2_보안_기본_역량/2-3_애플리케이션_보안/1. 웹 취약점 (OWASP TOP 10).md",
+    "SK_Rookies_Now/03_application-security/12:19) 웹_애플리케이션_보안_20251219_강의노트.md",
+    "SK_Rookies_Now/linux-network/12:04) AWS클라우드2일차_IAM및VPC기초_20251204_강의노트.md",
+    "SK_Rookies_Now/linux-network/12:05)aws_vpc_networking_complete_lecture_notes.md",
+    "SK_Rookies_Now/linux-network/11:28) TCP_IP_네트워크_보안_20251130_강의노트_최종본.md",
+    "SK_Rookies_Now/linux-network/12:01) 리눅스시스템_네트워크_보안_20241201_강의노트.md",
+    "SK_Rookies_Now/linux-network/12:02) 네트워크보안_프로토콜분석_20251202_강의노트.md",
+    "SK_Rookies_Now/linux-network/12:03) AWS_Cloud_Computing_LectureNotes_20251203.md",
+    "SK_Rookies_Now/linux-network/추가학습/Phase1_1_Network_Architecture.md",
+    "SK_Rookies_Now/linux-network/추가학습/아카이브.zip",
+    "SK_Rookies_Now/linux-network/11:25) Linux시스템보안_사용자관리_파일권한_20241125_강의노트.md",
+    "SK_Rookies_Now/linux-network/11:24) 리눅스시스템_네트워크_보안_20241124_강의노트.md"
+  ]
+}
