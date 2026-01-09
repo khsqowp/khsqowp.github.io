@@ -23,6 +23,7 @@ author:
 
 # Plugins
 plugins:
+  - jekyll-remote-theme # 추가됨
   - jekyll-include-cache
   - jekyll-paginate
   - jekyll-sitemap
