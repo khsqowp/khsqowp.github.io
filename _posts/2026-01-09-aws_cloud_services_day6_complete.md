@@ -6119,7 +6119,7 @@ mainSteps:
     inputs:
       Service: s3
       Api: PutPublicAccessBlock
-      Bucket: '{% raw %}{{ BucketName }}{% endraw %}'
+      Bucket: '&#123;% raw %&#125;&#123;&#123; BucketName &#125;&#125;&#123;% endraw %&#125;'
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         IgnorePublicAcls: true

@@ -1206,19 +1206,19 @@ $ aws s3api put-bucket-intelligent-tiering-configuration \
 $ aws s3api restore-object \
     --bucket glacier-bucket \
     --key archive/old-data.zip \
-    --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Expedited"}}'
+    --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Expedited"&#125;&#125;'
 
 # 표준 복원 (3~5시간, 중간 비용)
 $ aws s3api restore-object \
     --bucket glacier-bucket \
     --key archive/old-data.zip \
-    --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Standard"}}'
+    --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Standard"&#125;&#125;'
 
 # 대량 복원 (5~12시간, 최저 비용)
 $ aws s3api restore-object \
     --bucket glacier-bucket \
     --key archive/old-data.zip \
-    --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Bulk"}}'
+    --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Bulk"&#125;&#125;'
 ```
 
 #### Deep Archive 복원
@@ -1228,7 +1228,7 @@ $ aws s3api restore-object \
 $ aws s3api restore-object \
     --bucket deep-archive-bucket \
     --key compliance/2020/audit.zip \
-    --restore-request '{"Days":14,"GlacierJobParameters":{"Tier":"Standard"}}'
+    --restore-request '{"Days":14,"GlacierJobParameters":{"Tier":"Standard"&#125;&#125;'
 
 # 복원 상태 확인
 $ aws s3api head-object \
@@ -5604,7 +5604,7 @@ $ aws dynamodb batch-write-item \
 # 단일 아이템 조회 (get-item)
 $ aws dynamodb get-item \
     --table-name Users \
-    --key '{"UserID": {"S": "user001"}}'
+    --key '{"UserID": {"S": "user001"&#125;&#125;'
 
 # 출력
 {
@@ -5621,7 +5621,7 @@ $ aws dynamodb get-item \
 $ aws dynamodb query \
     --table-name Orders \
     --key-condition-expression "UserID = :uid" \
-    --expression-attribute-values '{":uid": {"S": "user001"}}'
+    --expression-attribute-values '{":uid": {"S": "user001"&#125;&#125;'
 
 # 범위 쿼리 (Sort Key 사용)
 $ aws dynamodb query \
@@ -5637,7 +5637,7 @@ $ aws dynamodb query \
 $ aws dynamodb scan \
     --table-name Users \
     --filter-expression "Age > :age" \
-    --expression-attribute-values '{":age": {"N": "25"}}'
+    --expression-attribute-values '{":age": {"N": "25"&#125;&#125;'
 ```
 
 ⚠️ **Query vs Scan**:
@@ -5650,7 +5650,7 @@ $ aws dynamodb scan \
 # 아이템 업데이트
 $ aws dynamodb update-item \
     --table-name Users \
-    --key '{"UserID": {"S": "user001"}}' \
+    --key '{"UserID": {"S": "user001"&#125;&#125;' \
     --update-expression "SET Age = :age, Email = :email" \
     --expression-attribute-values '{
         ":age": {"N": "29"},
@@ -5661,14 +5661,14 @@ $ aws dynamodb update-item \
 # 속성 추가
 $ aws dynamodb update-item \
     --table-name Users \
-    --key '{"UserID": {"S": "user001"}}' \
+    --key '{"UserID": {"S": "user001"&#125;&#125;' \
     --update-expression "SET PhoneNumber = :phone" \
-    --expression-attribute-values '{":phone": {"S": "010-1234-5678"}}'
+    --expression-attribute-values '{":phone": {"S": "010-1234-5678"&#125;&#125;'
 
 # 속성 삭제
 $ aws dynamodb update-item \
     --table-name Users \
-    --key '{"UserID": {"S": "user001"}}' \
+    --key '{"UserID": {"S": "user001"&#125;&#125;' \
     --update-expression "REMOVE PhoneNumber"
 ```
 
@@ -5678,14 +5678,14 @@ $ aws dynamodb update-item \
 # 아이템 삭제
 $ aws dynamodb delete-item \
     --table-name Users \
-    --key '{"UserID": {"S": "user001"}}'
+    --key '{"UserID": {"S": "user001"&#125;&#125;'
 
 # 조건부 삭제 (Conditional Delete)
 $ aws dynamodb delete-item \
     --table-name Users \
-    --key '{"UserID": {"S": "user001"}}' \
+    --key '{"UserID": {"S": "user001"&#125;&#125;' \
     --condition-expression "Age > :age" \
-    --expression-attribute-values '{":age": {"N": "30"}}'
+    --expression-attribute-values '{":age": {"N": "30"&#125;&#125;'
 ```
 
 ### 4.6 용량 모드 (Capacity Mode)
@@ -5923,7 +5923,7 @@ $ mysql -h my-mysql-db.c9akciq32.ap-northeast-2.rds.amazonaws.com \
 # DynamoDB는 기본적으로 HTTPS (TLS 1.2+) 사용
 $ aws dynamodb get-item \
     --table-name Users \
-    --key '{"UserID": {"S": "user001"}}' \
+    --key '{"UserID": {"S": "user001"&#125;&#125;' \
     --endpoint-url https://dynamodb.ap-northeast-2.amazonaws.com
 ```
 

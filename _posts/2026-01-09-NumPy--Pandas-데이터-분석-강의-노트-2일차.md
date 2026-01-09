@@ -1440,12 +1440,12 @@ print(ai_request_payload)
 
 # AI의 응답을 가정하고 파싱 (실제로는 API 호출)
 ai_response_json = f'''
-{% raw %}{{
+&#123;% raw %&#125;&#123;&#123;
     "summary": "Key insights from recent sales data:",
     "top_customer_insight": "User #{ai_request_data['top_spender_id']} is the highest spender with ${ai_request_data['top_spender_amount']:.2f}.",
     "top_product_insight": "The product '{ai_request_data['top_product_name']}' is the best-seller with {ai_request_data['top_product_quantity']} units sold.",
     "recommendation": "Focus marketing efforts on top spenders and ensure adequate stock of best-selling products."
-}}{% endraw %}
+&#125;&#125;&#123;% endraw %&#125;
 '''
 
 summary_report = json.loads(ai_response_json)
