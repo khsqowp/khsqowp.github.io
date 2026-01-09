@@ -1,7 +1,8 @@
 ---
 title: "complete_lecture_notes_20251218"
 date: 2025-12-18
-permalink: /posts/2025/12/18/complete_lecture_notes_20251218/
+categories:
+  - App-Security
 tags:
   - App-Security
   - SK_Rookies

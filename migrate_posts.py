@@ -14,7 +14,7 @@ CATEGORY_MAP = {
     '02_linux-network': 'Linux-Network',
     '03_cloud-aws': 'AWS-Cloud',
     '04_application-security': 'App-Security',
-    '05_privacy-security': 'Privacy-Security', # 새로 추가된 폴더
+    '05_privacy-security': 'Privacy-Security', 
     '98_mini_pjt_2': 'Project'
 }
 
@@ -60,10 +60,12 @@ def process_files():
                 content = f.read()
             
             if not content.startswith('---'):
+                # permalink 제거, categories 추가
                 front_matter = f"""---
 title: "{clean_title.replace('-', ' ')}"
 date: {date_str}
-permalink: /posts/{date_str.replace('-', '/')}/{clean_title}/
+categories:
+  - {category}
 tags:
   - {category}
   - SK_Rookies

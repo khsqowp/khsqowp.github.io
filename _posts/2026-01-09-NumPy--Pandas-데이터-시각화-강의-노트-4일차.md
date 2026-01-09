@@ -1,7 +1,8 @@
 ---
 title: "NumPy  Pandas 데이터 시각화 강의 노트 4일차"
 date: 2026-01-09
-permalink: /posts/2026/01/09/NumPy--Pandas-데이터-시각화-강의-노트-4일차/
+categories:
+  - Python
 tags:
   - Python
   - SK_Rookies

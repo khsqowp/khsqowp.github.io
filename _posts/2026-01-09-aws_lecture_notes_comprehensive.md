@@ -1,7 +1,8 @@
 ---
 title: "aws_lecture_notes_comprehensive"
 date: 2026-01-09
-permalink: /posts/2026/01/09/aws_lecture_notes_comprehensive/
+categories:
+  - AWS-Cloud
 tags:
   - AWS-Cloud
   - SK_Rookies

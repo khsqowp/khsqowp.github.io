@@ -1,7 +1,8 @@
 ---
 title: "LLM  Langchain 강의 노트 1일차"
 date: 2026-01-09
-permalink: /posts/2026/01/09/LLM--Langchain-강의-노트-1일차/
+categories:
+  - Python
 tags:
   - Python
   - SK_Rookies

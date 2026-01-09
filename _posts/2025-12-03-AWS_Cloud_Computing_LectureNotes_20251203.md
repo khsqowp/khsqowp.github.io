@@ -1,7 +1,8 @@
 ---
 title: "AWS_Cloud_Computing_LectureNotes_20251203"
 date: 2025-12-03
-permalink: /posts/2025/12/03/AWS_Cloud_Computing_LectureNotes_20251203/
+categories:
+  - AWS-Cloud
 tags:
   - AWS-Cloud
   - SK_Rookies

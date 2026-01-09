@@ -1,7 +1,8 @@
 ---
 title: "LLM RAG LangChain 기초 다지기 강의 노트 2일차"
 date: 2026-01-09
-permalink: /posts/2026/01/09/LLM-RAG-LangChain-기초-다지기-강의-노트-2일차/
+categories:
+  - Python
 tags:
   - Python
   - SK_Rookies

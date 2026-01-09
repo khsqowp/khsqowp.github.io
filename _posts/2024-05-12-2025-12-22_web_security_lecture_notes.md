@@ -1,7 +1,8 @@
 ---
 title: "2025 12 22_web_security_lecture_notes"
 date: 2024-05-12
-permalink: /posts/2024/05/12/2025-12-22_web_security_lecture_notes/
+categories:
+  - App-Security
 tags:
   - App-Security
   - SK_Rookies

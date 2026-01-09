@@ -1,7 +1,8 @@
 ---
 title: "Secure Python Day 강의 노트 4일차"
 date: 2026-01-09
-permalink: /posts/2026/01/09/Secure-Python-Day-강의-노트-4일차/
+categories:
+  - Python
 tags:
   - Python
   - SK_Rookies
