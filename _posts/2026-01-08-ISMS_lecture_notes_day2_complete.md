@@ -2,17 +2,13 @@
 ---
 title: "📝 ISMS 정보보호 관리체계 인증 컨설팅 강의 노트 (2일차)"
 date: 2026-01-08
-excerpt: "ISMS 정보보호 관리체계(위험 관리, 보호대책 요구사항)를 심층 학습합니다."
+excerpt: "**강의 일자**: 2026년 1월 8일 (수요일)"
 categories:
   - Consulting-Governance
 tags:
   - Consulting-Governance
   - SK_Rookies
 ---
-
-- Consulting-Governance
-  - Consulting-Governance
-  - SK_Rookies
 
 # 📝 ISMS 정보보호 관리체계 인증 컨설팅 강의 노트 (2일차)
 

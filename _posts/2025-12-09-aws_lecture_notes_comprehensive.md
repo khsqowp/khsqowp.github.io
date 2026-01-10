@@ -2,17 +2,13 @@
 ---
 title: "📝 AWS 클라우드 서비스 종합 강의 노트 (Day N)"
 date: 2025-12-09
-excerpt: "AWS 컴퓨팅, 스토리지, 네트워크, 데이터베이스 서비스 종합 정리 및 실무 팁을 공유합니다."
+excerpt: "**강의 일자**: 2025년 12월 9일"
 categories:
   - AWS-Cloud
 tags:
   - AWS-Cloud
   - SK_Rookies
 ---
-
-- AWS-Cloud
-  - AWS-Cloud
-  - SK_Rookies
 
 # 📝 AWS 클라우드 서비스 종합 강의 노트 (Day N)
 

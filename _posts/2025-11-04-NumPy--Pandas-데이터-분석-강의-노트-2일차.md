@@ -2,17 +2,13 @@
 ---
 title: "📝 NumPy & Pandas 데이터 분석 강의 노트 (2일차)"
 date: 2025-11-04
-excerpt: "Pandas의 핵심 데이터 구조인 Series와 DataFrame을 이해하고, CSV 파일 로드, 결측값(NaN) 처리, 기술 통계 분석 등 실무 데이터 분석의 기초를 다집니다."
+excerpt: "- **날짜**: 2025년 11월 4일 (월요일)"
 categories:
   - Python
 tags:
   - Python
   - SK_Rookies
 ---
-
-- Python
-  - Python
-  - SK_Rookies
 
 # 📝 NumPy & Pandas 데이터 분석 강의 노트 (2일차)
 

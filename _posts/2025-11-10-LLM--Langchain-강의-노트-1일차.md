@@ -2,17 +2,13 @@
 ---
 title: "📝 LLM & Langchain 강의 노트 (1일차)"
 date: 2025-11-10
-excerpt: "생성형 AI(Generative AI)의 핵심 기술인 LLM, LangChain, RAG의 개념을 이해하고, OpenAI API를 활용한 실습 환경을 구축합니다."
+excerpt: "**강의 날짜:** 2025년 11월 10일 (월요일)"
 categories:
   - Python
 tags:
   - Python
   - SK_Rookies
 ---
-
-- Python
-  - Python
-  - SK_Rookies
 
 # 📝 LLM & Langchain 강의 노트 (1일차)
 

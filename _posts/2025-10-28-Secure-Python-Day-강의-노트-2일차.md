@@ -2,17 +2,13 @@
 ---
 title: "📝 Secure Python Day 02 강의 노트 (2일차)"
 date: 2025-10-28
-excerpt: "파이썬 변수 타입 심화, 제어문, 함수 및 보안 코딩 기초"
+excerpt: "**강의일자**: 2025년 10월 28일"
 categories:
   - Python
 tags:
   - Python
   - SK_Rookies
 ---
-
-- Python
-  - Python
-  - SK_Rookies
 
 # 📝 Secure Python Day 02 강의 노트 (2일차)
 
