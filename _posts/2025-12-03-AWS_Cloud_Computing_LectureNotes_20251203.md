@@ -1,5 +1,6 @@
----
-title: "AWS_Cloud_Computing_LectureNotes_20251203"
+
+--- 
+title: "📝 AWS 클라우드 컴퓨팅 강의 노트 (2025-12-03)"
 date: 2025-12-03
 categories:
   - AWS-Cloud

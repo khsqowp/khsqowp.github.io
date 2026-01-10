@@ -1,5 +1,6 @@
----
-title: "complete_lecture_notes_20251218"
+
+--- 
+title: "📝 리눅스 시스템 및 웹 보안 강의 노트 (2025-12-18)"
 date: 2025-12-18
 categories:
   - App-Security

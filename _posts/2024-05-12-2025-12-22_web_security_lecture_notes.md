@@ -1,5 +1,6 @@
----
-title: "2025 12 22_web_security_lecture_notes"
+
+--- 
+title: "Section 1: 서론 및 강의 개요"
 date: 2024-05-12
 categories:
   - App-Security
