@@ -2,7 +2,7 @@
 ---
 title: "Section 1: 서론 및 강의 개요"
 date: 2024-05-12
-excerpt: "오늘 강의에서는 웹 애플리케이션 보안의 핵심 취약점들을 심층적으로 학습하고, 실제 소스 코드 분석을 통해 보안 취약점을 식별하는 방법을 배웠다. 오전과 오후 세션을 통해 SQL Injection 복습부터 XSS(Cross-Site Scripting), CSRF, ..."
+excerpt: "웹 보안 심화, 취약점 분석 방법론, 대응 방안 수립을 다룹니다."
 categories:
   - App-Security
 tags:
