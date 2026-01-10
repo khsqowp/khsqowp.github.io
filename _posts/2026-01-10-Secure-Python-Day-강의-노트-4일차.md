@@ -1,4 +1,3 @@
-
 ---
 title: "📝 Secure Python Day 04 강의 노트 (4일차)"
 date: 2026-01-10
