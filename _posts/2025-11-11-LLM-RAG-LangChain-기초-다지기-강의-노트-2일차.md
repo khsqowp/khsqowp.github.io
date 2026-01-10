@@ -1,7 +1,7 @@
 ---
 title: "📝 LLM, RAG, LangChain 기초 다지기 강의 노트 (2일차)"
 date: 2025-11-11
-excerpt: "**강의 날짜**: 2025년 11월 11일"
+excerpt: "LLM과 RAG의 개념을 심화 학습하고, 실제 보안 로그 분석 대시보드 구축을 위한 LangChain 활용법을 다룹니다."
 categories:
   - Python
 tags:

@@ -1,7 +1,7 @@
 ---
 title: "📝 LLM & LangChain 정규표현식 및 보안 대시보드 개발 강의 노트 (3일차)"
 date: 2025-11-12
-excerpt: "**강의 날짜**: 2025년 11월 12일"
+excerpt: "정규표현식을 활용하여 로그 데이터를 파싱하고, LLM과 LangChain을 연동하여 보안 위협을 분석하는 자동화 시스템을 구현합니다."
 categories:
   - Python
 tags:

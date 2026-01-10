@@ -1,7 +1,7 @@
 ---
 title: "📝 AWS VPC 네트워킹 및 ELB 강의 노트 (3일차)"
 date: 2025-12-05
-excerpt: "**강의 날짜**: 2025년 12월 5일"
+excerpt: "VPC 고급 네트워킹(Peering, Transit Gateway) 및 EC2, ELB 로드 밸런서 구성을 다룹니다."
 categories:
   - AWS-Cloud
 tags:
