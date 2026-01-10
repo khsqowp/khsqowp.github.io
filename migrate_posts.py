@@ -3,12 +3,10 @@ import re
 import shutil
 from datetime import datetime
 
-# 소스 디렉토리와 타겟 디렉토리
 SOURCE_DIR = 'SK_Rookies'
 TARGET_DIR = '_posts'
 DEFAULT_YEAR = '2024'
 
-# 디렉토리 매핑 (카테고리 태그로 사용)
 CATEGORY_MAP = {
     '01_python': 'Python',
     '02_linux-network': 'Linux-Network',
@@ -21,9 +19,7 @@ CATEGORY_MAP = {
 }
 
 def clean_filename(filename):
-    """파일명을 URL 슬러그용으로 정리"""
     name = os.path.splitext(filename)[0]
-    # 순서 번호 제거 (예: "01) ") - 정규식 안전하게 수정
     name = re.sub(r'^[0-9]+[):]\s*', '', name)
     name = re.sub(r'[()\[\]]', '', name)
     name = re.sub(r'\s+', '-', name)
@@ -31,7 +27,6 @@ def clean_filename(filename):
     return name
 
 def extract_date(content, filename):
-    """내용 또는 파일명에서 날짜 추출"""
     lines = content.split('\n')[:30]
     date_patterns = [
         r'(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일',
@@ -53,16 +48,47 @@ def extract_date(content, filename):
     return datetime.now().strftime('%Y-%m-%d')
 
 def extract_title(content, filename):
-    """내용에서 H1 제목 추출"""
     lines = content.split('\n')[:20]
     for line in lines:
         if line.lstrip().startswith('# '):
             title = line.strip().lstrip('#').strip()
-            # 특수문자 중 제목에 쓰면 안되는 것들은 제거하거나 이스케이프
             title = title.replace('"', "'") 
             return title
-            
     return clean_filename(filename).replace('-', ' ')
+
+def extract_excerpt(content):
+    """본문에서 요약문(excerpt) 추출"""
+    lines = content.split('\n')
+    excerpt = ""
+    
+    for line in lines[:20]:
+        if line.strip().startswith('>'):
+            clean_line = line.strip().lstrip('>').strip()
+            if '주제' in clean_line or '목표' in clean_line or '내용' in clean_line:
+                excerpt = clean_line
+                break
+            if len(clean_line) > 20 and ':' not in clean_line:
+                 excerpt = clean_line
+                 break
+
+    if not excerpt:
+        for line in lines[:30]:
+            clean_line = line.strip()
+            if not clean_line or clean_line.startswith('#') or clean_line.startswith('---') or clean_line.startswith('>'):
+                continue
+            if clean_line.startswith('!') or clean_line.startswith('['):
+                continue
+            
+            excerpt = clean_line
+            break
+    
+    if excerpt:
+        excerpt = re.sub(r'\*\*|__', '', excerpt)
+        excerpt = excerpt.replace('"', "'")
+        if len(excerpt) > 150:
+            excerpt = excerpt[:147] + "..."
+            
+    return excerpt
 
 def process_files():
     if os.path.exists(TARGET_DIR):
@@ -83,6 +109,7 @@ def process_files():
             
             date_str = extract_date(content, file)
             real_title = extract_title(content, file)
+            excerpt = extract_excerpt(content) 
             
             safe_slug = clean_filename(file)
             new_filename = f"{date_str}-{safe_slug}.md"
@@ -101,9 +128,10 @@ def process_files():
             body = body.replace('{%', '&#123;%').replace('%}', '%&#125;')
 
             front_matter = f"""
---- 
+---
 title: "{real_title}"
 date: {date_str}
+excerpt: "{excerpt}"
 categories:
   - {category}
 tags:
@@ -112,6 +140,7 @@ tags:
 ---
 
 """
+
             final_content = front_matter + body.lstrip()
 
             with open(target_path, 'w', encoding='utf-8') as f:
