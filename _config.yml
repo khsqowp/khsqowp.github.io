@@ -45,6 +45,7 @@ plugins:
   - jekyll-feed
   - jemoji
   - jekyll-include-cache
+  - jekyll-remote-theme # 테마 로드를 위해 필수 추가
 
 # Defaults
 permalink: /posts/:year/:month/:day/:title/
