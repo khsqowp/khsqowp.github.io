@@ -10,13 +10,16 @@ tags:
   - SK_Rookies
 ---
 
+- AWS-Cloud
+  - AWS-Cloud
+  - SK_Rookies
+
 # 📝 AWS VPC 네트워킹 및 ELB 강의 노트 (3일차)
 
 **강의 날짜**: 2025년 12월 5일
 **강의 주제**: AWS VPC 고급 네트워킹, EC2 컴퓨팅, Elastic Load Balancer
 **강사 강조 사항**: "오늘 배우는 내용은 AWS 클라우드 환경에서 가장 핵심이 되는 네트워킹과 컴퓨팅 서비스입니다. 특히 보안 업무를 담당하시는 분들에게 매우 중요한 내용이니 집중해주시기 바랍니다."
 
----
 
 ## 🎯 오늘의 학습 목표
 
@@ -60,7 +63,6 @@ tags:
 
 💡 **중요!** 강사님 강조: "앞부분에서 학습하는 내용들이 가장 베이직한 내용들입니다. 클라우드 컴퓨팅 환경을 사용한다고 했을 때 꼭 알고 계셔야만 하는 내용들을 중심으로 앞부분에 배치시켜 놨기 때문에, 시간을 많이 투자해서 복습하고 있습니다."
 
----
 
 ## 📚 Section 1: IAM (Identity and Access Management) 복습
 
@@ -77,7 +79,6 @@ tags:
 
 💡 **중요!** "보안의 시작은 사용자 관리와 권한 관리부터 시작합니다. 보안 업무를 담당하고 계시기 때문에 IAM 서비스에 대해서는 기본적인 용어와 개념을 꼭 기억해 두시는 것이 좋습니다."
 
----
 
 ### 1.2 IAM Role (역할)
 
@@ -176,7 +177,6 @@ graph TB
 5. 사용자는 임시 자격 증명을 받습니다
 6. 이 자격 증명으로 AWS 리소스에 접근할 수 있습니다
 
----
 
 #### IAM Role의 구성 요소
 
@@ -232,7 +232,6 @@ IAM Role을 정의할 때는 **두 가지 정책**을 등록해야 합니다:
 - `Action`: S3의 GetObject, PutObject 작업을 수행할 수 있습니다
 - `Resource`: `my-bucket` 버킷의 모든 객체에 대해 작업할 수 있습니다
 
----
 
 #### IAM Role의 보안 주체(Principal)
 
@@ -272,7 +271,6 @@ graph TB
 
 💡 **중요!** Role은 실제 AWS 클라우드 컴퓨팅 환경에서 **자주 사용**됩니다. 개념을 꼭 기억해주시기 바랍니다.
 
----
 
 ### 1.3 최대 권한 설정 정책
 
@@ -375,7 +373,6 @@ graph LR
    - 인프라팀: EC2, VPC 접근 가능
    - 각 팀의 권한 경계를 다르게 설정하여 관리
 
----
 
 #### 2️⃣ SCP (Service Control Policy) - 서비스 제어 정책
 
@@ -457,7 +454,6 @@ graph TB
 - Production OU SCP: S3, EC2, RDS 허용
 - **결과**: S3, EC2(삭제 제외), RDS 사용 가능
 
----
 
 #### AWS Organizations 사용 목적
 
@@ -502,7 +498,6 @@ graph TB
     style OU_Prod fill:#DDA0DD
 ```
 
----
 
 ### 1.4 계정 보안 관리
 
@@ -535,7 +530,6 @@ graph TB
 ```
 → 특정 S3 버킷의 읽기/쓰기만 허용
 
----
 
 ##### 2️⃣ 루트 사용자 관리
 
@@ -568,7 +562,6 @@ graph TB
 | **SMS MFA** | SMS로 코드 전송 | 휴대폰 문자 메시지 |
 | **Biometric** | 생체 인증 | 지문, 얼굼 인식 |
 
----
 
 ##### 3️⃣ IAM 사용자 보안 관리
 
@@ -594,7 +587,6 @@ graph TB
    - Access Key도 주기적으로 로테이션(Rotation)
    - AWS Secrets Manager를 통해 자동 로테이션 설정 가능
 
----
 
 ##### 4️⃣ 강력한 패스워드 정책
 
@@ -614,7 +606,6 @@ IAM 서비스에서 **패스워드 정책**을 설정할 수 있습니다:
 
 💡 **중요!** "IAM 서비스의 메뉴에서 이런 강력한 패스워드 정책을 설정하고 변경할 수 있습니다. 우리가 실습에서 이 메뉴를 봤었습니다."
 
----
 
 #### 계정 보안 관리 체크리스트
 
@@ -630,7 +621,6 @@ IAM 서비스에서 **패스워드 정책**을 설정할 수 있습니다:
 - [ ] 불필요한 사용자 및 Access Key 정기적으로 삭제
 - [ ] 암호 및 Access Key 주기적 교체
 
----
 
 ### 📋 Section 1 핵심 요약
 
@@ -659,7 +649,6 @@ IAM 서비스에서 **패스워드 정책**을 설정할 수 있습니다:
 
 💡 **강사 강조**: "IAM 서비스는 보안의 가장 기본이 되는 서비스입니다. 특히 보안 업무를 담당하시는 분들은 IAM Role, 권한 경계, SCP 같은 개념을 꼭 기억해 두셔야 합니다."
 
----
 
 ## 📚 Section 2: VPC (Virtual Private Cloud) 기본 개념 복습
 
@@ -675,7 +664,6 @@ IAM 서비스에서 **패스워드 정책**을 설정할 수 있습니다:
 
 💡 **중요!** "AWS 클라우드 컴퓨팅 환경에서 정보 시스템을 운영하려면 컴퓨팅 자원을 배포할 네트워크가 필요합니다. 그 네트워크가 바로 VPC입니다."
 
----
 
 ### 2.2 VPC의 주요 특징
 
@@ -716,7 +704,6 @@ graph TB
   - ap-northeast-2d
 - 고객이 원하는 가용 영역을 선택하여 서브넷을 배치할 수 있습니다
 
----
 
 #### 2️⃣ 사설 IP 주소 범위 사용
 
@@ -735,7 +722,6 @@ VPC는 **사설 IPv4 CIDR 블록**을 사용합니다.
 - `172.31.0.0/16` → 65,536개 IP 주소
 - `192.168.0.0/24` → 256개 IP 주소
 
----
 
 #### 3️⃣ CIDR 블록 중복 방지
 
@@ -773,7 +759,6 @@ graph LR
 
 💡 **강사 강조**: "가급적이면 CIDR 블록을 중복되지 않도록 관리하시는 것이 좋습니다. 나중에 사설 IP 통신을 하려고 했을 때 IP가 중복되어 있으면 통신이 안 될 수 있기 때문입니다."
 
----
 
 ### 2.3 서브넷 (Subnet)
 
@@ -797,7 +782,6 @@ graph TB
     style Sub4 fill:#F0E68C
 ```
 
----
 
 #### 서브넷 CIDR 블록 설정
 
@@ -818,7 +802,6 @@ graph TB
 | 10.100.2.0/25 | /25 | 128 | 작은 서브넷 |
 | 10.100.3.0/28 | /28 | 16 | 매우 작은 서브넷 |
 
----
 
 #### 서브넷별 IP 개수 결정
 
@@ -846,7 +829,6 @@ VPC: 10.100.0.0/16 (65,536 IPs)
 
 💡 **강사 강조**: "일반적으로 기업 환경에 가보면 퍼블릭 서브넷보다 프라이빗 서브넷이 더 많은 IP를 사용할 수 있게끔 서브넷을 나눌 때 그렇게 잡아줍니다."
 
----
 
 #### 서브넷과 가용 영역
 
@@ -884,7 +866,6 @@ graph TB
 - 가용 영역 선택 (예: ap-northeast-2a)
 - CIDR 블록 지정 (예: 10.100.1.0/24)
 
----
 
 #### 서브넷의 예약된 IP 주소
 
@@ -908,7 +889,6 @@ graph TB
 - 예약된 IP: 5개
 - **실제 사용 가능**: 256 - 5 = **251개**
 
----
 
 ### 2.4 서브넷 유형
 
@@ -931,7 +911,6 @@ graph TB
 - 사설 IP: 필수 (VPC 내부 통신용)
 - 공인 IP: 필수 (인터넷 통신용)
 
----
 
 #### 2️⃣ 프라이빗 서브넷 (Private Subnet)
 
@@ -950,7 +929,6 @@ graph TB
 - 사설 IP: 필수
 - 공인 IP: 불필요
 
----
 
 #### 퍼블릭 vs 프라이빗 서브넷 비교
 
@@ -995,7 +973,6 @@ graph TB
 
 💡 **강사 강조**: "서브넷의 네임 태그에 퍼블릭이다, 프라이빗이다 라는 용어를 넣을 필요는 없습니다. 다만 우리가 구별해주기 위해서 그런 이름을 사용하고 있을 뿐입니다. 개념적인 구분이에요."
 
----
 
 ### 📋 Section 2 핵심 요약
 
@@ -1018,7 +995,6 @@ graph TB
    - 서브넷 CIDR은 VPC CIDR의 하위 범위
    - 프라이빗 서브넷에 더 많은 IP 할당 권장
 
----
 
 ## 섹션 3: VPC 네트워킹 구성 요소
 
@@ -1033,7 +1009,6 @@ graph TB
 - 하나의 서브넷은 반드시 하나의 라우팅 테이블과 연결
 - 하나의 라우팅 테이블은 여러 서브넷에 연결 가능
 
----
 
 #### 라우팅 테이블 구성 요소
 
@@ -1059,7 +1034,6 @@ graph TB
 5. **tgw-xxxxx**: Transit Gateway
 6. **vgw-xxxxx**: Virtual Private Gateway (VPN)
 
----
 
 #### 퍼블릭 서브넷 라우팅 테이블 예시
 
@@ -1076,7 +1050,6 @@ Destination          Target
 
 💡 **핵심**: 퍼블릭 서브넷은 **0.0.0.0/0 → IGW** 경로가 반드시 존재합니다!
 
----
 
 #### 프라이빗 서브넷 라우팅 테이블 예시
 
@@ -1093,7 +1066,6 @@ Destination          Target
 
 💡 **핵심**: 프라이빗 서브넷은 **0.0.0.0/0 → NAT Gateway** 경로를 사용합니다!
 
----
 
 #### 라우팅 우선순위
 
@@ -1117,7 +1089,6 @@ Destination          Target
 
 💡 **우선순위**: `/24` > `/16` > `/0` (프리픽스 길이가 길수록 우선)
 
----
 
 ### 3.2 인터넷 게이트웨이 (Internet Gateway, IGW)
 
@@ -1135,7 +1106,6 @@ Destination          Target
 1. **NAT 기능**: 사설 IP ↔ 공인 IP 변환
 2. **라우팅**: 인터넷으로 향하는 트래픽 전달
 
----
 
 #### 인터넷 게이트웨이 동작 방식
 
@@ -1166,7 +1136,6 @@ sequenceDiagram
 
 💡 **강사 강조**: "EC2 인스턴스는 자신의 공인 IP를 직접 인식하지 못합니다. OS 레벨에서 `ifconfig`를 해보면 사설 IP만 보입니다. IGW에서 NAT 변환을 해주는 것입니다."
 
----
 
 #### 퍼블릭 서브넷 구성 요구사항
 
@@ -1198,7 +1167,6 @@ graph TB
 
 ⚠️ **주의**: 이 3가지 중 하나라도 빠지면 인터넷 통신이 불가능합니다!
 
----
 
 ### 3.3 NAT Gateway vs NAT Instance
 
@@ -1234,7 +1202,6 @@ graph LR
     style Internet fill:#FFD700
 ```
 
----
 
 #### NAT Gateway (권장)
 
@@ -1267,7 +1234,6 @@ graph LR
 - NAT Gateway 시간당 비용: 약 $0.045/시간
 - 데이터 처리 비용: $0.045/GB
 
----
 
 #### NAT Instance (레거시)
 
@@ -1303,7 +1269,6 @@ graph LR
 - EC2 인스턴스 비용 (타입에 따라 다름)
 - 일반적으로 NAT Gateway보다 저렴할 수 있음 (트래픽이 적은 경우)
 
----
 
 #### NAT Gateway vs NAT Instance 비교
 
@@ -1320,7 +1285,6 @@ graph LR
 
 💡 **강사 강조**: "NAT Gateway는 보안 그룹을 적용할 수 없습니다. 만약 외부에서 프라이빗 서브넷으로 포트 포워딩이 필요한 특수한 경우라면, NAT Instance를 사용해야 합니다. 하지만 대부분의 경우 NAT Gateway 사용을 권장합니다."
 
----
 
 #### NAT Gateway 구성 예시
 
@@ -1369,7 +1333,6 @@ Destination          Target
 3. NAT Gateway → Internet Gateway → 인터넷
 4. 응답 트래픽: 인터넷 → IGW → NAT Gateway → App Server
 
----
 
 ### 3.4 보안 그룹 (Security Group)
 
@@ -1404,7 +1367,6 @@ graph LR
     style SG fill:#FF6B6B
 ```
 
----
 
 #### 보안 그룹의 Stateful 특성
 
@@ -1460,7 +1422,6 @@ HTTPS       TCP         443     0.0.0.0/0
    - Inbound 규칙 무시
    - 세션 정보에 기반하여 자동으로 응답 허용 ✅
 
----
 
 #### 보안 그룹 기본 동작
 
@@ -1482,7 +1443,6 @@ All         All         All     0.0.0.0/0
 
 💡 **강사 강조**: "사용자 정의 보안 그룹을 만들면 기본적으로 Inbound는 모두 막혀 있습니다. 따라서 필요한 Inbound 규칙을 반드시 추가해야 합니다. Outbound는 기본적으로 모두 허용되어 있습니다."
 
----
 
 #### 보안 그룹 규칙 구성
 
@@ -1500,7 +1460,6 @@ All         All         All     0.0.0.0/0
 2. **Security Group ID**: `sg-0a1b2c3d` (다른 보안 그룹에 속한 인스턴스)
 3. **Prefix List ID**: `pl-xxxxx` (관리형 IP 주소 목록)
 
----
 
 #### 보안 그룹 체이닝 (Security Group Chaining)
 
@@ -1548,7 +1507,6 @@ Type        Protocol    Port    Destination
 Custom TCP  TCP         8080    sg-app
 ```
 
----
 
 **sg-app (App Server 보안 그룹)**:
 
@@ -1567,7 +1525,6 @@ Type        Protocol    Port    Destination
 MySQL       TCP         3306    sg-db
 ```
 
----
 
 **sg-db (Database 보안 그룹)**:
 
@@ -1584,7 +1541,6 @@ MySQL       TCP         3306    sg-app
 (필요한 경우에만 추가)
 ```
 
----
 
 **보안 그룹 체이닝의 장점**:
 
@@ -1602,7 +1558,6 @@ MySQL       TCP         3306    sg-app
 
 💡 **강사 강조**: "보안 그룹 체이닝을 사용하면 IP 주소를 일일이 관리할 필요가 없습니다. sg-app에서 sg-db로 접근할 수 있도록 설정하면, sg-app에 속한 모든 인스턴스가 자동으로 허용됩니다."
 
----
 
 #### 보안 그룹 규칙 평가
 
@@ -1627,7 +1582,6 @@ HTTPS       TCP         443     10.100.0.0/16
 
 💡 **핵심**: 보안 그룹은 **허용 규칙만** 지원하므로, **명시적으로 허용하지 않은 모든 트래픽은 거부**됩니다.
 
----
 
 ### 3.5 Network ACL (NACL)
 
@@ -1668,7 +1622,6 @@ graph LR
 
 💡 **핵심**: NACL은 **서브넷 전체**에 적용되며, 서브넷 내 모든 리소스에 영향을 줍니다.
 
----
 
 #### NACL의 Stateless 특성
 
@@ -1705,7 +1658,6 @@ Rule #    Type        Protocol    Port    Destination     Allow/Deny
 
 ⚠️ **문제**: Inbound로 들어온 트래픽의 응답이 Outbound에서 차단됨!
 
----
 
 **올바른 NACL 구성** (응답 트래픽 허용):
 
@@ -1732,7 +1684,6 @@ Rule #    Type        Protocol    Port        Destination     Allow/Deny
 
 💡 **Ephemeral Ports (임시 포트)**: 클라이언트가 서버와 통신할 때 사용하는 임시 포트 범위 (일반적으로 1024-65535)
 
----
 
 #### NACL 규칙 평가 순서
 
@@ -1770,7 +1721,6 @@ Rule #    Type        Protocol    Port    Source          Allow/Deny
 
 💡 **핵심**: 첫 번째로 매칭되는 규칙이 적용되므로, **규칙 번호 순서가 매우 중요**합니다!
 
----
 
 #### 기본 NACL vs 사용자 정의 NACL
 
@@ -1794,7 +1744,6 @@ Rule #    Type        Protocol    Port    Destination     Allow/Deny
 
 → **모든 트래픽 허용** (보안 그룹에서 트래픽 제어)
 
----
 
 **사용자 정의 NACL (Custom NACL) 생성 시**:
 
@@ -1816,7 +1765,6 @@ Rule #    Type        Protocol    Port    Destination     Allow/Deny
 
 💡 **강사 강조**: "VPC 생성 시 기본 NACL은 모든 트래픽을 허용하도록 설정되어 있습니다. 따라서 대부분의 경우 NACL은 건드리지 않고 보안 그룹만으로 트래픽을 제어합니다."
 
----
 
 #### Security Group vs NACL 비교
 
@@ -1831,7 +1779,6 @@ Rule #    Type        Protocol    Port    Destination     Allow/Deny
 | **적용 대상** | 인스턴스별로 선택 가능 | 서브넷 내 모든 리소스 |
 | **사용 사례** | 일반적인 트래픽 제어 | 서브넷 레벨 추가 보안 계층 |
 
----
 
 **방어 계층 (Defense in Depth)**:
 
@@ -1863,7 +1810,6 @@ graph LR
 
 💡 **Best Practice**: NACL을 기본 허용 상태로 두고, **Security Group으로 세밀한 트래픽 제어**를 하는 것이 일반적입니다.
 
----
 
 ### 3.6 VPC Flow Logs
 
@@ -1881,7 +1827,6 @@ graph LR
 - 서브넷 레벨: 특정 서브넷의 모든 ENI 트래픽
 - ENI 레벨: 특정 ENI의 트래픽만
 
----
 
 #### VPC Flow Logs 저장 위치
 
@@ -1899,7 +1844,6 @@ graph LR
 - 실시간 스트리밍 분석
 - 다른 서비스로 전송 (Elasticsearch, Splunk 등)
 
----
 
 #### Flow Log 레코드 형식
 
@@ -1928,7 +1872,6 @@ graph LR
 | action | ACCEPT | 트래픽 허용/거부 |
 | log-status | OK | 로그 상태 |
 
----
 
 #### Flow Log Action 필드
 
@@ -1944,7 +1887,6 @@ graph LR
 | 10.100.10.50 | 8.8.8.8 | 443 | ACCEPT | HTTPS 통신 허용 |
 | 203.0.113.10 | 10.100.10.50 | 3389 | REJECT | RDP 접근 차단 |
 
----
 
 #### VPC Flow Logs 활용 사례
 
@@ -1966,7 +1908,6 @@ srcaddr=1.2.3.4 dstaddr=10.100.10.50 dstport=22 action=REJECT
 - 보안 그룹에 `Source: 1.2.3.4, Port: 22` Inbound 규칙 추가
 - 또는 NACL에서 해당 트래픽 허용
 
----
 
 **2️⃣ 비정상 트래픽 탐지**
 
@@ -1987,7 +1928,6 @@ srcaddr=203.0.113.50 dstaddr=10.100.10.50 dstport=3306 packets=2000 action=REJEC
 - NACL에 해당 IP 차단 규칙 추가
 - AWS WAF 또는 Security Group 강화
 
----
 
 **3️⃣ 트래픽 패턴 분석**
 
@@ -2008,7 +1948,6 @@ fields @timestamp, srcaddr, dstaddr, dstport, bytes
 - 용량 계획 (Capacity Planning)
 - 비용 최적화
 
----
 
 **4️⃣ 네트워크 연결 문제 해결**
 
@@ -2034,7 +1973,6 @@ srcaddr=10.100.10.50 dstaddr=10.100.20.10 dstport=3306 action=REJECT
 
 💡 **강사 강조**: "VPC Flow Logs는 보안 그룹이나 NACL 규칙이 정상적으로 동작하는지 판단할 때 매우 유용합니다. 트래픽이 REJECT되고 있다면, 어떤 규칙 때문인지 확인할 수 있습니다."
 
----
 
 #### VPC Flow Logs 설정 예시
 
@@ -2057,7 +1995,6 @@ aws ec2 create-flow-logs \
 - `--log-destination-type s3`: S3 버킷에 저장
 - `--log-destination`: S3 버킷 ARN
 
----
 
 **2️⃣ ENI 레벨 Flow Log 생성** (CloudWatch Logs):
 
@@ -2077,7 +2014,6 @@ aws ec2 create-flow-logs \
 - `--log-group-name`: CloudWatch Logs 그룹 이름
 - `--deliver-logs-permission-arn`: Flow Logs가 CloudWatch에 쓸 수 있는 IAM Role
 
----
 
 #### VPC Flow Logs 비용
 
@@ -2099,7 +2035,6 @@ aws ec2 create-flow-logs \
 - S3 Lifecycle 정책으로 오래된 로그를 Glacier로 아카이빙
 - 불필요한 Flow Log는 삭제
 
----
 
 ### 📋 Section 3 핵심 요약
 
@@ -2138,7 +2073,6 @@ aws ec2 create-flow-logs \
    - 보안 분석, 문제 해결, 트래픽 패턴 분석
    - ACCEPT/REJECT 액션으로 규칙 검증
 
----
 # AWS VPC 네트워킹 고급 - 섹션 2
 
 ## 섹션 4: VPC 간 연결 서비스
@@ -2156,7 +2090,6 @@ aws ec2 create-flow-logs \
 - **계정 간 지원**: 다른 AWS 계정의 VPC와도 연결 가능
 - **암호화**: 리전 간 피어링 트래픽은 자동 암호화
 
----
 
 #### VPC Peering이 필요한 이유
 
@@ -2193,7 +2126,6 @@ graph TB
 - ❌ 지연 시간 증가
 - ❌ 대역폭 제한
 
----
 
 **VPC Peering 사용 시**:
 
@@ -2226,7 +2158,6 @@ graph TB
 
 💡 **강사 강조**: "VPC 피어링을 사용하면 인터넷을 거치지 않고 AWS 내부 네트워크로 안전하게 통신할 수 있습니다. 같은 회사의 여러 VPC를 운영할 때 매우 유용합니다."
 
----
 
 #### VPC Peering 연결 구조
 
@@ -2256,7 +2187,6 @@ graph TB
 
 💡 **핵심**: VPC B → VPC A → VPC C 경로로 **전이적 라우팅 (Transitive Routing) 불가**!
 
----
 
 #### VPC Peering 제약 사항
 
@@ -2290,7 +2220,6 @@ graph TB
 - 필요한 피어링 수: 4×3/2 = **6개**
 - 관리 복잡도가 VPC 수에 따라 급증
 
----
 
 **2️⃣ 전이적 라우팅 불가 (No Transitive Routing)**
 
@@ -2317,7 +2246,6 @@ graph LR
 - ❌ VPC A → VPC B → VPC C 경로 불가능
 - ✅ VPC A ↔ VPC C 피어링을 별도로 생성해야 함
 
----
 
 **3️⃣ CIDR 블록 중복 불가**
 
@@ -2342,7 +2270,6 @@ graph TB
 - VPC C: `10.50.0.0/16` ✅
 - 모두 중복 없음 → 피어링 가능
 
----
 
 #### VPC Peering 구성 단계
 
@@ -2362,7 +2289,6 @@ aws ec2 create-vpc-peering-connection \
     --peer-region ap-northeast-2
 ```
 
----
 
 **2️⃣ Peering Connection 수락**
 
@@ -2378,7 +2304,6 @@ aws ec2 accept-vpc-peering-connection \
     --vpc-peering-connection-id pcx-0a1b2c3d
 ```
 
----
 
 **3️⃣ 라우팅 테이블 업데이트**
 
@@ -2402,7 +2327,6 @@ Destination          Target
 
 💡 **중요**: **양쪽 VPC의 라우팅 테이블 모두 업데이트**해야 양방향 통신 가능!
 
----
 
 **4️⃣ 보안 그룹 설정**
 
@@ -2424,7 +2348,6 @@ All         All         All     10.0.0.0/16
 
 💡 **Best Practice**: 전체 CIDR 대신 **필요한 포트만** 허용하는 것이 보안상 좋습니다.
 
----
 
 #### VPC Peering 트래픽 흐름
 
@@ -2455,7 +2378,6 @@ sequenceDiagram
 - 리전 간 피어링의 경우 자동 암호화
 - 낮은 지연 시간, 높은 대역폭
 
----
 
 #### 리전 간 VPC Peering (Inter-Region VPC Peering)
 
@@ -2491,7 +2413,6 @@ graph TB
 - 데이터 전송 비용 발생 (리전 간)
 - 피어링 연결 자체는 무료
 
----
 
 #### 계정 간 VPC Peering (Cross-Account VPC Peering)
 
@@ -2534,7 +2455,6 @@ graph TB
 - 자회사와 모회사 간 VPC 연결
 - 개발 계정과 프로덕션 계정 분리
 
----
 
 #### VPC Peering 비용
 
@@ -2555,7 +2475,6 @@ graph TB
 
 💡 **비용 최적화**: 같은 리전 내 피어링이 리전 간 피어링보다 저렴합니다.
 
----
 
 #### VPC Peering 사용 사례
 
@@ -2587,7 +2506,6 @@ graph TB
 - 피어링으로 안전하게 연결
 - 장애 격리 (Fault Isolation)
 
----
 
 **2️⃣ 환경별 VPC 분리**
 
@@ -2609,7 +2527,6 @@ graph LR
 - 필요한 경우만 선택적 연결
 - 보안 및 권한 분리
 
----
 
 **3️⃣ 공유 서비스 VPC**
 
@@ -2634,7 +2551,6 @@ graph TB
 - Active Directory, DNS, 모니터링 등 공유 서비스
 - 각 애플리케이션 VPC에서 공유 서비스 접근
 
----
 
 ### 4.2 AWS Transit Gateway
 
@@ -2673,7 +2589,6 @@ graph TB
 
 💡 **강사 강조**: "Transit Gateway는 다수의 VPC와 온프레미스 네트워크를 연결할 때 허브 앤 스포크 형식으로 연결할 수 있습니다. 피어링보다 훨씬 관리가 쉽습니다."
 
----
 
 #### Transit Gateway vs VPC Peering 비교
 
@@ -2703,7 +2618,6 @@ graph TB
 - 10개 VPC: **45개** 피어링 필요
 - 관리 복잡도 높음
 
----
 
 **Transit Gateway 구조** (4개 VPC 연결):
 
@@ -2732,7 +2646,6 @@ graph TB
 - 10개 VPC: **10개** 연결만 필요
 - 관리 단순화
 
----
 
 **비교 표**:
 
@@ -2747,7 +2660,6 @@ graph TB
 | **최대 VPC 수** | 125개 (VPC당) | 5,000개 (TGW당) |
 | **사용 사례** | 소규모 (2-10 VPC) | 대규모 (10+ VPC) |
 
----
 
 #### Transit Gateway 주요 기능
 
@@ -2778,7 +2690,6 @@ graph TB
     style TGW fill:#FFD700
 ```
 
----
 
 **2️⃣ 라우팅 테이블을 통한 트래픽 제어**
 
@@ -2817,7 +2728,6 @@ graph TB
 - **Production ↔ Development 통신 차단**
 - 온프레미스는 Production과만 통신 허용
 
----
 
 **3️⃣ 멀티캐스트 지원**
 
@@ -2843,7 +2753,6 @@ graph TB
     style TGW fill:#FFD700
 ```
 
----
 
 #### Transit Gateway 구성 단계
 
@@ -2864,7 +2773,6 @@ aws ec2 create-transit-gateway \
     --options AmazonSideAsn=64512
 ```
 
----
 
 **2️⃣ VPC Attachment 생성**
 
@@ -2888,7 +2796,6 @@ aws ec2 create-transit-gateway-vpc-attachment \
 
 💡 **Best Practice**: **각 가용 영역에 최소 1개의 서브넷**을 포함해야 고가용성 확보!
 
----
 
 **3️⃣ VPC 라우팅 테이블 업데이트**
 
@@ -2912,7 +2819,6 @@ Destination          Target
 192.168.0.0/16      tgw-0a1b2c3d (On-Premises)
 ```
 
----
 
 **4️⃣ Transit Gateway Route Table 확인**
 
@@ -2928,7 +2834,6 @@ Destination          Attachment
 192.168.0.0/16      vpn-attachment
 ```
 
----
 
 #### Transit Gateway 고급 라우팅
 
@@ -2948,7 +2853,6 @@ aws ec2 create-transit-gateway-route-table \
     --tag-specifications 'ResourceType=transit-gateway-route-table,Tags=[{Key=Name,Value=Development-RT}]'
 ```
 
----
 
 **2️⃣ VPC Attachment 연결**
 
@@ -2964,7 +2868,6 @@ aws ec2 associate-transit-gateway-route-table \
     --transit-gateway-attachment-id tgw-attach-vpc-dev
 ```
 
----
 
 **3️⃣ 라우팅 규칙 설정**
 
@@ -2987,7 +2890,6 @@ Destination          Attachment
 ```
 → Production VPC와 On-Premises는 **포함 안 함** → 격리
 
----
 
 #### Transit Gateway Peering (리전 간 연결)
 
@@ -3037,7 +2939,6 @@ aws ec2 create-transit-gateway-peering-attachment \
     --peer-region ap-northeast-1
 ```
 
----
 
 #### Transit Gateway 비용
 
@@ -3060,7 +2961,6 @@ aws ec2 create-transit-gateway-peering-attachment \
 
 💡 **비용 고려**: VPC가 적은 경우 (2-5개) VPC Peering이 더 저렴할 수 있습니다.
 
----
 
 #### Transit Gateway 사용 사례
 
@@ -3095,7 +2995,6 @@ graph TB
 - 온프레미스와 모든 VPC 연결
 - 중앙 집중식 관리
 
----
 
 **2️⃣ 글로벌 네트워크**
 
@@ -3128,7 +3027,6 @@ graph LR
 - 다중 리전 VPC 연결
 - 글로벌 네트워크 구축
 
----
 
 **3️⃣ 환경별 격리 및 제어**
 
@@ -3161,7 +3059,6 @@ graph TB
 - 환경별 트래픽 격리
 - 세밀한 라우팅 제어
 
----
 
 ### 4.3 AWS VPN (Virtual Private Network)
 
@@ -3179,7 +3076,6 @@ graph TB
 1. **Site-to-Site VPN**: 온프레미스 네트워크 ↔ AWS VPC
 2. **Client VPN**: 개별 사용자 PC ↔ AWS VPC
 
----
 
 #### Site-to-Site VPN
 
@@ -3208,7 +3104,6 @@ graph LR
     style VGW fill:#4ECDC4
 ```
 
----
 
 #### Site-to-Site VPN 구성 요소
 
@@ -3232,7 +3127,6 @@ aws ec2 attach-vpn-gateway \
     --vpc-id vpc-4e5f6g7h
 ```
 
----
 
 **2️⃣ Customer Gateway (CGW)**
 
@@ -3256,7 +3150,6 @@ aws ec2 create-customer-gateway \
 - `--public-ip`: 온프레미스 VPN 장비의 공인 IP
 - `--bgp-asn`: BGP AS 번호 (동적 라우팅 사용 시)
 
----
 
 **3️⃣ Site-to-Site VPN Connection**
 
@@ -3276,7 +3169,6 @@ aws ec2 create-vpn-connection \
 - **Tunnel 2**: Secondary (백업 터널)
 - 두 터널 모두 활성화되어 고가용성 제공
 
----
 
 #### Site-to-Site VPN 구성 단계
 
@@ -3290,7 +3182,6 @@ aws ec2 create-vpn-connection \
 
 5. Actions → Attach to VPC → VPC 선택
 
----
 
 **2️⃣ Customer Gateway 생성**
 
@@ -3302,7 +3193,6 @@ aws ec2 create-vpn-connection \
 5. BGP ASN: `65000` (온프레미스 side)
 6. Create
 
----
 
 **3️⃣ Site-to-Site VPN Connection 생성**
 
@@ -3315,7 +3205,6 @@ aws ec2 create-vpn-connection \
 6. Routing Options: Dynamic (BGP) 또는 Static
 7. Create
 
----
 
 **4️⃣ VPN Configuration 다운로드 및 온프레미스 설정**
 
@@ -3345,7 +3234,6 @@ tunnel-group 52.79.123.45 ipsec-attributes
 exit
 ```
 
----
 
 **5️⃣ 라우팅 테이블 업데이트**
 
@@ -3367,7 +3255,6 @@ Destination          Target
 2. Route Propagation 탭 → Edit → Enable 체크
 3. Save
 
----
 
 #### Site-to-Site VPN 터널 이중화
 
@@ -3410,7 +3297,6 @@ graph TB
 
 💡 **Best Practice**: 온프레미스에도 **2개의 CGW 장비**를 구성하여 완전한 이중화
 
----
 
 #### 완전한 HA 구성 (Dual CGW)
 
@@ -3448,7 +3334,6 @@ graph TB
 - 1개 CGW 장애: 다른 CGW의 2개 터널 사용
 - 완전한 고가용성 확보
 
----
 
 #### Client VPN
 
@@ -3482,7 +3367,6 @@ graph LR
     style Internet fill:#FFD700
 ```
 
----
 
 #### Client VPN 특징
 
@@ -3497,7 +3381,6 @@ graph LR
 - 프라이빗 서브넷의 EC2, RDS 접근
 - 개발자가 내부 리소스 접근
 
----
 
 #### Client VPN 구성
 
@@ -3528,7 +3411,6 @@ aws acm import-certificate \
     --certificate-chain fileb://ca.crt
 ```
 
----
 
 **3️⃣ Client VPN Endpoint 생성**:
 
@@ -3545,7 +3427,6 @@ aws ec2 create-client-vpn-endpoint \
 - `--server-certificate-arn`: 서버 인증서 ARN
 - `--authentication-options`: 인증 방식 (Certificate, Active Directory, SAML)
 
----
 
 **4️⃣ Target Network 연결 및 Authorization Rule 추가**:
 
@@ -3562,7 +3443,6 @@ aws ec2 authorize-client-vpn-ingress \
     --authorize-all-groups
 ```
 
----
 
 **5️⃣ VPN Configuration 다운로드 및 클라이언트 설정**:
 
@@ -3575,7 +3455,6 @@ aws ec2 authorize-client-vpn-ingress \
 3. 인증서 (`client1.domain.tld.crt`, `client1.domain.tld.key`) 추가
 4. Connect 클릭
 
----
 
 #### VPN 성능 및 대역폭
 
@@ -3590,7 +3469,6 @@ aws ec2 authorize-client-vpn-ingress \
 
 💡 **제한 사항**: 더 높은 대역폭이 필요하면 **Direct Connect** 사용 권장!
 
----
 
 #### VPN 비용
 
@@ -3608,7 +3486,6 @@ aws ec2 authorize-client-vpn-ingress \
 - 데이터 전송 100GB/월: 약 $9/월
 - **총 비용**: $45/월
 
----
 
 #### VPN vs Direct Connect 비교
 
@@ -3625,7 +3502,6 @@ aws ec2 authorize-client-vpn-ingress \
 
 💡 **권장 조합**: **Direct Connect (Primary) + VPN (Backup)** - 고가용성과 비용 효율성
 
----
 
 ### 📋 Section 4 핵심 요약
 
@@ -3654,7 +3530,6 @@ aws ec2 authorize-client-vpn-ingress \
    - OpenVPN 기반, TLS 암호화
    - 재택근무, 원격 접속에 유용
 
----
 
 # AWS 클라우드 인프라 - 섹션 3
 
@@ -3704,7 +3579,6 @@ graph TB
 
 💡 **강사 강조**: "전용선은 광케이블로 연결된 물리적인 전용 라인입니다. 인터넷을 거치지 않기 때문에 안정적이면서 고속의 네트워크를 만들 수 있습니다. 하지만 비용이 굉장히 큽니다."
 
----
 
 #### VPN vs Direct Connect 차이
 
@@ -3728,7 +3602,6 @@ graph LR
 - ✅ 빠른 구성 (몇 분)
 - ✅ 저렴한 비용 ($36/월 +)
 
----
 
 **Direct Connect 연결** (전용선):
 
@@ -3750,7 +3623,6 @@ graph LR
 - ❌ 긴 구성 시간 (수주 ~ 수개월)
 - ❌ 높은 비용 (포트 비용 + 데이터 전송 비용)
 
----
 
 #### Direct Connect 구성 요소
 
@@ -3769,7 +3641,6 @@ graph LR
 - **AWS Direct Connect Router**: AWS 라우터
 - **Cross Connect**: 고객 라우터와 AWS 라우터 간 물리적 연결
 
----
 
 **2️⃣ Virtual Interface (VIF)**
 
@@ -3817,7 +3688,6 @@ graph TB
     style TGW fill:#FFD700
 ```
 
----
 
 **3️⃣ Direct Connect Gateway**
 
@@ -3855,7 +3725,6 @@ graph TB
 - 리전별로 별도 Direct Connect 불필요
 - 비용 효율적
 
----
 
 #### Direct Connect 대역폭
 
@@ -3879,7 +3748,6 @@ graph TB
 
 💡 **지역별 제한**: 지역마다 지원하는 최대 대역폭이 다를 수 있습니다. 한국은 최근 100Gbps까지 지원 가능하게 되었습니다.
 
----
 
 #### Direct Connect 구성 단계
 
@@ -3893,7 +3761,6 @@ graph TB
 5. Service Provider: 파트너 선택 (선택 사항)
 6. Create
 
----
 
 **2️⃣ LOA-CFA (Letter of Authorization and Connecting Facility Assignment) 다운로드**
 
@@ -3908,7 +3775,6 @@ graph TB
 - 고객 라우터와 AWS 라우터를 광케이블로 연결
 - 데이터 센터에서 수행 (수일 ~ 수주 소요)
 
----
 
 **3️⃣ Virtual Interface (VIF) 생성**
 
@@ -3930,7 +3796,6 @@ aws directconnect create-private-virtual-interface \
 - `--customerAddress`: 고객 측 BGP Peer IP
 - `--virtualGatewayId`: 연결할 VGW ID
 
----
 
 **4️⃣ 라우터 설정**
 
@@ -3953,7 +3818,6 @@ Destination          Target
 192.168.0.0/16      vgw-xxxxx (Direct Connect)
 ```
 
----
 
 #### Direct Connect + VPN 이중화 (Hybrid)
 
@@ -3994,7 +3858,6 @@ graph TB
 - Direct Connect: AS Path가 짧아 우선 선택
 - VPN: 백업 경로로 대기
 
----
 
 #### Direct Connect 비용
 
@@ -4020,7 +3883,6 @@ graph TB
 
 💡 **비교**: VPN은 약 $36/월이지만, 대역폭이 낮고 성능이 가변적입니다. 대규모 데이터 전송이나 안정적인 성능이 필요한 경우 Direct Connect가 유리합니다.
 
----
 
 #### Direct Connect 사용 사례
 
@@ -4030,7 +3892,6 @@ graph TB
 - 백업/복원: 대용량 백업 데이터 전송
 - 미디어 처리: 4K/8K 비디오 파일 전송
 
----
 
 **2️⃣ Hybrid Cloud 환경**
 
@@ -4060,7 +3921,6 @@ graph TB
 - 데이터베이스 복제 (Replication)
 - 일관된 네트워크 성능 필요
 
----
 
 **3️⃣ 미션 크리티컬 워크로드**
 
@@ -4073,7 +3933,6 @@ graph TB
 - 높은 안정성 (99.9% 이상)
 - 보안 강화
 
----
 
 ### 5.2 VPC Endpoint
 
@@ -4110,7 +3969,6 @@ graph TB
 
 💡 **강사 강조**: "VPC Endpoint를 사용하면 S3 같은 서비스를 접근할 때 인터넷을 통하지 않고 AWS 내부 네트워크로 직접 통신할 수 있습니다. 보안도 강화되고 NAT Gateway 비용도 절감할 수 있습니다."
 
----
 
 #### VPC Endpoint 없이 S3 접근
 
@@ -4148,7 +4006,6 @@ graph LR
 - ❌ 인터넷 경유 (보안 위험)
 - ❌ 대역폭 제한
 
----
 
 #### VPC Endpoint로 S3 접근
 
@@ -4179,7 +4036,6 @@ graph LR
 - ✅ AWS 내부 네트워크 (안전)
 - ✅ 대역폭 제한 없음
 
----
 
 #### VPC Endpoint 유형
 
@@ -4220,7 +4076,6 @@ pl-12a34b56         vpce-0a1b2c3d (Gateway Endpoint for S3)
 
 💡 **Prefix List (pl-)**: S3의 IP 주소 범위를 나타내는 관리형 Prefix List
 
----
 
 **2️⃣ Interface Endpoint** (인터페이스 유형)
 
@@ -4258,7 +4113,6 @@ graph TB
 3. EC2가 SQS 접근 시 자동으로 ENI를 통해 전달
 4. ENI → PrivateLink → SQS
 
----
 
 #### Gateway vs Interface Endpoint 비교
 
@@ -4274,7 +4128,6 @@ graph TB
 
 💡 **강사 강조**: "보안 입장에서 보면 Interface Endpoint가 더 유용합니다. Security Group을 연결할 수 있어서 세밀한 트래픽 제어가 가능하니까요."
 
----
 
 #### Interface Endpoint 지원 서비스
 
@@ -4292,7 +4145,6 @@ graph TB
 aws ec2 describe-vpc-endpoint-services --region ap-northeast-2
 ```
 
----
 
 #### AWS PrivateLink
 
@@ -4328,7 +4180,6 @@ graph LR
 
 💡 **핵심**: PrivateLink를 사용하면 전체 VPC를 피어링하지 않고도 특정 서비스만 안전하게 연결할 수 있습니다.
 
----
 
 #### Gateway Endpoint 구성
 
@@ -4351,7 +4202,6 @@ aws ec2 create-vpc-endpoint \
     --route-table-ids rtb-11111111 rtb-22222222
 ```
 
----
 
 **2️⃣ 라우팅 테이블 자동 업데이트 확인**
 
@@ -4364,7 +4214,6 @@ Destination          Target
 pl-12a34b56         vpce-0a1b2c3d (S3 Gateway Endpoint)
 ```
 
----
 
 **3️⃣ S3 접근 테스트**
 
@@ -4375,7 +4224,6 @@ aws s3 ls s3://my-bucket/
 # VPC Endpoint를 통해 접근됨 (인터넷 거치지 않음)
 ```
 
----
 
 #### Interface Endpoint 구성
 
@@ -4401,7 +4249,6 @@ aws ec2 create-vpc-endpoint \
     --security-group-ids sg-0a1b2c3d
 ```
 
----
 
 **2️⃣ ENI 생성 확인**
 
@@ -4423,7 +4270,6 @@ PrivateIpAddress: 10.100.20.100
 SubnetId: subnet-22222222
 ```
 
----
 
 **3️⃣ Security Group 설정**
 
@@ -4435,7 +4281,6 @@ HTTPS       TCP         443     10.100.0.0/16
 ```
 → VPC 내부에서 HTTPS (443) 접근 허용
 
----
 
 **4️⃣ Private DNS 활성화** (권장)
 
@@ -4449,7 +4294,6 @@ HTTPS       TCP         443     10.100.0.0/16
 
 💡 **권장**: Private DNS를 활성화하면 애플리케이션 코드 변경 없이 VPC Endpoint 사용 가능!
 
----
 
 #### VPC Endpoint 비용
 
@@ -4473,7 +4317,6 @@ HTTPS       TCP         443     10.100.0.0/16
 
 💡 **절감액**: VPC Endpoint 사용 시 약 $14.45/월 절감!
 
----
 
 #### VPC Endpoint Policy
 
@@ -4493,7 +4336,6 @@ HTTPS       TCP         443     10.100.0.0/16
 }
 ```
 
----
 
 **제한된 정책** (특정 S3 버킷만 허용):
 ```json
@@ -4517,7 +4359,6 @@ HTTPS       TCP         443     10.100.0.0/16
 ```
 → `my-allowed-bucket`에만 접근 허용
 
----
 
 **특정 IAM Role만 허용**:
 ```json
@@ -4536,7 +4377,6 @@ HTTPS       TCP         443     10.100.0.0/16
 ```
 → `MyAppRole` IAM Role에서만 SQS 접근 허용
 
----
 
 ### 📋 Section 5 핵심 요약
 
@@ -4566,7 +4406,6 @@ HTTPS       TCP         443     10.100.0.0/16
    - 특정 서비스만 안전하게 노출
    - SaaS, 마이크로서비스 연결에 유용
 
----
 
 ## 섹션 6: Amazon EC2 기본 개념
 
@@ -4613,7 +4452,6 @@ graph TB
 
 💡 **인스턴스 (Instance)**: 배포된 가상 서버를 "EC2 인스턴스"라고 부릅니다.
 
----
 
 #### EC2 역사 및 특징
 
@@ -4635,7 +4473,6 @@ graph TB
 - **초단위 과금**: 대부분의 Linux 인스턴스
 - **시간당 과금**: Red Hat Enterprise Linux, SUSE, Windows (일부)
 
----
 
 #### On-Premises vs EC2 비교
 
@@ -4672,7 +4509,6 @@ graph TB
     style AWS fill:#4ECDC4
 ```
 
----
 
 ### 6.2 EC2 구성 요소
 
@@ -4701,7 +4537,6 @@ graph TB
     style EC2 fill:#FFD700
 ```
 
----
 
 ### 6.3 AMI (Amazon Machine Image)
 
@@ -4736,7 +4571,6 @@ graph LR
 
 💡 **비유**: AMI는 VM을 설치할 때 사용하는 ISO 파일과 비슷합니다. Ubuntu ISO로 VM을 설치하듯이, AMI로 EC2 인스턴스를 생성합니다.
 
----
 
 #### AMI 소스
 
@@ -4762,7 +4596,6 @@ graph LR
 - S3에 자동 저장
 - 재사용 가능
 
----
 
 #### 사용자 정의 AMI 생성 과정
 
@@ -4817,7 +4650,6 @@ sequenceDiagram
    - Launch instance
    - 소프트웨어가 사전 설치된 EC2 즉시 사용 가능!
 
----
 
 ### 6.4 Instance Type (인스턴스 유형)
 
@@ -4840,7 +4672,6 @@ t3.medium
 **크기 옵션** (일반적으로 2배씩 증가):
 - `nano` → `micro` → `small` → `medium` → `large` → `xlarge` → `2xlarge` → `4xlarge` → ...
 
----
 
 #### Instance Family (패밀리 유형)
 
@@ -4870,7 +4701,6 @@ graph TB
 - 사용하지 않은 80%만큼 크레딧 축적
 - 갑자기 80% CPU 필요 시 크레딧 소모하여 버스트
 
----
 
 **M - General Purpose (균형 잡힌 범용)**:
 - **CPU:메모리 비율**: 1:4 (vCPU 1개당 메모리 4GB)
@@ -4880,7 +4710,6 @@ graph TB
 - `m6i.large`: vCPU 2개, 메모리 8GB
 - `m6i.xlarge`: vCPU 4개, 메모리 16GB
 
----
 
 **C - Compute Optimized (컴퓨팅 최적화)**:
 - **CPU:메모리 비율**: 1:2 (CPU가 많음)
@@ -4890,7 +4719,6 @@ graph TB
 - `c6i.large`: vCPU 2개, 메모리 4GB
 - `c6i.xlarge`: vCPU 4개, 메모리 8GB
 
----
 
 **R - Memory Optimized (메모리 최적화)**:
 - **CPU:메모리 비율**: 1:8 (메모리가 많음)
@@ -4900,7 +4728,6 @@ graph TB
 - `r6i.large`: vCPU 2개, 메모리 16GB
 - `r6i.xlarge`: vCPU 4개, 메모리 32GB
 
----
 
 **P - Accelerated Computing (GPU - AI/ML)**:
 - **GPU**: NVIDIA GPU 탑재
@@ -4914,13 +4741,11 @@ graph TB
 - **AWS Inferentia Chip**: AWS 자체 개발 AI 칩
 - **용도**: 머신러닝 추론 (학습 아님)
 
----
 
 **I - Storage Optimized (스토리지 최적화)**:
 - **고속 NVMe SSD**: 로컬 스토리지
 - **용도**: NoSQL 데이터베이스, 검색 엔진, 데이터 웨어하우스
 
----
 
 #### Instance Type 선택 가이드
 
@@ -4938,7 +4763,6 @@ graph TB
 
 💡 **일반적 선택**: 대부분의 웹 애플리케이션은 **T3 또는 M6i**로 충분합니다!
 
----
 
 ### 6.5 Key Pair (키 페어)
 
@@ -4968,7 +4792,6 @@ graph LR
 3. 사용자는 **개인키** 다운로드 (`.pem` 파일)
 4. SSH 접속 시 개인키로 인증
 
----
 
 #### Key Pair 생성
 
@@ -4990,7 +4813,6 @@ aws ec2 create-key-pair \
 chmod 400 my-keypair.pem
 ```
 
----
 
 #### SSH 접속 (Linux 인스턴스)
 
@@ -5013,7 +4835,6 @@ chmod 400 my-keypair.pem
 ```
 → 개인키는 소유자만 읽기 가능해야 함
 
----
 
 #### Session Manager (키 페어 없이 접속)
 
@@ -5054,7 +4875,6 @@ graph LR
 2. Connect → Session Manager 탭
 3. Connect 클릭
 
----
 
 ### 📋 Section 6 핵심 요약
 
@@ -5082,7 +4902,6 @@ graph LR
    - 개인키는 재다운로드 불가 (안전 보관 필수)
    - Session Manager로 Key Pair 없이 접속 가능
 
----
 
 # AWS VPC/Networking 3일차 학습 노트 - Section 4
 
@@ -5090,7 +4909,6 @@ graph LR
 
 이번 섹션에서는 Amazon EC2 인스턴스를 실제로 생성하고 관리하는 전체 과정을 실습합니다. 단순히 버튼을 클릭하는 것을 넘어서, 각 설정 항목이 어떤 의미를 가지는지, 왜 이렇게 설정해야 하는지를 이해하는 것이 목표입니다.
 
----
 
 ### 7.1 EC2 인스턴스 생성 준비
 
@@ -5117,7 +4935,6 @@ EC2 인스턴스를 생성하기 전에 다음 사항들을 미리 준비하고 
 - Instance Type: 필요한 CPU/메모리 스펙은?
 - 스토리지: EBS 볼륨 크기와 타입은?
 
----
 
 ### 7.2 첫 번째 EC2 인스턴스 생성 (Session Manager용)
 
@@ -5132,7 +4949,6 @@ AWS Console → EC2 → Instances → Launch instances
 - 중앙: 인스턴스 목록 및 상태
 - 우측: 선택한 인스턴스의 상세 정보
 
----
 
 #### Step 2: 이름 및 태그 설정
 
@@ -5158,7 +4974,6 @@ Name: [prefix]-ec2-pub-01
 
 **강사 강조**: "태그는 나중에 수백 개의 리소스를 관리할 때 생명줄이 됩니다. 처음부터 명명 규칙을 정하고 일관되게 사용하세요."
 
----
 
 #### Step 3: AMI (Amazon Machine Image) 선택
 
@@ -5191,7 +5006,6 @@ Free tier eligible: Yes
 - 처음 12개월간 제공
 ```
 
----
 
 #### Step 4: Instance Type 선택
 
@@ -5242,7 +5056,6 @@ graph LR
     style Peak fill:#FFD700
 ```
 
----
 
 #### Step 5: Key Pair 설정
 
@@ -5288,7 +5101,6 @@ graph LR
 
 **강사 강조**: "Session Manager를 사용하면 SSH 키를 잃어버려서 서버에 접속 못하는 사태를 방지할 수 있습니다. 프로덕션 환경에서 매우 유용합니다."
 
----
 
 #### Step 6: 네트워크 설정
 
@@ -5351,7 +5163,6 @@ Auto-assign public IP: Enable
 | 비용 | 무료 | 미사용 시 과금 |
 | 사용 사례 | 개발/테스트 | 프로덕션 |
 
----
 
 #### Step 7: Security Group 생성
 
@@ -5414,7 +5225,6 @@ graph LR
 아웃바운드 규칙과 무관하게 자동 허용
 ```
 
----
 
 #### Step 8: 스토리지 구성
 
@@ -5463,7 +5273,6 @@ No: 인스턴스 삭제 후에도 볼륨 유지
 - Root Volume: Yes (OS는 재생성 가능)
 - Data Volume: No (데이터 보존 필요)
 
----
 
 #### Step 9: Advanced Details - IAM Instance Profile
 
@@ -5542,7 +5351,6 @@ Dedicated: 전용 하드웨어 (비용 높음)
 # (이번 실습에서는 사용하지 않음)
 ```
 
----
 
 #### Step 10: 인스턴스 생성 및 상태 확인
 
@@ -5622,7 +5430,6 @@ Running 상태 진입 시점부터 과금 시작
 → Terminated 상태는 완전 삭제
 ```
 
----
 
 ### 7.3 메타데이터 (Metadata) 이해
 
@@ -5678,13 +5485,11 @@ Instance status checks: 1/1 checks passed
 - 비용 추적 및 리소스 태깅
 - 문제 해결 (Troubleshooting)
 
----
 
 ## Section 8: Session Manager를 이용한 EC2 접속
 
 Session Manager는 브라우저 기반으로 EC2 인스턴스에 안전하게 접속할 수 있는 AWS Systems Manager의 기능입니다.
 
----
 
 ### 8.1 Session Manager 접속 실습
 
@@ -5711,7 +5516,6 @@ Security 탭 → IAM Role 확인
 - 라우팅 테이블 설정 확인
 ```
 
----
 
 #### Session Manager 접속 단계
 
@@ -5747,7 +5551,6 @@ ssm-user
 
 **강사 강조**: "Session Manager를 사용하면 ssm-user라는 사용자로 자동 로그인됩니다. 이는 AWS가 자동으로 생성한 사용자입니다."
 
----
 
 ### 8.2 EC2 메타데이터 서비스 활용
 
@@ -5855,7 +5658,6 @@ echo "My Instance ID: $INSTANCE_ID"
 My Instance ID: i-0123456789abcdef0
 ```
 
----
 
 #### 메타데이터 활용 사례
 
@@ -5918,7 +5720,6 @@ aws cloudwatch put-metric-data \
 
 **강사 강조**: "메타데이터 서비스는 인스턴스 내부에서만 접근 가능합니다. 외부에서는 접근할 수 없으므로 보안상 안전합니다."
 
----
 
 ### 8.3 서브넷 자동 Public IP 할당 설정
 
@@ -5972,13 +5773,11 @@ EC2 Launch → Network settings → Edit
 
 **강사 강조**: "서브넷 레벨에서 설정하면 실수로 Public IP를 할당하지 않는 실수를 방지할 수 있습니다. Public Subnet은 항상 이 설정을 켜두는 것을 권장합니다."
 
----
 
 ## Section 9: SSH 및 RDP 접속 실습
 
 이번 섹션에서는 전통적인 방식인 SSH와 RDP를 이용한 EC2 접속을 실습합니다.
 
----
 
 ### 9.1 SSH 접속을 위한 Key Pair 생성
 
@@ -6009,7 +5808,6 @@ graph LR
 3. 사용자는 Private Key (`.pem` 파일) 다운로드
 4. SSH 접속 시 Private Key로 인증
 
----
 
 #### Key Pair 생성 단계
 
@@ -6056,7 +5854,6 @@ Mac/Linux: ~/.ssh/
 → 권한 설정: chmod 400 (읽기 전용)
 ```
 
----
 
 ### 9.2 Linux 인스턴스 SSH 접속 (PuTTY)
 
@@ -6095,7 +5892,6 @@ Instance Details → Public IPv4 address: 3.34.XXX.XXX
 → 메모장에 복사
 ```
 
----
 
 #### PuTTY 설치 및 설정
 
@@ -6118,7 +5914,6 @@ https://www.putty.org/
 시작 메뉴 → PuTTY
 ```
 
----
 
 #### PuTTY 연결 설정
 
@@ -6155,7 +5950,6 @@ Saved Sessions: [prefix]-ec2-ssh
 다음 번에는 저장된 세션을 더블클릭하여 빠르게 접속
 ```
 
----
 
 #### SSH 접속
 
@@ -6210,7 +6004,6 @@ Linux ip-10-100-10-50 6.1.102-108.177.amzn2023.x86_64
     inet 10.100.10.50/24 brd 10.100.10.255 scope global eth0
 ```
 
----
 
 #### Key Pair 보안 관리
 
@@ -6241,7 +6034,6 @@ Linux ip-10-100-10-50 6.1.102-108.177.amzn2023.x86_64
 - **AWS Systems Manager Fleet Manager** (브라우저 기반)
 - **EC2 Instance Connect** (임시 Key 자동 생성)
 
----
 
 ### 9.3 Windows 인스턴스 RDP 접속 (선택 실습)
 
@@ -6290,7 +6082,6 @@ Volume Type: gp3
 
 **⚠️ 주의**: Windows 인스턴스는 초기화가 오래 걸림 (3-5분)
 
----
 
 #### 암호 가져오기 (Get Windows Password)
 
@@ -6324,7 +6115,6 @@ Password: Abcd1234!@#$Xyz (예시)
 4. 사용자가 개인키로 암호를 복호화
 ```
 
----
 
 #### Remote Desktop 접속
 
@@ -6364,7 +6154,6 @@ Windows Server 2022 Datacenter
 Server Manager 자동 실행
 ```
 
----
 
 #### Windows Server 초기 설정
 
@@ -6391,7 +6180,6 @@ Control Panel → Clock and Region
 → Restart
 ```
 
----
 
 #### RDP 세션 종료
 
@@ -6413,13 +6201,11 @@ X 버튼 클릭 → OK
 Start → Administrator → Sign out
 ```
 
----
 
 ## Section 10: EBS 볼륨 관리 실습
 
 이번 섹션에서는 EC2 인스턴스에 추가 스토리지를 연결하고 관리하는 방법을 실습합니다.
 
----
 
 ### 10.1 EBS (Elastic Block Store) 볼륨 개념
 
@@ -6447,7 +6233,6 @@ graph LR
 4. **성능 선택 가능**: IOPS, 처리량 조정
 5. **스냅샷 지원**: S3에 백업
 
----
 
 #### EBS 볼륨 유형
 
@@ -6474,7 +6259,6 @@ Root 볼륨으로 사용 불가
 → 반드시 SSD (gp3, gp2, io2, io1)만 부트 볼륨으로 사용 가능
 ```
 
----
 
 #### gp2 vs gp3 상세 비교
 
@@ -6519,7 +6303,6 @@ gp3:
 
 **강사 강조**: "작은 볼륨에서는 gp3가 훨씬 유리합니다. 특히 부트 볼륨은 무조건 gp3를 사용하세요."
 
----
 
 #### Provisioned IOPS SSD (io2, io1)
 
@@ -6550,7 +6333,6 @@ gp3:
 - 최대 IOPS: 256,000
 ```
 
----
 
 #### HDD 볼륨 (st1, sc1)
 
@@ -6583,7 +6365,6 @@ gp3:
 가격: 가장 저렴
 ```
 
----
 
 ### 10.2 EBS 볼륨 생성 실습
 
@@ -6609,7 +6390,6 @@ EBS 볼륨과 EC2 인스턴스는 반드시 같은 가용 영역에 있어야 �
 2. 다른 가용 영역에서 스냅샷으로부터 볼륨 생성
 ```
 
----
 
 #### Step 1: EBS 볼륨 생성
 
@@ -6647,7 +6427,6 @@ State: Creating → Available
 → 사용 가능 상태
 ```
 
----
 
 #### Step 2: 볼륨을 EC2에 연결 (Attach)
 
@@ -6676,7 +6455,6 @@ State: Available → In-use
 Attachment information: i-xxxxx (/dev/sdf)
 ```
 
----
 
 ### 10.3 파일 시스템 생성 및 마운트
 
@@ -6687,7 +6465,6 @@ EC2 Console → Instances → 인스턴스 선택
 → Connect → Session Manager → Connect
 ```
 
----
 
 #### Step 1: 디바이스 확인
 
@@ -6715,7 +6492,6 @@ tmpfs           483M     0  483M   0% /dev/shm
 
 → `/dev/xvdf`가 보이지 않음 (아직 마운트 안됨)
 
----
 
 #### Step 2: 파일 시스템 생성
 
@@ -6749,7 +6525,6 @@ Writing superblocks and filesystem accounting information: done
 - 안정성과 성능의 균형
 - 관리 도구 풍부
 
----
 
 #### Step 3: 마운트 디렉터리 생성
 
@@ -6763,7 +6538,6 @@ Writing superblocks and filesystem accounting information: done
 drwxr-xr-x 2 root root 6 Dec  5 01:30 /appdir
 ```
 
----
 
 #### Step 4: 볼륨 마운트
 
@@ -6791,7 +6565,6 @@ xvda    202:0    0   8G  0 disk
 xvdf    202:80   0   1G  0 disk /appdir
 ```
 
----
 
 #### Step 5: 파일 생성 테스트
 
@@ -6814,7 +6587,6 @@ Filesystem      Size  Used Avail Use% Mounted on
 /dev/xvdf       974M   24K  907M   1% /appdir
 ```
 
----
 
 #### 영구 마운트 설정 (재부팅 후에도 유지)
 
@@ -6856,7 +6628,6 @@ defaults,nofail  : 마운트 옵션
 ```
 → 오류 없으면 /etc/fstab 설정이 올바름
 
----
 
 ### 10.4 EBS 스냅샷 (Snapshot)
 
@@ -6889,7 +6660,6 @@ graph LR
 3. **리전 내 접근**: 다른 가용 영역에서도 사용 가능
 4. **AMI 생성 가능**: 루트 볼륨 스냅샷으로 AMI 생성
 
----
 
 #### 스냅샷 생성
 
@@ -6923,7 +6693,6 @@ Progress: 0% → 100%
 증분 스냅샷: 변경된 데이터만 (수 분 이내)
 ```
 
----
 
 #### 스냅샷으로부터 볼륨 생성
 
@@ -6945,7 +6714,6 @@ Availability Zone: ap-northeast-2c (다른 AZ 가능!)
 3. 테스트 환경: 프로덕션 데이터로 테스트 볼륨 생성
 ```
 
----
 
 #### 스냅샷 복사 (리전 간)
 
@@ -6962,7 +6730,6 @@ Encryption: Enable (권장)
 - 다른 리전에서 서비스 확장
 - 규정 준수 (데이터 지역 요구사항)
 
----
 
 #### 스냅샷 비용
 
@@ -6980,7 +6747,6 @@ Encryption: Enable (권장)
 2. **증분 백업 활용**: 첫 스냅샷 이후 변경분만 저장
 3. **라이프사이클 정책**: Amazon Data Lifecycle Manager 사용
 
----
 
 ### 10.5 볼륨 및 인스턴스 정리
 
@@ -7020,7 +6786,6 @@ Volumes → 볼륨 선택 → Actions → Delete volume
 → Yes, Delete
 ```
 
----
 
 #### EC2 인스턴스 삭제
 
@@ -7048,7 +6813,6 @@ Running → Shutting-down → Terminated
 → 중요한 데이터는 스냅샷 또는 AMI로 백업 필수
 ```
 
----
 
 ### 10.6 요약
 
@@ -7089,13 +6853,11 @@ stateDiagram-v2
 ✅ 불필요한 볼륨 정리
 ```
 
----
 
 ## Section 11: Security Group 심화 - Chaining
 
 이번 섹션에서는 Security Group의 고급 기능인 "Security Group Chaining"을 다룹니다. 이는 3-tier 아키텍처 등 복잡한 환경에서 매우 유용한 기법입니다.
 
----
 
 ### 11.1 Security Group Chaining이란?
 
@@ -7166,7 +6928,6 @@ WAS Security Group Inbound Rules:
 ✅ 동적으로 확장 가능
 ```
 
----
 
 ### 11.2 3-Tier 아키텍처 Security Group 설계
 
@@ -7236,7 +6997,6 @@ Outbound Rules:
 
 **강사 강조**: "Security Group Chaining은 클라우드 환경에서 보안을 동적으로 관리할 수 있는 매우 강력한 기능입니다. 실무에서 반드시 활용하세요."
 
----
 
 ### 11.3 My IP 제한 설정 실습
 
@@ -7286,7 +7046,6 @@ Source 드롭다운 → My IP 선택
 
 **Save rules**
 
----
 
 #### 접근 테스트
 
@@ -7311,7 +7070,6 @@ PC 공인 IP: 203.234.63.123 (허용됨)
 → Security Group이 정상 작동
 ```
 
----
 
 #### 회사 IP 대역으로 제한
 
@@ -7341,13 +7099,11 @@ CIDR 표기:
 | 회사 대역 (/24) | ✅ 권장 | 기업 프로덕션 환경 |
 | VPN IP (/32) | ✅ 매우 높음 | 민감한 관리 작업 |
 
----
 
 ## Section 12: User Data를 이용한 웹 서버 자동 구축
 
 이번 섹션에서는 EC2 인스턴스 생성 시 User Data 스크립트를 이용하여 자동으로 웹 서버를 구축하는 방법을 실습합니다.
 
----
 
 ### 12.1 User Data란?
 
@@ -7375,7 +7131,6 @@ graph TD
 3. **로그 기록**: `/var/log/cloud-init-output.log`
 4. **스크립트 형식**: Bash, Python 등
 
----
 
 ### 12.2 웹 서버 자동 설치 실습
 
@@ -7454,7 +7209,6 @@ systemctl enable httpd
 5. `systemctl start httpd`: 웹 서버 시작
 6. `systemctl enable httpd`: 부팅 시 자동 시작 설정
 
----
 
 #### EC2 인스턴스 생성 (User Data 포함)
 
@@ -7516,7 +7270,6 @@ systemctl enable httpd
 
 **Launch instance**
 
----
 
 #### 웹 서버 접속 확인
 
@@ -7543,7 +7296,6 @@ Private IP: 10.100.10.50
 Thu Dec 05 10:30:45 UTC 2025
 ```
 
----
 
 ### 12.3 User Data 로그 확인
 
@@ -7579,7 +7331,6 @@ Created symlink /etc/systemd/system/multi-user.target.wants/httpd.service → /u
 
 **⚠️ 주의**: User Data는 기본적으로 첫 부팅 시에만 실행됨
 
----
 
 ### 12.4 User Data 활용 사례
 
@@ -7675,13 +7426,11 @@ systemctl enable fail2ban
 systemctl start fail2ban
 ```
 
----
 
 ## Section 13: EC2 요금제 옵션
 
 EC2는 다양한 요금제 옵션을 제공하여 비용을 최적화할 수 있습니다.
 
----
 
 ### 13.1 On-Demand 인스턴스
 
@@ -7710,7 +7459,6 @@ t2.micro 1개월 24/7 운영:
 $0.0128 × 24시간 × 30일 = $9.216/월
 ```
 
----
 
 #### 사용 사례
 
@@ -7727,7 +7475,6 @@ $0.0128 × 24시간 × 30일 = $9.216/월
 - On-Demand가 유리 (약정 불필요)
 ```
 
----
 
 ### 13.2 Reserved Instances (예약 인스턴스)
 
@@ -7757,7 +7504,6 @@ graph LR
 | Partial Upfront | 일부 선불 + 시간당 할인 | 중간 할인 |
 | No Upfront | 선불 없음, 시간당 할인 | 최소 할인 |
 
----
 
 #### Reserved Instance 유형
 
@@ -7785,7 +7531,6 @@ graph LR
 - m5.large를 c5.xlarge로 변경 가능
 ```
 
----
 
 #### 비용 비교
 
@@ -7801,7 +7546,6 @@ graph LR
 
 **강사 강조**: "프로덕션 환경에서 항상 켜두는 인스턴스는 반드시 Reserved Instance를 구매하세요. 비용을 70% 이상 절감할 수 있습니다."
 
----
 
 ### 13.3 Spot Instances (스팟 인스턴스)
 
@@ -7835,7 +7579,6 @@ stateDiagram-v2
     end note
 ```
 
----
 
 #### Spot Instance 가격 동향
 
@@ -7853,7 +7596,6 @@ Spot 가격:
 EC2 Console → Spot Requests → Pricing History
 ```
 
----
 
 #### Spot Instance 적합한 사용 사례
 
@@ -7870,7 +7612,6 @@ EC2 Console → Spot Requests → Pricing History
 3. **실시간 처리**: 중단 불가
 4. **상태 유지 필요**: 세션 정보 등
 
----
 
 #### Spot Instance 요청
 
@@ -7892,7 +7633,6 @@ Request type:
 - One-time: 회수 후 종료
 ```
 
----
 
 #### Spot Instance 인터럽션 처리
 
@@ -7923,7 +7663,6 @@ while true; do
 done
 ```
 
----
 
 ### 13.4 Savings Plans
 
@@ -7952,7 +7691,6 @@ Savings Plans 약정:
 - Lambda, Fargate 사용 → 할인 적용 (Compute Savings Plans)
 ```
 
----
 
 #### Savings Plans 유형
 
@@ -7976,7 +7714,6 @@ Savings Plans 약정:
 유연성: 중간 (리전 내 인스턴스 패밀리 변경 가능)
 ```
 
----
 
 ### 13.5 요금제 선택 가이드
 
@@ -8010,13 +7747,11 @@ graph TD
 | 중단되어도 괜찮은가? | Spot | On-Demand / Reserved |
 | Lambda/Fargate도 사용하는가? | Compute Savings Plans | EC2 Savings Plans / RI |
 
----
 
 ## Section 14: 종합 정리 및 삭제
 
 이번 섹션에서는 오늘 실습한 내용을 정리하고 생성한 리소스를 깔끔하게 삭제하는 방법을 다룹니다.
 
----
 
 ### 14.1 오늘 실습 내용 요약
 
@@ -8044,7 +7779,6 @@ graph TD
 5. Elastic IP (있다면)
 ```
 
----
 
 ### 14.2 리소스 삭제 순서
 
@@ -8064,7 +7798,6 @@ graph TD
     style Complete fill:#6BCF7F
 ```
 
----
 
 #### 단계별 삭제 방법
 
@@ -8157,7 +7890,6 @@ EC2 Console → Elastic IPs
 
 **⚠️ 중요**: 사용하지 않는 Elastic IP는 **시간당 과금**!
 
----
 
 ### 14.3 Security Group과 Key Pair 관리
 
@@ -8190,7 +7922,6 @@ EC2 Console → Security Groups
 → 먼저 연결 해제 필요
 ```
 
----
 
 #### Key Pair
 
@@ -8216,7 +7947,6 @@ EC2 Console → Key Pairs
 
 **⚠️ 주의**: 삭제 후에도 기존 인스턴스는 계속 사용 가능 (이미 공개키가 설치됨)
 
----
 
 ### 14.4 비용 확인
 
@@ -8244,7 +7974,6 @@ Billing Dashboard → Free Tier
 → Snapshots: 1 GiB/month
 ```
 
----
 
 ### 14.5 📋 Section 4 핵심 요약
 
@@ -8259,7 +7988,6 @@ Billing Dashboard → Free Tier
 6. ✅ Security Group 설정
 7. ✅ IAM Instance Profile 연결 (Session Manager용)
 
----
 
 #### Security Group 설계 원칙
 
@@ -8278,7 +8006,6 @@ WAS-SG: Web-SG → 8080
 DB-SG: WAS-SG → 3306
 ```
 
----
 
 #### EBS 볼륨 관리
 
@@ -8305,7 +8032,6 @@ sc1: 아카이브
 - 리전 간 복사 가능
 ```
 
----
 
 #### 요금제 최적화
 
@@ -8326,7 +8052,6 @@ Savings Plans: 유연한 장기 약정
 ✅ Right Sizing (적정 스펙 선택)
 ```
 
----
 
 #### User Data 활용
 
@@ -8344,7 +8069,6 @@ Savings Plans: 유연한 장기 약정
 /var/log/cloud-init-output.log
 ```
 
----
 
 ### 14.6 다음 학습 예고
 
@@ -8360,7 +8084,6 @@ Savings Plans: 유연한 장기 약정
 - Auto Scaling 연동 (다음 주)
 - 리소스 정리 및 최종 검증
 
----
 
 **🎉 Section 4 완료!**
 
@@ -8386,7 +8109,6 @@ Savings Plans: 유연한 장기 약정
 - [섹션 20: ALB vs NLB 비교](#섹션-20-alb-vs-nlb-비교)
 - [섹션 21: ELB 구성 요소 상세](#섹션-21-elb-구성-요소-상세)
 
----
 
 ## 섹션 15: EBS (Elastic Block Store) 심화
 
@@ -9359,7 +9081,6 @@ EBS 전용 대역폭: 최대 4,750 Mbps (593 MB/s)
 - 추가 비용 발생
 ```
 
----
 
 ## 섹션 16: EBS 스냅샷 전략
 
@@ -9722,7 +9443,6 @@ aws ec2 modify-snapshot-tier \
 # 절감액: $1,200 - $330 = $870 (72.5% 절감)
 ```
 
----
 
 ## 섹션 17: Security Group 심화
 
@@ -9992,7 +9712,6 @@ aws ec2 describe-security-groups \
 # restricted-common-ports: 일반 포트의 무제한 접근 감사
 ```
 
----
 
 ## 섹션 18: Security Group Chaining 패턴
 
@@ -10289,7 +10008,6 @@ Source: sg-bastion  # Bastion SG
 - 마이크로서비스 격리
 ```
 
----
 
 ## 섹션 19: ELB (Elastic Load Balancing) 개념
 
@@ -10419,7 +10137,6 @@ graph TD
     style CLB2 fill:#D3D3D3
 ```
 
----
 
 ## 섹션 20: ALB vs NLB 비교
 
@@ -10605,7 +10322,6 @@ NLB 선택:
 ✓ 비용 최적화 (높은 트래픽)
 ```
 
----
 
 ## 섹션 21: ELB 구성 요소 상세
 
@@ -10914,7 +10630,6 @@ Deregistration Delay: 5-30초
 - [섹션 27: AWS 리소스 정리](#섹션-27-aws-리소스-정리)
 - [섹션 28: 최종 종합 정리 및 복습](#섹션-28-최종-종합-정리-및-복습)
 
----
 
 ## 섹션 22: NAT Gateway 생성 및 구성
 
@@ -11267,7 +10982,6 @@ aws ec2 create-nat-gateway \
 - 각 NAT Gateway당 $0.045/시간
 - 월 비용: 2 × $0.045 × 730 = $65.7
 
----
 
 ## 섹션 23: ALB 실습 - Security Group 구성
 
@@ -11554,7 +11268,6 @@ aws ec2 describe-security-groups \
 # 출력: sg-alb-xxxxx (ALB Security Group ID)
 ```
 
----
 
 ## 섹션 24: ALB 실습 - EC2 웹 서버 생성
 
@@ -11912,7 +11625,6 @@ aws ec2 describe-instances \
 +---------------------+--------------+----------+
 ```
 
----
 
 ## 섹션 25: ALB 실습 - Target Group 및 ALB 생성
 
@@ -12260,7 +11972,6 @@ sudo tail -f /var/log/httpd/access_log
 # ALB의 Health Check 요청이 들어오는지 확인
 ```
 
----
 
 ## 섹션 26: ALB 테스트 및 검증
 
@@ -12489,7 +12200,6 @@ type time elb client:port target:port request_processing_time target_processing_
 http 2025-12-06T10:30:00.123456Z app/prod-web-alb/1234567890abcdef 203.0.113.1:12345 10.0.1.10:80 0.001 0.002 0.000 200 200 123 456 "GET http://prod-web-alb-xxx.elb.amazonaws.com:80/ HTTP/1.1" "Mozilla/5.0" - - arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/prod-web-tg/abc123 "Root=1-abc-def" "prod-web-alb-xxx.elb.amazonaws.com" "-" 0 2025-12-06T10:30:00.120000Z "forward" "-" "-"
 ```
 
----
 
 ## 섹션 27: AWS 리소스 정리
 
@@ -12875,7 +12585,6 @@ aws ec2 describe-volumes \
 echo -e "\n=== 모든 값이 0이어야 과금 없음 ==="
 ```
 
----
 
 ## 섹션 28: 최종 종합 정리 및 복습
 
@@ -13405,6 +13114,5 @@ A: 미션 크리티컬 DB, 초고성능 필요, SAP HANA 등
 계속해서 실습하고 학습하시기 바랍니다!
 ```
 
----
 
 **학습 노트 끝**

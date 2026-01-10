@@ -10,13 +10,16 @@ tags:
   - SK_Rookies
 ---
 
+- AWS-Cloud
+  - AWS-Cloud
+  - SK_Rookies
+
 # 📝 AWS 클라우드 서비스 종합 강의 노트 (Day N)
 
 **강의 일자**: 2025년 12월 9일
 **강의 주제**: AWS 컴퓨팅, 스토리지, 네트워크, 데이터베이스 서비스
 **학습 목표**: AWS 핵심 서비스의 상세 구성, 보안, 실습을 통한 실무 역량 강화
 
----
 
 ## 📋 목차
 
@@ -28,7 +31,6 @@ tags:
 6. [데이터베이스 서비스](#6-데이터베이스-서비스)
 7. [종합 정리](#7-종합-정리)
 
----
 
 ## 1. 지난 시간 복습 및 EC2 오토스케일링
 
@@ -36,7 +38,6 @@ tags:
 
 강사님께서 강조하신 것처럼, 이전 학습 내용을 복습하는 것은 단순한 반복이 아닙니다. 클라우드 서비스는 서로 연결되어 있으며, 이전 개념을 정확히 이해해야 새로운 개념을 제대로 학습할 수 있습니다. 특히 S3 실습을 완료하지 못한 상태에서 오늘 이어서 진행하기 때문에, 복습은 필수적입니다.
 
----
 
 ### 📦 1.1 EC2 오토스케일링 (Auto Scaling)
 
@@ -63,7 +64,6 @@ graph LR
     I --> J[비용 절감]
 ```
 
----
 
 #### 🔧 **오토스케일링 그룹 (Auto Scaling Group) 구성 요소**
 
@@ -129,7 +129,6 @@ systemctl start httpd
 systemctl enable httpd
 ```
 
----
 
 ##### **2. 오토스케일링 정책 (Scaling Policy)**
 
@@ -161,7 +160,6 @@ $ aws autoscaling update-auto-scaling-group \
     --desired-capacity 5
 ```
 
----
 
 ###### **정책 유형 2: 예약된 일정 기반 조정 (Scheduled Scaling)**
 
@@ -201,7 +199,6 @@ $ aws autoscaling put-scheduled-update-group-action \
 
 **⚠️ 주의**: Cron 표현식 형식은 `분 시 일 월 요일` 순서입니다.
 
----
 
 ###### **정책 유형 3: 초기값 유지 (Maintain Current Levels)**
 
@@ -253,7 +250,6 @@ $ aws autoscaling create-auto-scaling-group \
 - 필수 백그라운드 작업 서버 (최소 3개 유지)
 - 고정된 인프라 구성이 필요한 경우
 
----
 
 ###### **정책 유형 4: 동적 조정 (Dynamic Scaling) - 대상 추적 조정 정책 ⭐**
 
@@ -325,7 +321,6 @@ $ aws autoscaling put-scaling-policy \
   - `AlarmHigh`: CPU가 70% 이상일 때 Scale Out 트리거
   - `AlarmLow`: CPU가 일정 수준 이하일 때 Scale In 트리거
 
----
 
 **실행 예제 2: ALB 타겟당 요청 수 기반 조정**
 
@@ -358,7 +353,6 @@ $ aws elbv2 describe-target-groups --load-balancer-arn <ALB-ARN>
 # ResourceLabel 형식: app/<lb-name>/<lb-id>/targetgroup/<tg-name>/<tg-id>
 ```
 
----
 
 **실행 예제 3: 사용자 지정 지표 기반 조정**
 
@@ -389,7 +383,6 @@ $ aws autoscaling put-scaling-policy \
 - 메시지 수가 감소하면 워커 인스턴스 제거
 - 백그라운드 작업 처리에 효율적
 
----
 
 ###### **정책 유형 5: 예측 기반 조정 (Predictive Scaling)**
 
@@ -422,7 +415,6 @@ graph TD
 - 사용자 경험 향상 (지연 없음)
 ```
 
----
 
 #### 🎯 **오토스케일링의 장점**
 
@@ -458,7 +450,6 @@ graph TD
 
 **💡 중요**: 트래픽 패턴에 따라 동적으로 조정하면 비용을 크게 절감할 수 있습니다.
 
----
 
 ### 🚀 1.2 Lambda 서버리스 컴퓨팅
 
@@ -489,7 +480,6 @@ mindmap
       자동 장애 조치
 ```
 
----
 
 #### 🏗️ **대표적인 서버리스 서비스**
 
@@ -503,7 +493,6 @@ mindmap
 | **SQS** | 메시징 | 메시지 큐 | 비동기 작업 처리 |
 | **SNS** | 메시징 | Pub/Sub 메시징 | 알림 전송, 이벤트 브로드캐스트 |
 
----
 
 #### 🔧 **Lambda 상세 분석**
 
@@ -583,7 +572,6 @@ def lambda_handler(event, context):
 - 재호출 대기 (Warm Start를 위해)
 - 일정 시간 후 자동 종료
 
----
 
 ##### **Lambda 제한사항 ⚠️**
 
@@ -597,7 +585,6 @@ def lambda_handler(event, context):
 
 **📌 노트**: 메모리를 많이 필요로 하거나 실행 시간이 긴 작업은 Lambda보다 EC2나 ECS/Fargate를 사용하는 것이 적합합니다.
 
----
 
 ##### **Lambda 사용 사례**
 
@@ -639,7 +626,6 @@ def lambda_handler(event, context):
 4. 썸네일을 S3에 업로드
 5. 자동 종료
 
----
 
 **사례 2: API 백엔드**
 
@@ -683,7 +669,6 @@ GET  /products/{id}  → Lambda 함수 → DynamoDB 조회
 POST /products       → Lambda 함수 → DynamoDB 저장
 ```
 
----
 
 ### 📦 1.3 컨테이너 서비스 (ECS, EKS, Fargate)
 
@@ -722,7 +707,6 @@ graph TD
 | **이식성** | 낮음 | 높음 (어디서든 동일하게 실행) |
 | **확장성** | 느림 | 빠름 |
 
----
 
 #### 🔧 **컨테이너의 특징**
 
@@ -764,7 +748,6 @@ graph LR
 
 **💡 중요**: 각 서비스를 독립된 컨테이너로 실행하면, 서비스별로 독립적인 배포, 확장, 장애 격리가 가능합니다.
 
----
 
 #### 🏗️ **AWS 컨테이너 관련 서비스**
 
@@ -801,7 +784,6 @@ $ docker push \
   123456789012.dkr.ecr.ap-northeast-2.amazonaws.com/my-app:latest
 ```
 
----
 
 ##### **2. ECS (Elastic Container Service)**
 
@@ -854,7 +836,6 @@ sequenceDiagram
     ECS-->>User: Task Running 상태
 ```
 
----
 
 ##### **3. EKS (Elastic Kubernetes Service)**
 
@@ -876,7 +857,6 @@ sequenceDiagram
 
 **💡 중요**: "처음 컨테이너를 도입하고, AWS 서비스와 통합이 중요하다면 ECS를 선택하세요. Kubernetes 경험이 있고, 온프레미스와 통합이 필요하다면 EKS를 선택하세요."
 
----
 
 ##### **4. Fargate vs EC2 선택**
 
@@ -921,7 +901,6 @@ flowchart TD
     D -->|No| C
 ```
 
----
 
 ### 🎯 **Section 1 핵심 요약**
 
@@ -969,11 +948,9 @@ flowchart TD
 - Kubernetes 경험 있음: EKS
 - 비용 최적화: ECS + EC2 (Reserved Instance)
 
----
 
 **다음 섹션 예고**: Section 2에서는 S3 객체 스토리지의 상세 구성, 보안 설정, VPC Endpoint를 이용한 프라이빗 연결, 그리고 정적 웹사이트 호스팅 실습을 다룹니다.
 
----
 
 *작성 완료: Section 1 (약 600줄)*
 # 📦 S3 객체 스토리지 심화 및 보안 실습
@@ -990,7 +967,6 @@ flowchart TD
 9. [S3 정적 웹사이트 호스팅](#s3-정적-웹사이트-호스팅)
 10. [종합 정리 및 체크리스트](#종합-정리-및-체크리스트)
 
----
 
 ## S3 객체 스토리지 개요
 
@@ -1126,7 +1102,6 @@ $ aws ec2 create-snapshot \
 | **SageMaker** | ML 모델 학습 데이터 저장소 |
 | **CloudTrail** | AWS API 호출 로그 저장 |
 
----
 
 ## S3 스토리지 클래스와 Intelligent Tiering
 
@@ -1247,7 +1222,6 @@ $ aws s3api head-object \
 
 ⚠️ **비용 주의**: Glacier 클래스는 저장 비용은 저렴하지만, **검색 비용**과 **조기 삭제 수수료**가 발생할 수 있습니다.
 
----
 
 ## S3 보안 아키텍처
 
@@ -1408,7 +1382,6 @@ $ aws s3control put-public-access-block \
 - 반드시 필요한 경우가 아니라면 **비활성화하지 마세요**
 - 버킷 정책이나 ACL로 Public 권한을 부여해도, Block Public Access가 활성화되어 있으면 **우선적으로 차단**됩니다
 
----
 
 ## S3 암호화 메커니즘
 
@@ -1607,7 +1580,6 @@ $ aws s3api put-bucket-encryption \
 - KMS API 호출 횟수를 **최대 99% 감소**
 - 대량의 객체를 업로드하는 경우 비용 절감 효과 큼
 
----
 
 ## S3 접근 제어 정책
 
@@ -1710,7 +1682,6 @@ $ aws s3api put-bucket-encryption \
 }
 ```
 
----
 
 ## S3 데이터 보호 및 가용성
 
@@ -2045,7 +2016,6 @@ $ aws s3api put-bucket-lifecycle-configuration \
 | 임시 데이터 | 7일 후 자동 삭제 |
 | 멀티파트 업로드 정리 | 7일 이내 미완료 업로드 삭제 |
 
----
 
 ## VPC Gateway Endpoint 실습
 
@@ -2258,7 +2228,6 @@ sequenceDiagram
     Note over EC2,S3: 인터넷을 거치지 않는<br/>프라이빗한 통신
 ```
 
----
 
 ## Bastion Server 구성 실습
 
@@ -2389,7 +2358,6 @@ $ chmod 600 ~/.ssh/config
 $ ssh private-ec2
 ```
 
----
 
 ## S3 정적 웹사이트 호스팅
 
@@ -2570,7 +2538,6 @@ $ aws s3api put-public-access-block \
 - Route 53으로 커스텀 도메인 연결
 - CloudFront로 HTTPS 적용
 
----
 
 ## 종합 정리 및 체크리스트
 
@@ -2756,7 +2723,6 @@ $ aws ec2 describe-instances --instance-ids i-xxx \
     --query 'Reservations[0].Instances[0].PrivateIpAddress'
 ```
 
----
 
 ## 학습 체크리스트
 
@@ -2830,11 +2796,9 @@ aws s3api put-bucket-versioning --bucket my-bucket --versioning-configuration St
 aws ec2 create-vpc-endpoint --vpc-id vpc-xxx --service-name com.amazonaws.REGION.s3 ...
 ```
 
----
 
 **다음 섹션 예고**: Section 3에서는 스토리지 서비스(EFS, FSx, Storage Gateway, DataSync)와 네트워크 서비스(Route 53, CloudFront, API Gateway, Global Accelerator)를 다룹니다.
 
----
 
 *작성: 2024-12-09*
 *AWS 강의 노트 - S3 심화 및 보안 실습편*
@@ -2849,7 +2813,6 @@ aws ec2 create-vpc-endpoint --vpc-id vpc-xxx --service-name com.amazonaws.REGION
 6. [글로벌 가속화 - Global Accelerator](#글로벌-가속화---global-accelerator)
 7. [종합 정리 및 체크리스트](#종합-정리-및-체크리스트)
 
----
 
 ## 공유 파일 스토리지 서비스
 
@@ -3155,7 +3118,6 @@ $ python train_model.py --data-dir /mnt/fsx/dataset1
 - **압축**: 투명한 데이터 압축
 - **Linux 워크로드 최적화**: 고성능 Linux 애플리케이션
 
----
 
 ## 하이브리드 스토리지 및 데이터 전송
 
@@ -3672,7 +3634,6 @@ $ aws backup start-restore-job \
 | **주별** | `cron(0 3 ? * SUN *)` | 90일 | 주간 체크포인트 |
 | **월별** | `cron(0 3 1 * ? *)` | 1년 | 장기 보관 |
 
----
 
 ## DNS 서비스 - Route 53
 
@@ -4107,7 +4068,6 @@ $ aws route53 change-resource-record-sets \
 
 **클라이언트는 최대 8개의 IP를 받아 자체적으로 선택**
 
----
 
 ## CDN 서비스 - CloudFront
 
@@ -4324,7 +4284,6 @@ $ aws cloudfront update-distribution --id E1ABC123DEF456 --distribution-config '
 }'
 ```
 
----
 
 ## API 관리 - API Gateway
 
@@ -4458,7 +4417,6 @@ $ aws apigateway create-authorizer \
     --identity-source method.request.header.Authorization
 ```
 
----
 
 ## 글로벌 가속화 - Global Accelerator
 
@@ -4548,7 +4506,6 @@ $ aws globalaccelerator create-endpoint-group \
 - DNS 변경 불필요: IP 주소가 변하지 않음
 - 즉각적인 장애 조치: 30초 이내 자동 Failover
 
----
 
 ## 종합 정리 및 체크리스트
 
@@ -4629,17 +4586,14 @@ aws globalaccelerator create-accelerator
 aws globalaccelerator create-listener
 ```
 
----
 
 **다음 섹션 예고**: Section 4에서는 관계형 데이터베이스(RDS, Aurora)와 NoSQL 데이터베이스(DynamoDB)를 다룹니다.
 
----
 
 *작성: 2024-12-09*
 *AWS 강의 노트 - 스토리지 및 네트워크 서비스편*
 # 📝 Section 4: AWS 데이터베이스 서비스 (RDS, Aurora, DynamoDB)
 
----
 
 ## 📚 목차
 
@@ -4652,7 +4606,6 @@ aws globalaccelerator create-listener
 7. [데이터베이스 서비스 비교 및 선택 가이드](#7-데이터베이스-서비스-비교-및-선택-가이드)
 8. [체크리스트](#8-체크리스트)
 
----
 
 ## 1. AWS 데이터베이스 서비스 개요
 
@@ -4693,7 +4646,6 @@ graph TB
 | **그래프 DB** | Neptune | 소셜 네트워크, 추천 엔진, 지식 그래프 |
 | **시계열 DB** | Timestream | IoT, 모니터링, 분석 |
 
----
 
 ## 2. RDS (Relational Database Service)
 
@@ -5077,7 +5029,6 @@ $ aws rds delete-db-snapshot \
 - 자동 백업: RDS 인스턴스 스토리지 크기만큼 무료, 초과분은 과금
 - 수동 스냅샷: S3 스토리지 요금 부과
 
----
 
 ## 3. Aurora (AWS 클라우드 네이티브 데이터베이스)
 
@@ -5375,7 +5326,6 @@ $ aws rds create-db-instance \
 - 개발/테스트 환경
 - 새로운 애플리케이션 (트래픽 예측 어려움)
 
----
 
 ## 4. DynamoDB (NoSQL 데이터베이스)
 
@@ -5824,7 +5774,6 @@ $ aws dynamodb describe-continuous-backups --table-name Users
 - **온디맨드 백업**: 수동 생성, 무제한 보관, 전체 테이블 백업
 - **PITR (Point-in-Time Recovery)**: 최근 35일 이내 임의 시점 복원 가능
 
----
 
 ## 5. 데이터베이스 보안
 
@@ -5986,7 +5935,6 @@ $ aws secretsmanager rotate-secret \
     --rotation-rules AutomaticallyAfterDays=30
 ```
 
----
 
 ## 6. 실습 가이드
 
@@ -6148,7 +6096,6 @@ $ watch -n 5 'aws rds describe-db-clusters \
 - Cluster Endpoint는 변경되지 않았는가?
 - 애플리케이션 연결이 끊기지 않았는가?
 
----
 
 ## 7. 데이터베이스 서비스 비교 및 선택 가이드
 
@@ -6203,7 +6150,6 @@ graph TB
 - 초고속 응답 시간 필요 (밀리초 미만)
 - 대규모 확장 필요
 
----
 
 ## 8. 체크리스트
 
@@ -6255,7 +6201,6 @@ graph TB
 - [ ] 비용 최적화 전략
 - [ ] 리소스 정리 (DB 삭제)
 
----
 
 ## 📝 요약
 
@@ -6273,12 +6218,10 @@ graph TB
 💡 **DynamoDB 용량**: RCU (4KB 읽기), WCU (1KB 쓰기), 프로비저닝드 vs 온디맨드
 💡 **보안**: Private Subnet, Security Group, Bastion Server, 암호화, Secrets Manager
 
----
 
 **다음 섹션 예고**: Section 5에서는 전체 AWS 서비스 종합 정리 및 학습 체크리스트를 제공합니다.
 # 📝 Section 5: 종합 정리 및 학습 체크리스트
 
----
 
 ## 📚 목차
 
@@ -6291,7 +6234,6 @@ graph TB
 7. [다음 학습 방향](#7-다음-학습-방향)
 8. [참고 자료](#8-참고-자료)
 
----
 
 ## 1. 강의 전체 요약
 
@@ -6333,7 +6275,6 @@ graph TB
 ✅ **네트워크**: DNS 라우팅, CDN 캐싱, API Gateway
 ✅ **데이터베이스**: RDS 고가용성, Aurora Failover, DynamoDB 용량 모드
 
----
 
 ## 2. AWS 서비스별 핵심 개념 정리
 
@@ -6487,7 +6428,6 @@ sequenceDiagram
 → (3KB ÷ 1KB) × 50 = 150 WCU 필요
 ```
 
----
 
 ## 3. 서비스 비교 매트릭스
 
@@ -6542,7 +6482,6 @@ graph TB
 | **마이크로서비스** | ECS/EKS | 컨테이너 오케스트레이션 |
 | **배치 작업** | Batch | 대규모 데이터 처리 |
 
----
 
 ## 4. 아키텍처 패턴 및 모범 사례
 
@@ -6665,7 +6604,6 @@ Secrets Manager: 자격증명 자동 로테이션
 - [ ] S3는 기본적으로 Multi-AZ
 - [ ] EFS는 기본적으로 Multi-AZ
 
----
 
 ## 5. 실습 총정리
 
@@ -6738,7 +6676,6 @@ aws lambda delete-function --function-name my-function
 aws logs delete-log-group --log-group-name /aws/lambda/my-function
 ```
 
----
 
 ## 6. 학습 체크리스트
 
@@ -6854,7 +6791,6 @@ aws logs delete-log-group --log-group-name /aws/lambda/my-function
 - [ ] IAM Role for EC2/Lambda
 - [ ] 최소 권한 원칙 (Least Privilege)
 
----
 
 ## 7. 다음 학습 방향
 
@@ -6992,7 +6928,6 @@ graph TB
 - 이벤트 기반 아키텍처
 ```
 
----
 
 ## 8. 참고 자료
 
@@ -7104,7 +7039,6 @@ https://calculator.aws/
 - **AWS Online Tech Talks**: 기술 세미나 및 웨비나
 - **AWS re:Invent**: 연례 컨퍼런스 세션
 
----
 
 ## 📝 최종 요약
 
@@ -7133,7 +7067,6 @@ https://calculator.aws/
 💡 **공식 문서**: AWS 공식 문서를 참고하는 습관을 들이세요
 💡 **실전 경험**: 개인 프로젝트나 회사 업무에 적용해보세요
 
----
 
 **수고하셨습니다! 🎉**
 

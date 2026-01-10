@@ -10,6 +10,10 @@ tags:
   - SK_Rookies
 ---
 
+- App-Security
+  - App-Security
+  - SK_Rookies
+
 # Section 1: 서론 및 강의 개요
 
 ## 1.1 강의 소개
@@ -428,7 +432,6 @@ WebGoat-Lessons/xss/src/main/java/org/owasp/webgoat/plugin/
 - [ ] 파일 업로드 취약점과 경로 조작 공격을 이해한다
 - [ ] WebGoat에서 SQL Injection 및 XSS 문제를 해결할 수 있다
 
----
 
 **다음 섹션 예고:**
 
@@ -1186,7 +1189,6 @@ Process p = Runtime.getRuntime().exec(command);
 %>
 ```
 
----
 
 **다음 섹션 예고:**
 
@@ -2121,7 +2123,6 @@ if (ip.matches("^[0-9\\.]+$")) {
 }
 ```
 
----
 
 **다음 섹션 예고:**
 
@@ -2542,7 +2543,6 @@ sessionCookie.setMaxAge(3600);    // 1시간
 response.addCookie(sessionCookie);
 ```
 
----
 
 # Section 5: CSRF/SSRF 및 WebGoat 실습
 
@@ -2768,7 +2768,6 @@ Password: (아무 값)
 URL: http://localhost:8080/WebGoat/start.mvc#attack/...?query=<script>alert('XSS')</script>
 ```
 
----
 
 # Section 6: 소스 코드 보안 분석 및 파일 업로드 취약점
 
@@ -2945,7 +2944,6 @@ if (!canonicalPath.startsWith(basePath)) {
 }
 ```
 
----
 
 # Section 7: 종합 정리 및 체크리스트
 
@@ -3056,7 +3054,6 @@ if (!canonicalPath.startsWith(basePath)) {
 - 프레임워크를 맹신하지 말고 직접 검증
 - 보안 업데이트를 주기적으로 확인
 
----
 
 **강의 종료**
 
