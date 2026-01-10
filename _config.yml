@@ -1,43 +1,50 @@
-# Site Settings
-title: DevLog
-description: "Security Researcher & Developer"
-url: "https://khsqowp.github.io"
-baseurl: ""
-repository: "khsqowp/khsqowp.github.io"
-locale: "ko-KR"
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 
-# Theme
-remote_theme: "mmistakes/minimal-mistakes"
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+title: "SK Shielders Rookies"
+email: "khsqowp@github.io"
+description: >- # this means to ignore newlines until "baseurl:"
+  SK Shielders Rookies 28기 학습 로그 및 포트폴리오
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://khsqowp.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: khsqowp
+github_username: khsqowp
+
+# Minimal Mistakes Skin
 minimal_mistakes_skin: "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
-# Author
-author:
-  name: "DevLog"
-  avatar: "/assets/images/profile.png" # 나중에 이미지 넣으세요
-  bio: "Security Researcher & Developer.<br>Building secure and scalable systems."
-  location: "Seoul, Korea"
-  links:
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/khsqowp"
+# Build settings
+markdown: kramdown
+remote_theme: "mmistakes/minimal-mistakes"
+# Outputting
+permalink: /:categories/:title/
+paginate: 5 # amount of posts to show
+paginate_path: /page:num/
+timezone: Asia/Seoul # Seoul
+
+include:
+  - _pages
 
 # Plugins
 plugins:
-  - jekyll-remote-theme # 추가됨
-  - jekyll-include-cache
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
   - jemoji
-
-# Pagination
-paginate: 10
-paginate_path: "/page:num/"
-
-# Navigation
-logo: # "/assets/images/logo.png"
-masthead_title: "DevLog"
+  - jekyll-include-cache
 
 # Defaults
 permalink: /posts/:year/:month/:day/:title/
@@ -49,10 +56,11 @@ defaults:
     values:
       layout: "single"
       author_profile: true
-        read_time: true
-        show_date: true # 날짜 표시 활성화
-        date_format: "%Y-%m-%d" # 날짜 포맷 고정
-        comments: false      share: true
+      read_time: true
+      show_date: true
+      date_format: "%Y-%m-%d"
+      comments: false
+      share: true
       related: true
   - scope:
       path: ""
