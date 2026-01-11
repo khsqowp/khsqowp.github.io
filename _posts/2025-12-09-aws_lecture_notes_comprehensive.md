@@ -1,7 +1,7 @@
 --- 
-title: "📝 AWS 클라우드 서비스 종합 강의 노트 (Day N)"
+title: "AWS 컴퓨팅 심화: Auto Scaling, Lambda, 그리고 컨테이너"
 date: 2025-12-09
-excerpt: "학습 목표: AWS 핵심 서비스의 상세 구성, 보안, 실습을 통한 실무 역량 강화"
+excerpt: "애플리케이션 부하에 따라 유연하게 확장하는 EC2 Auto Scaling 구성 방법과 서버리스 컴퓨팅의 핵심인 Lambda를 학습합니다. ECS, EKS 등 컨테이너 서비스와 S3 객체 스토리지의 심화 기능을 통해 클라우드 아키텍처 역량을 강화합니다."
 categories:
   - AWS-Cloud
 tags:

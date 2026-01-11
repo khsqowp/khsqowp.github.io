@@ -1,7 +1,7 @@
 --- 
-title: "📝 NumPy & Pandas 데이터 분석 강의 노트 (2일차)"
+title: "Pandas 데이터 분석: 데이터프레임 조작과 결측치 처리"
 date: 2025-11-04
-excerpt: "- 날짜: 2025년 11월 4일 (월요일)"
+excerpt: "데이터 분석의 필수 라이브러리인 Pandas의 Series와 DataFrame 구조를 심층적으로 다룹니다. 실무 데이터에서 필연적으로 발생하는 결측값(NaN)을 처리하는 다양한 전략과 데이터를 탐색하고 정제하는 EDA(탐색적 데이터 분석) 기법을 익힙니다."
 categories:
   - Python
 tags:

@@ -1,7 +1,7 @@
 --- 
-title: "📝 AWS 클라우드 서비스 강의 노트 (6일차)"
+title: "AWS 데이터베이스와 보안: DynamoDB, Redshift 및 WAF 활용"
 date: 2025-12-10
-excerpt: "- 날짜: 2025년 12월 10일"
+excerpt: "AWS의 핵심 데이터베이스 서비스인 DynamoDB, Redshift, DMS의 특징과 활용법을 학습합니다. 또한 WAF를 이용한 웹 서비스 보호 실습과 GuardDuty, Config 등 AWS 보안 서비스의 전반적인 기능을 다룹니다."
 categories:
   - AWS-Cloud
 tags:
