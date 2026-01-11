@@ -1,7 +1,7 @@
 ---
 title: "📝 AWS VPC 네트워킹 및 ELB 강의 노트 (3일차)"
 date: 2025-12-05
-excerpt: "VPC 고급 네트워킹(Peering, Transit Gateway) 및 EC2, ELB 로드 밸런서 구성을 다룹니다."
+excerpt: "강사 강조 사항: '오늘 배우는 내용은 AWS 클라우드 환경에서 가장 핵심이 되는 네트워킹과 컴퓨팅 서비스입니다. 특히 보안 업무를 담당하시는 분들에게 매우 중요한 내용이니 집중해주시기 바랍니다.'"
 categories:
   - AWS-Cloud
 tags:

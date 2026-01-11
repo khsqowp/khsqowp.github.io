@@ -1,7 +1,7 @@
 ---
-title: "NumPy--Pandas-데이터-시각화-강의-노트-4일차"
-date: 2026-01-11
-excerpt: ""
+title: "📝 NumPy & Pandas 데이터 시각화 강의 노트 (4일차)"
+date: 2025-11-06
+excerpt: "3일차까지 NumPy와 Pandas의 기본적인 데이터 분석 기능들을 학습했습니다. 오늘은 그 데이터들을 효과적으로 시각화(Visualization) 하는 방법을 배웠습니다. 강사님께서 강조하신 것처럼, 프로그래밍 언어 학습은 '끊어지는 부분이 없이 연속성을 가지고..."
 categories:
   - Python
 tags:

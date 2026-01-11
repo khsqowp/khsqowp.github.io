@@ -1,13 +1,13 @@
----"
+---
 title: "📝 Streamlit 웹 시각화 및 보안 대시보드 구축 강의 노트 (5일차)"
-date: 2025-11-07
-excerpt: "💡 **중요!**: 오늘 배운 Streamlit은 **데이터 분석 결과를 웹으로 즉시 배포**할 수 있는 강력한 도구입니다. Python 코드만으로 HTML, CSS, JavaScript 없이 전문적인 웹 애플리케이션을 만들 수 있습니다."
+date: 2025-01-01
+excerpt: "이전 강의에서는 NumPy와 Pandas를 활용한 데이터 분석의 기초와 Matplotlib, Seaborn을 활용한 정적 시각화를 다루었습니다. 오늘은 그 내용을 기반으로 실전 웹 시각화로 나아가는 중요한 전환점입니다. 특히 보안 분야에서 실시간 모니터링과 침해사..."
 categories:
   - Python
 tags:
   - Python
   - SK_Rookies
-"---
+---
 
 # 📝 Streamlit 웹 시각화 및 보안 대시보드 구축 강의 노트 (5일차)
 

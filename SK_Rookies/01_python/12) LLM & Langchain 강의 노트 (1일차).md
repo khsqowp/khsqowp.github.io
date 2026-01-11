@@ -1,3 +1,14 @@
+---
+title: "📝 LLM & Langchain 강의 노트 (1일차)"
+date: 2025-11-10
+excerpt: "오늘 강의에서는 생성형 AI(Generative AI)의 핵심 기술인 LLM(Large Language Model), Langchain, 그리고 RAG(Retrieval Augmented Generation)에 대해 학습했습니다. 단순히 개념을 이해하는 것을 넘어..."
+categories:
+  - Python
+tags:
+  - Python
+  - SK_Rookies
+---
+
 # 📝 LLM & Langchain 강의 노트 (1일차)
 
 **강의 날짜:** 2025년 11월 10일 (월요일)  

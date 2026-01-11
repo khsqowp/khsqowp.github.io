@@ -1,3 +1,14 @@
+---
+title: "📝 NumPy & Pandas 데이터 분석 강의 노트 (2일차)"
+date: 2025-11-04
+excerpt: "- 날짜: 2025년 11월 4일 (월요일)"
+categories:
+  - Python
+tags:
+  - Python
+  - SK_Rookies
+---
+
 # 📝 NumPy & Pandas 데이터 분석 강의 노트 (2일차)
 
 ## 📅 강의 정보

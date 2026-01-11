@@ -1,7 +1,7 @@
 ---
-title: "Secure-Python-강의-노트5일차"
-date: 2026-01-11
-excerpt: ""
+title: "📝 Secure Python 강의 노트 - Day 5 (2025년 10월 31일)"
+date: 2025-10-31
+excerpt: "오늘 강의에서는 Python의 예외 처리(Exception Handling), 로깅(Logging), 파일 입출력(File I/O), 그리고 데코레이터를 활용한 보안 강화 기법을 배웠습니다. 이번 강의는 실무에서 매우 중요한 내용들로 구성되어 있으며, 특히 안전한..."
 categories:
   - Python
 tags:

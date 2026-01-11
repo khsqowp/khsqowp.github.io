@@ -1,3 +1,14 @@
+---
+title: "📝 보안 파이썬(Secure Python) 강의 노트 - Day 01 (2025년 10월 27일)"
+date: 2025-10-27
+excerpt: "1. [학습 개요 및 목표](#학습-개요-및-목표)"
+categories:
+  - Python
+tags:
+  - Python
+  - SK_Rookies
+---
+
 # 📝 보안 파이썬(Secure Python) 강의 노트 - Day 01 (2025년 10월 27일)
 
 ---

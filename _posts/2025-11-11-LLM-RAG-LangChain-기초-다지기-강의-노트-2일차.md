@@ -1,7 +1,7 @@
 ---
-title: "LLM-RAG-LangChain-기초-다지기-강의-노트-2일차"
-date: 2026-01-11
-excerpt: ""
+title: "📝 LLM, RAG, LangChain 기초 다지기 강의 노트 (2일차)"
+date: 2025-11-11
+excerpt: "학습 목표: 기존 내용을 다시 학습하면서 LLM, RAG, Langchain 기초를 탄탄히 다지고, 실제 보안 로그 분석 대시보드 구축하기"
 categories:
   - Python
 tags:
