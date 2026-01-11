@@ -1,4 +1,3 @@
-
 --- 
 title: "📝 Secure Python Day 02 강의 노트 (2일차)"
 date: 2025-10-28

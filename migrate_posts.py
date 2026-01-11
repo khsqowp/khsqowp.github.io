@@ -155,8 +155,7 @@ def process_files():
                 if 'SK_Rookies' in root:
                     tags.append('SK_Rookies')
 
-                front_matter = f"""
---- 
+                front_matter = f"""--- 
 title: "{title}"
 date: {date_str}
 excerpt: "{excerpt}"
