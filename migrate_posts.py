@@ -46,77 +46,66 @@ def clean_filename(filename):
     name = re.sub(r'[^\w\-\u3131-\u3163\uac00-\ud7a3]', '', name)
     return name
 
-def extract_date(content, filename):
-    lines = content.split('\n')[:30]
-    date_patterns = [
+def extract_front_matter(content):
+    if content.startswith('---'):
+        parts = content.split('---', 2)
+        if len(parts) >= 3:
+            return parts[1], parts[2] 
+    return None, content
+
+def extract_value_from_fm(fm, key):
+    match = re.search(f'^{key}:\s*"(.*)"', fm, re.MULTILINE) or \
+            re.search(f'^{key}:\s*(.*)', fm, re.MULTILINE)
+    if match:
+        return match.group(1).strip()
+    return None
+
+def extract_date_smart(content, filename):
+    # 1. Front Matter가 있으면 거기서 날짜 추출 (가장 우선)
+    fm, _ = extract_front_matter(content)
+    if fm:
+        date_val = extract_value_from_fm(fm, 'date')
+        if date_val:
+            return date_val
+
+    # 2. 본문 내용에서 날짜 추출 (강력한 정규식)
+    # Front Matter 영역 제외
+    parts = content.split('---', 2)
+    body = parts[2] if len(parts) >= 3 else content
+    
+    body_head = '\n'.join(body.split('\n')[:50]) # 상단 50줄
+    
+    patterns = [
         r'(?:강의\s*일자|강의\s*날짜|작성일|날짜|일시|강의일).*?(\d{4})[-년.]\s*(\d{1,2})[-월.]\s*(\d{1,2})',
         r'(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일',
-        r'(?<!date: )(\d{4})-(\d{1,2})-(\d{1,2})',
+        r'(\d{4})-(\d{1,2})-(\d{1,2})', # YYYY-MM-DD
         r'(\d{4})\.(\d{1,2})\.(\d{1,2})'
     ]
-    for line in lines:
-        for pattern in date_patterns:
-            match = re.search(pattern, line)
-            if match:
-                try:
-                    y, m, d = match.groups()
-                    if 2023 <= int(y) <= 2026:
-                        return f"{y}-{m.zfill(2)}-{d.zfill(2)}"
-                except: continue
+    
+    for pattern in patterns:
+        match = re.search(pattern, body_head)
+        if match:
+            try:
+                y, m, d = match.groups()
+                if 2023 <= int(y) <= 2026: # 유효 범위 체크
+                    return f"{y}-{m.zfill(2)}-{d.zfill(2)}"
+            except: continue
 
+    # 3. 파일명에서 날짜 추출
     match = re.search(r'(202[0-9])([01][0-9])([0-3][0-9])', filename)
     if match: return f"{match.group(1)}-{match.group(2)}-{match.group(3)}"
     
     match = re.search(r'([01]?[0-9])-([0-3][0-9])', filename)
     if match: return f"{DEFAULT_YEAR}-{match.group(1).zfill(2)}-{match.group(2).zfill(2)}"
 
+    # 4. 최후의 수단: 오늘 날짜
     return datetime.now().strftime('%Y-%m-%d')
-
-def extract_title(content, filename):
-    lines = content.split('\n')[:20]
-    for line in lines:
-        if line.lstrip().startswith('# '):
-            title = line.strip().lstrip('#').strip()
-            title = title.replace('"', "'") 
-            return title
-    return clean_filename(filename).replace('-', ' ')
-
-def extract_excerpt(content):
-    lines = content.split('\n')
-    excerpt = ""
-    
-    for line in lines[:20]:
-        if line.strip().startswith('>'):
-            clean_line = line.strip().lstrip('>').strip()
-            if '주제' in clean_line or '목표' in clean_line or '내용' in clean_line:
-                excerpt = clean_line
-                break
-            if len(clean_line) > 20 and ':' not in clean_line:
-                 excerpt = clean_line
-                 break
-
-    if not excerpt:
-        for line in lines[:30]:
-            clean_line = line.strip()
-            if not clean_line or clean_line.startswith('#') or clean_line.startswith('---') or clean_line.startswith('>'):
-                continue
-            if clean_line.startswith('!') or clean_line.startswith('['):
-                continue
-            excerpt = clean_line
-            break
-    
-    if excerpt:
-        excerpt = re.sub(r'\*\*|__', '', excerpt)
-        excerpt = excerpt.replace('"', "'")
-        if len(excerpt) > 150:
-            excerpt = excerpt[:147] + "..."
-    return excerpt
 
 def process_files():
     if not os.path.exists(TARGET_DIR):
         os.makedirs(TARGET_DIR)
 
-    # 기존 포스트 삭제 (재생성)
+    # 기존 포스트 삭제
     for f in os.listdir(TARGET_DIR):
         os.remove(os.path.join(TARGET_DIR, f))
 
@@ -138,24 +127,36 @@ def process_files():
                 with open(source_path, 'r', encoding='utf-8') as f:
                     content = f.read()
                 
-                date_str = extract_date(content, file)
-                real_title = extract_title(content, file)
-                excerpt = extract_excerpt(content)
+                # 스마트 날짜 추출
+                date_str = extract_date_smart(content, file)
                 
+                # Front Matter & Body 분리
+                fm_str, body = extract_front_matter(content)
+                
+                # 제목 추출
+                title = None
+                excerpt = None
+                
+                if fm_str:
+                    title = extract_value_from_fm(fm_str, 'title')
+                    excerpt = extract_value_from_fm(fm_str, 'excerpt')
+                
+                if not title:
+                    title = clean_filename(file) # TODO: 본문 H1 추출 로직 추가하면 좋음
+                if not excerpt:
+                    excerpt = ""
+
                 safe_slug = clean_filename(file)
-                new_filename = f"{date_str}-{safe_slug}.md"
+                
+                # 파일명 결정 (날짜-제목.md)
+                if re.match(r'\d{4}-\d{2}-\d{2}', str(date_str)):
+                    new_filename = f"{date_str}-{safe_slug}.md"
+                else:
+                    new_filename = f"{DEFAULT_YEAR}-01-01-{safe_slug}.md"
+
                 target_path = os.path.join(TARGET_DIR, new_filename)
                 
-                # Front Matter 처리
-                if content.startswith('---'):
-                    parts = content.split('---', 2)
-                    if len(parts) >= 3:
-                        body = parts[2]
-                    else:
-                        body = content
-                else:
-                    body = content
-                    
+                # Liquid 태그 처리
                 body = body.replace('{{', '&#123;&#123;').replace('}}', '&#125;&#125;')
                 body = body.replace('{%', '&#123;%').replace('%}', '%&#125;')
 
@@ -163,9 +164,8 @@ def process_files():
                 if 'SK_Rookies' in root:
                     tags.append('SK_Rookies')
 
-                front_matter = f"""
---- 
-title: "{real_title}"
+                front_matter = f"""---
+title: "{title}"
 date: {date_str}
 excerpt: "{excerpt}"
 categories:
@@ -178,7 +178,7 @@ tags:
                 with open(target_path, 'w', encoding='utf-8') as f:
                     f.write(front_matter + body.lstrip())
                 
-                print(f"  -> [{category}] {new_filename}")
+                print(f"  -> {new_filename}")
 
 if __name__ == "__main__":
     process_files()

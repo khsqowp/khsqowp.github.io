@@ -1,8 +1,7 @@
-
---- 
-title: "📝 LLM & LangChain 정규표현식 및 보안 대시보드 개발 강의 노트 (3일차)"
-date: 2025-11-12
-excerpt: "주요 주제: LLM/LangChain 복습, 정규표현식, 보안 로그 분석, Streamlit/Plotly 시각화"
+---
+title: "LLM--LangChain-정규표현식-및-보안-대시보드-개발-강의-노트-3일차"
+date: 2026-01-11
+excerpt: ""
 categories:
   - Python
 tags:

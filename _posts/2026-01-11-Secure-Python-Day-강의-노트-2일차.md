@@ -1,8 +1,7 @@
-
---- 
-title: "📝 Secure Python Day 02 강의 노트 (2일차)"
-date: 2025-10-28
-excerpt: "강의일자: 2025년 10월 28일"
+---
+title: "Secure-Python-Day-강의-노트-2일차"
+date: 2026-01-11
+excerpt: ""
 categories:
   - Python
 tags:

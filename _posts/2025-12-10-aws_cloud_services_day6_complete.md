@@ -1,8 +1,7 @@
-
---- 
+---
 title: "📝 AWS 클라우드 서비스 강의 노트 (6일차)"
 date: 2025-12-10
-excerpt: "- 날짜: 2025년 12월 10일"
+excerpt: "AWS 데이터베이스 서비스(DynamoDB, Redshift) 및 보안 서비스(WAF, Shield)를 학습합니다."
 categories:
   - AWS-Cloud
 tags:

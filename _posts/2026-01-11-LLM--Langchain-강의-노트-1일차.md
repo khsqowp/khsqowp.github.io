@@ -1,8 +1,7 @@
-
---- 
-title: "📝 LLM & Langchain 강의 노트 (1일차)"
-date: 2025-11-10
-excerpt: "강의 날짜: 2025년 11월 10일 (월요일)"
+---
+title: "LLM--Langchain-강의-노트-1일차"
+date: 2026-01-11
+excerpt: ""
 categories:
   - Python
 tags:

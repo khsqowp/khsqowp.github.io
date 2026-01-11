@@ -1,3 +1,14 @@
+---"
+title: "📝 NumPy & Pandas Day 3 강의 노트 (11월 5일)"
+date: 2025-11-05
+excerpt: "실전 데이터셋(Titanic, Iris)을 활용한 데이터 조작, 인덱싱(loc/iloc), 결측치 처리 및 GroupBy 연산을 통한 데이터 분석 심화 과정을 다룹니다."
+categories:
+  - Python
+tags:
+  - Python
+  - SK_Rookies
+"---
+
 # 📝 NumPy & Pandas Day 3 강의 노트 (11월 5일)
 
 ---
