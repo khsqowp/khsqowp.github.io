@@ -1,7 +1,7 @@
 --- 
-title: "📝 Streamlit 웹 시각화 및 보안 대시보드 구축 강의 노트 (5일차)"
-date: 2025-01-01
-excerpt: "이전 강의에서는 NumPy와 Pandas를 활용한 데이터 분석의 기초와 Matplotlib, Seaborn을 활용한 정적 시각화를 다루었습니다. 오늘은 그 내용을 기반으로 실전 웹 시각화로 나아가는 중요한 전환점입니다. 특히 보안 분야에서 실시간 모니터링과 침해사..."
+title: "실전 웹 시각화: Streamlit을 활용한 보안 대시보드 구축"
+date: 2025-11-07
+excerpt: "Folium과 Plotly를 활용해 지리적 공격 위치를 추적하고 인터랙티브 차트를 생성하는 실무 기술을 학습합니다. Streamlit 프레임워크를 사용하여 Python 코드만으로 실시간 보안 모니터링 대시보드를 구축하고 데이터 분석 결과를 웹으로 배포하는 방법을 익힙니다."
 categories:
   - Python
 tags:
