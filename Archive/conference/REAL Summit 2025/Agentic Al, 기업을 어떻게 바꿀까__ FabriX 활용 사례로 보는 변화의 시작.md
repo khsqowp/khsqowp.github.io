@@ -1,3 +1,13 @@
+---
+title: "Agentic Al, 기업을 어떻게 바꿀까__ FabriX 활용 사례로 보는 변화의 시작"
+date: 2025-09-11
+excerpt: "[cite_start]Agentic AI는 다양한 AI 에이전트들이 유기적으로 연결되어 사람의 업무를 대신 처리하는 기술로, 우리 앞에 성큼 다가온 미래입니다[cite: 7]. [cite_start]하지만 MIT 리포트에 따르면, 기업의 AI 도입 성공률은 5%에 불과하며 95%는 실패를 경험합니다[cite: 11]. [cite_start]실패의 주된 원인..."
+categories:
+  - Conference-REAL-Summit-2025
+tags:
+  - Conference
+---
+
 ### Agentic Al, 기업을 어떻게 바꿀까__ FabriX 활용 사례로 보는 변화의 시작
 
 #### 1. Agentic AI 시대의 도래와 기업의 과제

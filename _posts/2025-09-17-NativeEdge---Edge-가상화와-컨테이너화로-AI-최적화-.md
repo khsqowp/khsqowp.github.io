@@ -1,15 +1,15 @@
 --- 
-title: "NativeEdge---Edge-가상화와-컨테이너화로-AI-최적화-"
-date: 2026-01-13
-excerpt: ""
+title: "Dell NativeEdge: 분산된 엣지 환경의 AI를 위한 통합 운영 플랫폼"
+date: 2025-09-17
+excerpt: "**발표자:** 권기영, Dell Technologies    엣지(Edge)는 더 이상 먼 미래의 이야기가 아닙니다. 우리가 일상에서 사용하는 스마트폰, TV, PC를 넘어, 공장의 로봇, 편의점의 POS 단말기, 도시의 CCTV, 풍력 발전기 등 수많은 디바이스들이 데이터를 생성하고 처리하는 모든 곳이 바로 엣지입니다. AI 기술의 발전으로, 이제는 이..."
 categories:
   - Archive
   - conference
   - Dell
 tags:
+  - conference
   - Archive
   - Dell
-  - conference
 ---
 
 # Dell NativeEdge: 분산된 엣지 환경의 AI를 위한 통합 운영 플랫폼

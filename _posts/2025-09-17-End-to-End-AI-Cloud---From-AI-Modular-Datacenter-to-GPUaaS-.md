@@ -1,15 +1,15 @@
 --- 
-title: "End-to-End-AI-Cloud---From-AI-Modular-Datacenter-to-GPUaaS-"
-date: 2026-01-13
-excerpt: ""
+title: "End-to-End AI Cloud: AI 모듈러 데이터센터부터 GPUaaS까지"
+date: 2025-09-17
+excerpt: "**발표자:** Alice (엘리스)    AI 기술, 특히 GPU의 발전 속도는 상상을 초월합니다. 1~2년마다 이전 세대를 압도하는 성능과 전력 소비, 그리고 완전히 다른 냉각 방식을 요구하는 새로운 GPU가 등장합니다. 하지만 전통적인 데이터센터를 설계하고, 인허가를 받고, 건설하는 데에는 최소 2~3년이 소요됩니다. 이는 A100 GPU에 최적화된..."
 categories:
   - Archive
   - conference
   - Dell
 tags:
+  - conference
   - Archive
   - Dell
-  - conference
 ---
 
 # End-to-End AI Cloud: AI 모듈러 데이터센터부터 GPUaaS까지

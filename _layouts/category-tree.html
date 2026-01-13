@@ -11,7 +11,7 @@ layout: single
         <i class="fas fa-folder-open"></i> {{ root_cat }}
       </h2>
       
-      <div class="archive__content">
+      <div class="archive__content" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
         {% assign posts_in_root = site.categories[root_cat] %}
         
         {% if posts_in_root and posts_in_root.size > 0 %}
@@ -28,24 +28,27 @@ layout: single
             
             {% comment %} 2. 하위 카테고리별 출력 {% endcomment %}
             {% for sub_cat in sub_categories %}
-                <div class="sub-category-section" style="margin-left: 20px; margin-top: 20px;">
+                <div class="sub-category-section" style="background: #f8f9fa; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                     {% if sub_cat != "_Direct_Files_" %}
-                        <h3 class="archive__subtitle" id="{{ root_cat | slugify }}-{{ sub_cat | slugify }}" style="color: #555;">
+                        <h3 class="archive__subtitle" id="{{ root_cat | slugify }}-{{ sub_cat | slugify }}" style="color: #495057; margin-top: 0; border-bottom: 1px solid #dee2e6; padding-bottom: 8px; font-size: 1.1em;">
                             <i class="fas fa-folder"></i> {{ sub_cat }}
+                        </h3>
+                    {% else %}
+                         <h3 class="archive__subtitle" style="color: #495057; margin-top: 0; border-bottom: 1px solid #dee2e6; padding-bottom: 8px; font-size: 1.1em;">
+                            <i class="fas fa-file"></i> Uncategorized
                         </h3>
                     {% endif %}
                     
-                    <ul style="list-style-type: none; padding-left: 10px; border-left: 3px solid #eee;">
+                    <ul style="list-style-type: none; padding-left: 0; margin-bottom: 0;">
                     {% for post in posts_in_root %}
                         {% assign post_sub_cat = post.categories[1] | default: "_Direct_Files_" %}
                         {% if post_sub_cat == sub_cat %}
-                            <li style="margin-bottom: 8px;">
-                                <a href="{{ post.url | relative_url }}" style="text-decoration: none; font-weight: 500;">
-                                    <i class="fas fa-file-alt" style="color: #999; margin-right: 5px;"></i>
+                            <li style="margin-bottom: 8px; border-bottom: 1px dashed #e9ecef; padding-bottom: 4px;">
+                                <a href="{{ post.url | relative_url }}" style="text-decoration: none; font-weight: 500; color: #212529; display: block;">
                                     {{ post.title }}
                                 </a>
-                                <span style="font-size: 0.8em; color: #aaa; margin-left: 8px;">
-                                    {{ post.date | date: "%Y-%m-%d" }}
+                                <span style="font-size: 0.75em; color: #868e96; display: block; margin-top: 2px;">
+                                    <i class="far fa-calendar-alt"></i> {{ post.date | date: "%Y-%m-%d" }}
                                 </span>
                             </li>
                         {% endif %}
@@ -54,7 +57,7 @@ layout: single
                 </div>
             {% endfor %}
         {% else %}
-            <p style="color: #888; font-style: italic;">No posts found.</p>
+            <p style="color: #888; font-style: italic; grid-column: 1 / -1;">No posts found.</p>
         {% endif %}
       </div>
     </div>
