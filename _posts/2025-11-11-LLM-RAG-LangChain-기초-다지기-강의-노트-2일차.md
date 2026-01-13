@@ -1,12 +1,13 @@
 --- 
-title: "LLM 애플리케이션 개발: LangChain과 RAG 아키텍처"
+title: "📝 LLM, RAG, LangChain 기초 다지기 강의 노트 (2일차)"
 date: 2025-11-11
-excerpt: "대형 언어 모델(LLM)의 한계를 극복하는 RAG(검색 증강 생성) 아키텍처의 원리를 이해하고 구현합니다. LangChain 프레임워크를 활용하여 문서 기반 질의응답 시스템을 구축하고, 기업 내부 데이터를 안전하게 AI에 연동하는 방법을 학습합니다."
+excerpt: "학습 목표: 기존 내용을 다시 학습하면서 LLM, RAG, Langchain 기초를 탄탄히 다지고, 실제 보안 로그 분석 대시보드 구축하기"
 categories:
+  - SK_Rookies
   - Python
 tags:
-  - Python
   - SK_Rookies
+  - Python
 ---
 
 # 📝 LLM, RAG, LangChain 기초 다지기 강의 노트 (2일차)

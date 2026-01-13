@@ -1,13 +1,15 @@
----
-title: "퀄컴 스냅드래곤 X 엘리트와 온디바이스 AI PC의 미래"
-date: 2025-09-18
-excerpt: "클라우드 의존도를 낮추고 보안과 반응성을 높이는 온디바이스 AI의 이점과 퀄컴의 이기종 컴퓨팅 기술을 활용한 AI PC 전략을 다룹니다."
+--- 
+title: "The-PC-Reborn---Delivering-unrivaled-Snapdragon-Xperience"
+date: 2026-01-13
+excerpt: ""
 categories:
-  - Conference-DIC
+  - Archive
+  - conference
+  - DIC 2025
 tags:
-  - On-Device-AI
-  - Qualcomm
-  - Snapdragon
+  - Archive
+  - DIC 2025
+  - conference
 ---
 
 # The PC Reborn: 퀄컴 스냅드래곤 X 엘리트가 여는 On-Device AI 시대

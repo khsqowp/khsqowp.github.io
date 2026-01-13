@@ -1,0 +1,62 @@
+---
+layout: single
+---
+
+<div class="archive">
+  {% assign root_categories = "SK_Rookies,Archive" | split: "," %}
+  
+  {% for root_cat in root_categories %}
+    <div class="feature__item">
+      <h2 class="archive__item-title" style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 40px;">
+        <i class="fas fa-folder-open"></i> {{ root_cat }}
+      </h2>
+      
+      <div class="archive__content">
+        {% assign posts_in_root = site.categories[root_cat] %}
+        
+        {% if posts_in_root and posts_in_root.size > 0 %}
+            {% comment %} 1. 하위 카테고리 목록 추출 {% endcomment %}
+            {% assign sub_categories = "" | split: "" %}
+            {% for post in posts_in_root %}
+                {% if post.categories[1] %}
+                    {% assign sub_categories = sub_categories | push: post.categories[1] %}
+                {% else %}
+                    {% assign sub_categories = sub_categories | push: "_Direct_Files_" %}
+                {% endif %}
+            {% endfor %}
+            {% assign sub_categories = sub_categories | uniq | sort %}
+            
+            {% comment %} 2. 하위 카테고리별 출력 {% endcomment %}
+            {% for sub_cat in sub_categories %}
+                <div class="sub-category-section" style="margin-left: 20px; margin-top: 20px;">
+                    {% if sub_cat != "_Direct_Files_" %}
+                        <h3 class="archive__subtitle" id="{{ root_cat | slugify }}-{{ sub_cat | slugify }}" style="color: #555;">
+                            <i class="fas fa-folder"></i> {{ sub_cat }}
+                        </h3>
+                    {% endif %}
+                    
+                    <ul style="list-style-type: none; padding-left: 10px; border-left: 3px solid #eee;">
+                    {% for post in posts_in_root %}
+                        {% assign post_sub_cat = post.categories[1] | default: "_Direct_Files_" %}
+                        {% if post_sub_cat == sub_cat %}
+                            <li style="margin-bottom: 8px;">
+                                <a href="{{ post.url | relative_url }}" style="text-decoration: none; font-weight: 500;">
+                                    <i class="fas fa-file-alt" style="color: #999; margin-right: 5px;"></i>
+                                    {{ post.title }}
+                                </a>
+                                <span style="font-size: 0.8em; color: #aaa; margin-left: 8px;">
+                                    {{ post.date | date: "%Y-%m-%d" }}
+                                </span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #888; font-style: italic;">No posts found.</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

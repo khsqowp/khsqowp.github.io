@@ -1,12 +1,13 @@
 --- 
-title: "파이썬 타입 시스템과 OOP: 객체지향 프로그래밍의 이해"
+title: "📝 Secure Python Day 02 강의 노트 (2일차)"
 date: 2025-10-28
-excerpt: "파이썬의 모든 데이터가 참조 타입(Reference Type)임을 이해하고, 클래스와 인스턴스의 개념을 통해 객체지향 프로그래밍(OOP)의 기초를 다집니다. 문자열, 리스트 등 내장 타입의 고급 활용법과 메모리 관리 원리를 학습하여 효율적인 코드를 작성하는 방법을 익힙니다."
+excerpt: "강사: 임정섭 강사님"
 categories:
+  - SK_Rookies
   - Python
 tags:
-  - Python
   - SK_Rookies
+  - Python
 ---
 
 # 📝 Secure Python Day 02 강의 노트 (2일차)

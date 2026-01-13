@@ -1,13 +1,15 @@
----
-title: "엣지 운영의 혁신: Dell NativeEdge를 통한 AI 배포 자동화"
-date: 2025-09-17
-excerpt: "분산된 엣지 환경의 복잡성을 해결하고 제로 트러스트 보안을 기반으로 AI 애플리케이션을 신속하게 배포하는 오케스트레이션 플랫폼을 다룹니다."
+--- 
+title: "NativeEdge---Edge-가상화와-컨테이너화로-AI-최적화-"
+date: 2026-01-13
+excerpt: ""
 categories:
-  - Conference-Dell
+  - Archive
+  - conference
+  - Dell
 tags:
-  - Edge-Computing
-  - NativeEdge
-  - Zero-Trust
+  - Archive
+  - Dell
+  - conference
 ---
 
 # Dell NativeEdge: 분산된 엣지 환경의 AI를 위한 통합 운영 플랫폼

@@ -1,6 +1,6 @@
 ---
 title: "Library Structure"
-layout: archive
+layout: category-tree
 permalink: /categories/
 author_profile: true
 sidebar:

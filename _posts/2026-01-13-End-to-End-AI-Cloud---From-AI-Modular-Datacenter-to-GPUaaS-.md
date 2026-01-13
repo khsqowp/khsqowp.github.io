@@ -1,14 +1,15 @@
----
-title: "Alice의 End-to-End AI 클라우드: 모듈러 데이터센터에서 GPUaaS까지"
-date: 2025-09-17
-excerpt: "급변하는 GPU 기술 주기에 대응하기 위해 모듈형 데이터센터(PMDC)와 자체 IaaS/PaaS를 수직 통합하여 구축 속도를 획기적으로 단축한 사례를 공유합니다."
+--- 
+title: "End-to-End-AI-Cloud---From-AI-Modular-Datacenter-to-GPUaaS-"
+date: 2026-01-13
+excerpt: ""
 categories:
-  - Conference-Dell
+  - Archive
+  - conference
+  - Dell
 tags:
-  - AI-Cloud
-  - GPUaaS
-  - Alice-Group
-  - Modular-DataCenter
+  - Archive
+  - Dell
+  - conference
 ---
 
 # End-to-End AI Cloud: AI 모듈러 데이터센터부터 GPUaaS까지

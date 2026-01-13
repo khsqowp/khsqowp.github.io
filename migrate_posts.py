@@ -25,18 +25,25 @@ SK_ROOKIES_MAP = {
     '98_mini_pjt_2': 'Project-Security'
 }
 
-def get_category(root_dir, parent_dir):
-    """경로 기반 카테고리 결정"""
-    parts = root_dir.split(os.sep)
-    top_folder = next((p for p in parts if p and p != '.'), None)
-
-    if top_folder == 'SK_Rookies':
-        return SK_ROOKIES_MAP.get(parent_dir, 'SK_Rookies')
+def get_categories(root_dir):
+    """경로 기반 계층적 카테고리 리스트 생성"""
+    # 상대 경로로 변환 (현재 디렉토리 기준)
+    rel_path = os.path.relpath(root_dir, '.')
+    parts = rel_path.split(os.sep)
     
-    if top_folder:
-        return top_folder.replace(' ', '-')
-        
-    return 'Study'
+    categories = []
+    
+    for part in parts:
+        if part == '.' or part == '':
+            continue
+            
+        # SK_Rookies 매핑 적용
+        if part in SK_ROOKIES_MAP:
+            categories.append(SK_ROOKIES_MAP[part])
+        else:
+            categories.append(part)
+            
+    return categories
 
 def clean_filename(filename):
     name = os.path.splitext(filename)[0]
@@ -118,8 +125,8 @@ def process_files():
                     continue
                 
                 source_path = os.path.join(root, file)
-                parent_dir = os.path.basename(root)
-                category = get_category(root, parent_dir)
+                # parent_dir = os.path.basename(root) # Not used
+                categories = get_categories(root)
                 
                 with open(source_path, 'r', encoding='utf-8') as f:
                     content = f.read()
@@ -151,16 +158,19 @@ def process_files():
                 body = body.replace('{{', '&#123;&#123;').replace('}}', '&#125;&#125;')
                 body = body.replace('{%', '&#123;%').replace('%}', '%&#125;')
 
-                tags = [category]
+                tags = list(categories)
                 if 'SK_Rookies' in root:
                     tags.append('SK_Rookies')
+                
+                # 중복 제거
+                tags = list(set(tags))
 
                 front_matter = f"""--- 
 title: "{title}"
 date: {date_str}
 excerpt: "{excerpt}"
 categories:
-  - {category}
+{chr(10).join([f'  - {cat}' for cat in categories])}
 tags:
 {chr(10).join([f'  - {tag}' for tag in tags])}
 ---

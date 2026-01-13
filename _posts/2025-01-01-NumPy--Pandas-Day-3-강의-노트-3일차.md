@@ -1,12 +1,13 @@
 --- 
-title: "데이터 프레임 심화 조작: GroupBy와 결측치 전처리"
-date: 2025-11-05
-excerpt: "Pandas의 loc, iloc 인덱서를 활용한 정밀한 데이터 접근 방법과 GroupBy 연산을 이용한 그룹별 집계 기법을 학습합니다. Titanic 및 Iris 실전 데이터셋을 사용하여 결측치 처리 등 데이터 분석 프로젝트의 필수 전처리 과정을 실습합니다."
+title: "📝 NumPy & Pandas Day 3 강의 노트 (11월 5일)"
+date: 2025-01-01
+excerpt: "오늘 강의에서는 데이터 프레임 조작에 대해 심도 깊게 배웠습니다. 어제까지는 데이터 프레임을 만들고 이해하는 시간이었다면, 오늘은 본격적으로 데이터 프레임을 조작하고 분석하는 다양한 함수들을 학습했습니다. 특히 실제 데이터셋(Titanic, Iris)을 활용하여 ..."
 categories:
+  - SK_Rookies
   - Python
 tags:
-  - Python
   - SK_Rookies
+  - Python
 ---
 
 # 📝 NumPy & Pandas Day 3 강의 노트 (11월 5일)

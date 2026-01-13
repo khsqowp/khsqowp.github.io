@@ -1,12 +1,13 @@
 --- 
-title: "웹 애플리케이션 취약점 분석: 공격 원리 이해와 보안 개발 가이드"
+title: "Section 1: 서론 및 강의 개요"
 date: 2025-12-22
-excerpt: "SQL Injection, Command Injection, XSS 등 주요 웹 공격 기법의 동작 원리를 파악하고, 소스 코드 레벨에서 취약한 패턴을 식별하는 보안 분석 능력을 키웁니다. WebGoat과 Tomcat 환경에서의 실습을 통해 행정안전부 SW 개발보안 가이드를 적용한 안전한 웹 서비스 구축 방법을 학습합니다."
+excerpt: "오늘 강의에서는 웹 애플리케이션 보안의 핵심 취약점들을 심층적으로 학습하고, 실제 소스 코드 분석을 통해 보안 취약점을 식별하는 방법을 배웠다. 오전과 오후 세션을 통해 SQL Injection 복습부터 XSS(Cross-Site Scripting), CSRF, ..."
 categories:
+  - SK_Rookies
   - App-Security
 tags:
-  - App-Security
   - SK_Rookies
+  - App-Security
 ---
 
 # Section 1: 서론 및 강의 개요

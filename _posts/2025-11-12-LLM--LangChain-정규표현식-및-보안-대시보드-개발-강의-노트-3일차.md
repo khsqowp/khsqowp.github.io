@@ -1,12 +1,13 @@
 --- 
-title: "보안 로그 분석 자동화: 정규표현식과 Streamlit 대시보드"
+title: "📝 LLM & LangChain 정규표현식 및 보안 대시보드 개발 강의 노트 (3일차)"
 date: 2025-11-12
-excerpt: "복잡한 텍스트 패턴 매칭을 위한 정규표현식을 마스터하고, 이를 활용해 비정형 보안 로그를 파싱하는 기법을 익힙니다. 분석된 데이터를 Streamlit과 Plotly를 이용해 시각적인 보안 대시보드로 구현하는 전 과정을 실습합니다."
+excerpt: "오늘 강의에서는 다음과 같은 핵심 내용들을 배웠습니다:"
 categories:
+  - SK_Rookies
   - Python
 tags:
-  - Python
   - SK_Rookies
+  - Python
 ---
 
 # 📝 LLM & LangChain 정규표현식 및 보안 대시보드 개발 강의 노트 (3일차)

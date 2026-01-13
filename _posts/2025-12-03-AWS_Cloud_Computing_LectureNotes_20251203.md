@@ -3,10 +3,11 @@ title: "📝 AWS 클라우드 컴퓨팅 강의 노트 (2025-12-03)"
 date: 2025-12-03
 excerpt: "오늘 강의에서는 Amazon Web Services (AWS) 클라우드 컴퓨팅의 기본 개념부터 실전 활용까지 폭넓은 내용을 다루었습니다. 특히 AWS 계정 관리, 글로벌 인프라 구조, 요금 모델, 그리고 IAM(Identity and Access Managemen..."
 categories:
+  - SK_Rookies
   - AWS-Cloud
 tags:
-  - AWS-Cloud
   - SK_Rookies
+  - AWS-Cloud
 ---
 
 # 📝 AWS 클라우드 컴퓨팅 강의 노트 (2025-12-03)

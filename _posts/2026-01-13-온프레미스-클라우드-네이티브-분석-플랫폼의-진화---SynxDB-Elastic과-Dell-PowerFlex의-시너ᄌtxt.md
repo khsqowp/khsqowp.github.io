@@ -1,14 +1,15 @@
----
-title: "온프레미스 AI 분석 플랫폼: SynxDB와 Dell PowerFlex의 결합"
-date: 2025-09-17
-excerpt: "데이터 주권과 비용 효율성을 위해 온프레미스 환경에서 클라우드 네이티브 분석과 벡터 DB 기능을 통합 구현한 차세대 데이터 플랫폼을 다룹니다."
+--- 
+title: "온프레미스-클라우드-네이티브-분석-플랫폼의-진화---SynxDB-Elastic과-Dell-PowerFlex의-시너ᄌtxt"
+date: 2026-01-13
+excerpt: ""
 categories:
-  - Conference-Dell
+  - Archive
+  - conference
+  - Dell
 tags:
-  - Data-Platform
-  - SynxDB
-  - PowerFlex
-  - On-Premise-AI
+  - Archive
+  - Dell
+  - conference
 ---
 
 # 온프레미스 클라우드 네이티브 분석 플랫폼의 진화: SynxDB Elastic과 Dell PowerFlex의 시너지

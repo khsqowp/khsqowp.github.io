@@ -1,13 +1,15 @@
----
-title: "차세대 스토리지 PowerStore: AI 기반 관리와 랜섬웨어 방어"
-date: 2025-09-17
-excerpt: "다이내믹 노드 어피니티 등 아키텍처 혁신과 내장된 랜섬웨어 탐지 기능을 통해 데이터센터의 효율성과 보안을 강화하는 스토리지 전략을 소개합니다."
+--- 
+title: "PowerStore-최신-동향-모던-데이터-센터-혁신과-경쟁력-강화의-열쇠"
+date: 2026-01-13
+excerpt: ""
 categories:
-  - Conference-Dell
+  - Archive
+  - conference
+  - Dell
 tags:
-  - Storage
-  - PowerStore
-  - Ransomware-Protection
+  - Archive
+  - Dell
+  - conference
 ---
 
 # PowerStore 최신 동향: 모던 데이터센터 혁신과 경쟁력 강화의 열쇠
