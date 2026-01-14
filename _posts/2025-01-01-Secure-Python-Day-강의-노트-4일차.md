@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - Python
 tags:
-  - SK_Rookies
   - Python
+  - SK_Rookies
 ---
 
 # 📝 Secure Python Day 04 강의 노트 (4일차)

@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - Python
 tags:
-  - SK_Rookies
   - Python
+  - SK_Rookies
 ---
 
 # 📝 NumPy & Pandas 데이터 분석 강의 노트 (2일차)

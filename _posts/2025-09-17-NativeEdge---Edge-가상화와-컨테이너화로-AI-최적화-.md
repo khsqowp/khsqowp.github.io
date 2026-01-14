@@ -8,8 +8,8 @@ categories:
   - Dell
 tags:
   - conference
-  - Archive
   - Dell
+  - Archive
 ---
 
 # Dell NativeEdge: 분산된 엣지 환경의 AI를 위한 통합 운영 플랫폼

@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - Python
 tags:
-  - SK_Rookies
   - Python
+  - SK_Rookies
 ---
 
 # 📝 LLM & LangChain 정규표현식 및 보안 대시보드 개발 강의 노트 (3일차)

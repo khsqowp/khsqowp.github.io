@@ -1,13 +1,13 @@
 --- 
 title: "리눅스-명령어-CheatSheet"
-date: 2026-01-13
+date: 2026-01-14
 excerpt: ""
 categories:
   - Archive
   - linux
 tags:
-  - Archive
   - linux
+  - Archive
 ---
 
 | **커맨드** | **설명** |

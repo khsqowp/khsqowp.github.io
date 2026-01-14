@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - Python
 tags:
-  - SK_Rookies
   - Python
+  - SK_Rookies
 ---
 
 # 📝 LLM, RAG, LangChain 기초 다지기 강의 노트 (2일차)

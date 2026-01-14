@@ -7,8 +7,8 @@ categories:
   - conference
   - DIC 2025
 tags:
-  - DIC 2025
   - conference
+  - DIC 2025
   - Archive
 ---
 

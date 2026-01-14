@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - Consulting-Governance
 tags:
-  - SK_Rookies
   - Consulting-Governance
+  - SK_Rookies
 ---
 
 # 📝 ISMS 정보보호 관리체계 인증 컨설팅 강의 노트 (2일차)

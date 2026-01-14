@@ -8,8 +8,8 @@ categories:
   - Dell
 tags:
   - conference
-  - Archive
   - Dell
+  - Archive
 ---
 
 # End-to-End AI Cloud: AI 모듈러 데이터센터부터 GPUaaS까지

@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - Python
 tags:
-  - SK_Rookies
   - Python
+  - SK_Rookies
 ---
 
 # 📝 보안 파이썬(Secure Python) 강의 노트 - Day 01 (2025년 10월 27일)

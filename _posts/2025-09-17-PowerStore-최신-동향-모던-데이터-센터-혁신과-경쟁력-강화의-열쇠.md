@@ -8,8 +8,8 @@ categories:
   - Dell
 tags:
   - conference
-  - Archive
   - Dell
+  - Archive
 ---
 
 # PowerStore 최신 동향: 모던 데이터센터 혁신과 경쟁력 강화의 열쇠

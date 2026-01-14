@@ -7,7 +7,7 @@ from datetime import datetime
 IGNORE_DIRS = {
     '_posts', '_site', '_includes', '_layouts', '_data', 
     '.git', '.github', '.obsidian', '.gemini', 'assets',
-    '.claude', 'study', 'vendor'
+    '.claude', 'vendor'
 }
 
 TARGET_DIR = '_posts'

@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - AWS-Cloud
 tags:
-  - SK_Rookies
   - AWS-Cloud
+  - SK_Rookies
 ---
 
 # 📝 AWS 클라우드 서비스 종합 강의 노트 (Day N)

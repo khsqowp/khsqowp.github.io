@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - AWS-Cloud
 tags:
-  - SK_Rookies
   - AWS-Cloud
+  - SK_Rookies
 ---
 
 # 📝 AWS VPC 네트워킹 및 ELB 강의 노트 (3일차)

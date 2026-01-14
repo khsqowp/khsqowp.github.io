@@ -6,8 +6,8 @@ categories:
   - SK_Rookies
   - App-Security
 tags:
-  - SK_Rookies
   - App-Security
+  - SK_Rookies
 ---
 
 # Section 1: 서론 및 강의 개요
