@@ -1,15 +1,15 @@
 --- 
-title: "비즈니스 로직 취약점 분석: 애플리케이션 설계 결함과 특수 공격"
+title: "Logic-Misc-Complete"
 date: 2026-01-14
-excerpt: "정상적인 기능을 우회하거나 악용하는 비즈니스 로직 결함 위협을 탐구합니다. 전자결재 우회, 파라미터 변조 등 설계 단계의 취약점과 기타 특수 공격 기법을 통해 애플리케이션 전반의 논리적 보안 수준을 높이는 방법을 학습합니다."
+excerpt: ""
 categories:
   - Project
   - CTF
   - FIVENINES
 tags:
-  - FIVENINES
   - Project
   - CTF
+  - FIVENINES
 ---
 
 # Logic & Misc 완전 정복 가이드

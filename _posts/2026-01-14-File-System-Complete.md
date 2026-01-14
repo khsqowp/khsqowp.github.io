@@ -1,15 +1,15 @@
 --- 
-title: "파일 시스템 보안 위협: 경로 조작과 임의 파일 읽기/쓰기 분석"
+title: "File-System-Complete"
 date: 2026-01-14
-excerpt: "Path Traversal과 부적절한 파일 업로드 기능을 이용한 파일 시스템 공격 기법을 마스터합니다. 시스템의 민감한 설정 파일을 탈취하거나 웹쉘을 실행하는 실전 공격 시나리오와 파일 시스템 보호를 위한 보안 가이드를 학습합니다."
+excerpt: ""
 categories:
   - Project
   - CTF
   - FIVENINES
 tags:
-  - FIVENINES
   - Project
   - CTF
+  - FIVENINES
 ---
 
 # File System 완전 정복 가이드

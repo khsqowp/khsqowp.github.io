@@ -1,15 +1,15 @@
 --- 
-title: "SQL Injection 실전 가이드: 9가지 시나리오로 마스터하는 공격과 방어"
+title: "SQL-Injection-Complete"
 date: 2026-01-14
-excerpt: "다양한 난이도의 SQL Injection 실전 문제를 통해 취약점 탐지 및 데이터 추출 기법을 체득합니다. Time-based Blind SQLi와 이진 탐색 알고리즘을 활용한 자동화 공격 원리를 이해하고 완벽한 방어 전략을 설계합니다."
+excerpt: ""
 categories:
   - Project
   - CTF
   - FIVENINES
 tags:
-  - FIVENINES
   - Project
   - CTF
+  - FIVENINES
 ---
 
 # SQL Injection 완전 정복

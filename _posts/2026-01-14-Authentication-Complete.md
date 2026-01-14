@@ -1,15 +1,15 @@
 --- 
-title: "인증 및 권한 부여 취약점: 계정 탈취와 권한 상승 공격 분석"
+title: "Authentication-Complete"
 date: 2026-01-14
-excerpt: "인증 로직의 결함과 부적절한 권한 부여로 발생하는 보안 위협을 실전 시나리오를 통해 분석합니다. 세션 하이재킹, 무차별 대입 공격, 그리고 권한 상승(Privilege Escalation) 기법을 이해하고 안전한 인증 체계 설계 방안을 도출합니다."
+excerpt: ""
 categories:
   - Project
   - CTF
   - FIVENINES
 tags:
-  - FIVENINES
   - Project
   - CTF
+  - FIVENINES
 ---
 
 # Authentication & Authorization 완전 정복 가이드

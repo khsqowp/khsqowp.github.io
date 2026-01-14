@@ -1,15 +1,15 @@
 --- 
-title: "코드 인젝션 공격 기법: XSS, LFI 및 Command Injection 완전 정복"
+title: "Code-Injection-Complete"
 date: 2026-01-14
-excerpt: "XSS, LFI, Command Injection 등 클라이언트와 서버 측 코드 실행 취약점의 핵심 원리를 파헤칩니다. 난독화된 악성 스크립트 분석과 필터링 우회 기법을 실습하며 실전 코드 인젝션 위협에 대한 대응 능력을 강화합니다."
+excerpt: ""
 categories:
   - Project
   - CTF
   - FIVENINES
 tags:
-  - FIVENINES
   - Project
   - CTF
+  - FIVENINES
 ---
 
 # Code Injection 완전 정복

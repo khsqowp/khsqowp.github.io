@@ -1,7 +1,7 @@
 --- 
-title: "Agentic Al, 기업을 어떻게 바꿀까__ FabriX 활용 사례로 보는 변화의 시작"
+title: "Agentic AI의 시대: 삼성SDS FabriX 활용 사례와 변화"
 date: 2025-09-11
-excerpt: "[cite_start]Agentic AI는 다양한 AI 에이전트들이 유기적으로 연결되어 사람의 업무를 대신 처리하는 기술로, 우리 앞에 성큼 다가온 미래입니다[cite: 7]. [cite_start]하지만 MIT 리포트에 따르면, 기업의 AI 도입 성공률은 5%에 불과하며 95%는 실패를 경험합니다[cite: 11]. [cite_start]실패의 주된 원인..."
+excerpt: "단순 자동화를 넘어 스스로 업무를 수행하는 Agentic AI의 개념과 삼성SDS FabriX 플랫폼을 활용한 딥 리서치, 디지털 트윈 등 실제 도입 사례를 공유합니다."
 categories:
   - Archive
   - conference
