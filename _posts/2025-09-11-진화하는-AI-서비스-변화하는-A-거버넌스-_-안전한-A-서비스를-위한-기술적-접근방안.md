@@ -7,8 +7,8 @@ categories:
   - conference
   - REAL Summit 2025
 tags:
-  - REAL Summit 2025
   - conference
+  - REAL Summit 2025
   - Archive
 ---
 

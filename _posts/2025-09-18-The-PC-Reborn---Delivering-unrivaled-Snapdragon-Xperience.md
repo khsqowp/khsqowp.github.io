@@ -7,9 +7,9 @@ categories:
   - conference
   - DIC 2025
 tags:
-  - DIC 2025
   - conference
   - Archive
+  - DIC 2025
 ---
 
 # The PC Reborn: 퀄컴 스냅드래곤 X 엘리트가 여는 On-Device AI 시대

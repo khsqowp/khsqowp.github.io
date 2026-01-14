@@ -8,8 +8,8 @@ categories:
   - Dell
 tags:
   - conference
-  - Dell
   - Archive
+  - Dell
 ---
 
 # 온프레미스 클라우드 네이티브 분석 플랫폼의 진화: SynxDB Elastic과 Dell PowerFlex의 시너지
