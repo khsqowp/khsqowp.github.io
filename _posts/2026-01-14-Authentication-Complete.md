@@ -1,7 +1,7 @@
 --- 
 title: "Authentication-Complete"
 date: 2026-01-14
-excerpt: ""
+excerpt: "인증 우회, 세션 하이재킹 등 인증 및 권한 관리 시스템의 취약점과 보안 대책을 학습합니다."
 categories:
   - Project
   - CTF

@@ -1,7 +1,7 @@
 --- 
-title: "📝 AWS 클라우드 2일차 강의 노트 - IAM 및 VPC 기초"
+title: "AWS 클라우드 핵심: IAM 권한 관리와 VPC 네트워크 구축"
 date: 2025-12-04
-excerpt: "학습 시간: 약 3시간"
+excerpt: "AWS 보안의 핵심인 IAM 정책 설정과 격리된 네트워크 환경인 VPC의 서브넷, 라우팅 테이블 구성을 실습합니다."
 categories:
   - SK_Rookies
   - AWS-Cloud

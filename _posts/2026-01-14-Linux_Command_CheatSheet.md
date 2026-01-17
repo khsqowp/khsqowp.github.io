@@ -1,7 +1,7 @@
 --- 
-title: "리눅스-명령어-CheatSheet"
+title: "리눅스 명령어 마스터 치트시트"
 date: 2026-01-14
-excerpt: ""
+excerpt: "보안 전문가가 자주 사용하는 필수 리눅스 명령어와 옵션을 정리한 빠른 참조 가이드입니다."
 categories:
   - Archive
   - linux

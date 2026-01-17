@@ -1,7 +1,7 @@
 --- 
-title: "📝 AWS 보안 기초 강의 노트 (4일차)"
+title: "AWS 보안 기초: 책임 공유 모델과 보안 서비스"
 date: 2025-12-08
-excerpt: "이전 학습 복습: VPC Peering, Transit Gateway, VPN, Direct Connect, EC2, ELB"
+excerpt: "AWS의 책임 공유 모델을 이해하고, KMS, Shield, WAF 등 핵심 보안 서비스의 적용 방법을 학습합니다."
 categories:
   - SK_Rookies
   - AWS-Cloud

@@ -1,7 +1,7 @@
 --- 
 title: "Logic-Misc-Complete"
 date: 2026-01-14
-excerpt: ""
+excerpt: "비즈니스 로직 취약점과 기타 웹 애플리케이션 보안 위협을 식별하고 대응하는 방법을 다룹니다."
 categories:
   - Project
   - CTF

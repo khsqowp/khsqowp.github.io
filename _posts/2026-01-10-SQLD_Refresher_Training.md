@@ -1,7 +1,7 @@
 --- 
-title: "SQL개발자_보수교육_20260110_강의노트"
+title: "SQLD 자격 보수교육: 최신 SQL 트렌드와 실무 활용"
 date: 2026-01-10
-excerpt: ""
+excerpt: "SQLD 자격 보유자를 위한 보수교육 핵심 요약으로, 쿼리 최적화 및 최신 데이터베이스 기술 동향을 정리합니다."
 categories:
   - Archive
   - study

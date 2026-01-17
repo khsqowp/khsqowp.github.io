@@ -1,7 +1,7 @@
 --- 
-title: "📝 리눅스 시스템·네트워크·보안 강의 노트 (4일차)"
+title: "리눅스 시스템 및 네트워크 보안: 프로세스 관리와 로그 분석"
 date: 2025-11-27
-excerpt: "강사 노트: 7일 과정 중 4일차 - 리눅스 시스템 관리 핵심 기능 학습"
+excerpt: "리눅스 프로세스 관리, 스케줄링(cron), 시스템 로그 분석 및 rsyslog 설정 방법을 상세히 다룹니다."
 categories:
   - SK_Rookies
   - Linux-Network

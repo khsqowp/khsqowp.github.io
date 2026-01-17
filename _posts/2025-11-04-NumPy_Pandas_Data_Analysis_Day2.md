@@ -1,7 +1,7 @@
 --- 
-title: "📝 NumPy & Pandas 데이터 분석 강의 노트 (2일차)"
+title: "데이터 분석 심화: Pandas DataFrame 마스터하기"
 date: 2025-11-04
-excerpt: "- 날짜: 2025년 11월 4일 (월요일)"
+excerpt: "Pandas DataFrame의 고급 인덱싱, 필터링, 정렬 기법을 익히고 실전 데이터 전처리 방법을 학습합니다."
 categories:
   - SK_Rookies
   - Python

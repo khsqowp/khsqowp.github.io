@@ -1,5 +1,5 @@
 --- 
-title: "📝 네트워크 보안 & 프로토콜 분석 강의 노트 (최종일)"
+title: "네트워크 보안: Wireshark를 활용한 프로토콜 분석"
 date: 2025-12-02
 excerpt: "- 강의 주제: TCP/IP 프로토콜 분석, 포트 스캐닝, HTTP/TLS, 네트워크 보안 시스템"
 categories:

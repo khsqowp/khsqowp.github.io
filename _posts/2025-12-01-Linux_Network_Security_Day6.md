@@ -1,7 +1,7 @@
 --- 
-title: "📝 리눅스 시스템 네트워크 보안 강의 노트 (6일차)"
+title: "리눅스 방화벽과 접근 제어: iptables 및 TCP Wrapper"
 date: 2025-12-01
-excerpt: "- 강의 날짜: 2025년 12월 1일 (월요일)"
+excerpt: "리눅스 서버 보안을 위한 iptables 방화벽 정책 수립과 TCP Wrapper를 이용한 네트워크 접근 제어 기술을 학습합니다."
 categories:
   - SK_Rookies
   - Linux-Network

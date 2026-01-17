@@ -1,7 +1,7 @@
 --- 
-title: "📝 애플리케이션 보안 강의 노트 (1일차)"
+title: "애플리케이션 보안 개요: OWASP Top 10과 취약점 진단"
 date: 2025-12-16
-excerpt: "강의일: 2025년 12월 16일"
+excerpt: "웹 애플리케이션 보안의 표준인 OWASP Top 10 취약점을 분석하고, 진단 도구 사용법을 익힙니다."
 categories:
   - SK_Rookies
   - App-Security

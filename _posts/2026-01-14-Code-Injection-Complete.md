@@ -1,7 +1,7 @@
 --- 
 title: "Code-Injection-Complete"
 date: 2026-01-14
-excerpt: ""
+excerpt: "Command Injection, PHP Code Injection 등 시스템 명령어를 실행시킬 수 있는 치명적인 취약점을 연구합니다."
 categories:
   - Project
   - CTF

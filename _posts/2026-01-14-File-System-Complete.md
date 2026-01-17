@@ -1,7 +1,7 @@
 --- 
 title: "File-System-Complete"
 date: 2026-01-14
-excerpt: ""
+excerpt: "파일 업로드 취약점, 디렉토리 트래버설 등 파일 시스템과 관련된 보안 위협을 분석합니다."
 categories:
   - Project
   - CTF

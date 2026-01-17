@@ -1,7 +1,7 @@
 --- 
-title: "📝 Secure Python Day 02 강의 노트 (2일차)"
+title: "Secure Python: 데이터 타입과 안전한 변수 관리"
 date: 2025-10-28
-excerpt: "강사: 임정섭 강사님"
+excerpt: "파이썬의 핵심 데이터 타입인 List, Tuple, Set, Dictionary의 보안적 특성과 안전한 사용법을 학습합니다."
 categories:
   - SK_Rookies
   - Python

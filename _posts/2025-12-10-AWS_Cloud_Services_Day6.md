@@ -1,7 +1,7 @@
 --- 
-title: "📝 AWS 클라우드 서비스 강의 노트 (6일차)"
+title: "AWS 서버리스 아키텍처: Lambda와 API Gateway"
 date: 2025-12-10
-excerpt: "- 날짜: 2025년 12월 10일"
+excerpt: "서버 관리 없는 컴퓨팅 환경인 AWS Lambda와 API Gateway를 연동하여 서버리스 백엔드를 구축해봅니다."
 categories:
   - SK_Rookies
   - AWS-Cloud

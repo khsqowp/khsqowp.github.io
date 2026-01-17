@@ -1,7 +1,7 @@
 --- 
 title: "CTF-README"
 date: 2026-01-14
-excerpt: ""
+excerpt: "FIVENINES CTF 문제 풀이를 위한 통합 가이드 및 환경 설정 안내입니다."
 categories:
   - Project
   - CTF

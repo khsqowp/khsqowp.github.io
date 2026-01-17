@@ -1,7 +1,7 @@
 --- 
-title: "📝 LLM & LangChain 정규표현식 및 보안 대시보드 개발 강의 노트 (3일차)"
+title: "LLM 기반 보안 대시보드 개발: 정규표현식과 LangChain 활용"
 date: 2025-11-12
-excerpt: "오늘 강의에서는 다음과 같은 핵심 내용들을 배웠습니다:"
+excerpt: "정규표현식으로 보안 로그를 파싱하고, LangChain을 활용하여 위협을 분석하는 지능형 보안 대시보드를 구축합니다."
 categories:
   - SK_Rookies
   - Python

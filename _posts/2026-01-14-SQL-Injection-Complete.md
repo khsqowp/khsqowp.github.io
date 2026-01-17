@@ -1,7 +1,7 @@
 --- 
 title: "SQL-Injection-Complete"
 date: 2026-01-14
-excerpt: ""
+excerpt: "SQL Injection 공격의 원리와 다양한 공격 기법(Union, Error, Blind)을 실습을 통해 심층 분석합니다."
 categories:
   - Project
   - CTF

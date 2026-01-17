@@ -1,7 +1,7 @@
 --- 
-title: "Linux 기반 3계층 웹 아키텍처 구축 및 보안 실습"
+title: "고가용성 3계층 웹 아키텍처 구축 실습"
 date: 2025-12-17
-excerpt: "강의 시간: 오전 9시 11분 ~ (약 6시간)"
+excerpt: "Web, WAS, DB로 구성된 3-Tier 아키텍처를 리눅스 환경에서 직접 구축하고 로드 밸런싱을 적용해봅니다."
 categories:
   - SK_Rookies
   - App-Security
