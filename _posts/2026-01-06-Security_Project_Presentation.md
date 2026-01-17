@@ -8225,6 +8225,7 @@ class ReportGenerator:
 <body>
     <h1>Rookies DNA Security Scan Report</h1>
 
+    {% raw %}
     <div class="stats">
         <h2>통계</h2>
         <p>총 스캐너 수: {{ stats.total_scanners }}개</p>
@@ -8232,6 +8233,7 @@ class ReportGenerator:
         <p>안전: <span class="safe">{{ stats.safe }}개</span></p>
         <p>취약률: {{ "%.2f"|format(stats.vulnerability_rate) }}%</p>
     </div>
+    {% endraw %}
 
     <h2>상세 결과</h2>
     <table>
@@ -8240,6 +8242,7 @@ class ReportGenerator:
             <th>상태</th>
             <th>증거</th>
         </tr>
+        {% raw %}
         {% for scanner, results in scan_results.items() %}
             {% for result in results %}
             <tr>
@@ -8251,6 +8254,7 @@ class ReportGenerator:
             </tr>
             {% endfor %}
         {% endfor %}
+        {% endraw %}
     </table>
 </body>
 </html>
