@@ -1,7 +1,7 @@
 --- 
-title: "📝 NumPy & Pandas 데이터 시각화 강의 노트 (4일차)"
+title: "데이터 시각화의 예술: Matplotlib과 Seaborn으로 인사이트 발견하기"
 date: 2025-11-06
-excerpt: "3일차까지 NumPy와 Pandas의 기본적인 데이터 분석 기능들을 학습했습니다. 오늘은 그 데이터들을 효과적으로 시각화(Visualization) 하는 방법을 배웠습니다. 강사님께서 강조하신 것처럼, 프로그래밍 언어 학습은 '끊어지는 부분이 없이 연속성을 가지고..."
+excerpt: "Matplotlib와 Seaborn 라이브러리를 활용하여 데이터를 효과적으로 시각화하고, 복잡한 데이터셋에서 의미 있는 패턴과 인사이트를 도출하는 기법을 학습합니다."
 categories:
   - SK_Rookies
   - Python

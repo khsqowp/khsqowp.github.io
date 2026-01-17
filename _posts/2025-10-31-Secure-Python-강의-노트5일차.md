@@ -1,7 +1,7 @@
 --- 
-title: "📝 Secure Python 강의 노트 - Day 5 (2025년 10월 31일)"
+title: "Secure Python: 예외 처리, 로깅, 그리고 파일 입출력 보안"
 date: 2025-10-31
-excerpt: "오늘 강의에서는 Python의 예외 처리(Exception Handling), 로깅(Logging), 파일 입출력(File I/O), 그리고 데코레이터를 활용한 보안 강화 기법을 배웠습니다. 이번 강의는 실무에서 매우 중요한 내용들로 구성되어 있으며, 특히 안전한..."
+excerpt: "견고한 애플리케이션을 위한 예외 처리 전략, 효과적인 로깅 기법, 그리고 안전한 파일 입출력 처리를 통해 파이썬 코드의 안정성과 보안성을 높입니다."
 categories:
   - SK_Rookies
   - Python

@@ -1,7 +1,7 @@
 --- 
-title: "📝 LLM, RAG, LangChain 기초 다지기 강의 노트 (2일차)"
+title: "LLM 애플리케이션 개발: RAG와 LangChain을 활용한 보안 챗봇 구축"
 date: 2025-11-11
-excerpt: "학습 목표: 기존 내용을 다시 학습하면서 LLM, RAG, Langchain 기초를 탄탄히 다지고, 실제 보안 로그 분석 대시보드 구축하기"
+excerpt: "RAG(검색 증강 생성) 아키텍처와 LangChain 프레임워크를 활용하여 보안 로그를 분석하고 질의응답할 수 있는 AI 챗봇을 직접 구현해봅니다."
 categories:
   - SK_Rookies
   - Python

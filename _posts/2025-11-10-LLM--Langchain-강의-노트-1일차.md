@@ -1,7 +1,7 @@
 --- 
-title: "📝 LLM & Langchain 강의 노트 (1일차)"
+title: "생성형 AI 입문: LLM, LangChain, 그리고 프롬프트 엔지니어링"
 date: 2025-11-10
-excerpt: "오늘 강의에서는 생성형 AI(Generative AI)의 핵심 기술인 LLM(Large Language Model), Langchain, 그리고 RAG(Retrieval Augmented Generation)에 대해 학습했습니다. 단순히 개념을 이해하는 것을 넘어..."
+excerpt: "대규모 언어 모델(LLM)의 원리와 LangChain의 핵심 컴포넌트를 이해하고, 효과적인 프롬프트 엔지니어링 기술을 통해 AI 애플리케이션 개발의 기초를 다집니다."
 categories:
   - SK_Rookies
   - Python
