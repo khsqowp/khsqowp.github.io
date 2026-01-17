@@ -1,7 +1,7 @@
 --- 
-title: "📝 웹 애플리케이션 보안 강의 노트 (4일차)"
+title: "WebGoat 실습: SQL Injection과 XPath Injection 심화"
 date: 2025-12-19
-excerpt: "강의 차수: 4일차 (이번 주 마지막 시간)"
+excerpt: "WebGoat 실습 환경을 통해 SQL Injection과 XPath Injection 취약점을 직접 공격해보고, 방어 코드의 중요성을 체험합니다."
 categories:
   - SK_Rookies
   - App-Security

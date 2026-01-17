@@ -1,7 +1,7 @@
 --- 
-title: "📝 정보보안 컨설팅 강의 노트 - ISMS 및 개인정보 보호법 (3일차)"
+title: "정보보안 컨설팅 실무: ISMS 및 개인정보 보호법 심화"
 date: 2026-01-09
-excerpt: "- 강의 일자: 2026년 01월 09일"
+excerpt: "ISMS 인증 심사 기준과 개인정보 보호법의 주요 쟁점을 심층 분석하고, 실무 컨설팅 시나리오를 통해 대응 능력을 기릅니다."
 categories:
   - SK_Rookies
   - Consulting-Governance

@@ -1,7 +1,7 @@
 --- 
-title: "📝 ISMS 정보보호 관리체계 인증 컨설팅 강의 노트 (2일차)"
+title: "ISMS-P 인증 체계와 결함 분석 방법론"
 date: 2026-01-08
-excerpt: "강의 형태: 온라인 실시간 교육"
+excerpt: "ISMS-P 인증 기준의 세부 항목을 분석하고, 주요 결함 사례를 통해 인증 심사 시 필수 점검 사항을 학습합니다."
 categories:
   - SK_Rookies
   - Consulting-Governance

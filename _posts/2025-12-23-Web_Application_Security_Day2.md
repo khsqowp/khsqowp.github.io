@@ -1,7 +1,7 @@
 --- 
-title: "📝 웹 애플리케이션 보안 강의 노트 (Day 2)"
+title: "웹 해킹 도구 활용: Burp Suite와 패킷 분석 심화"
 date: 2025-12-23
-excerpt: "1. [강의 개요 및 전체 학습 계획](#1-강의-개요-및-전체-학습-계획)"
+excerpt: "Burp Suite를 활용한 프록시 설정, 세션 및 쿠키 조작, 브루트 포스 공격 기법을 실습하며 웹 패킷 분석 능력을 키웁니다."
 categories:
   - SK_Rookies
   - App-Security

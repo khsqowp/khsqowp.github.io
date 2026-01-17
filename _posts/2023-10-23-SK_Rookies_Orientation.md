@@ -1,7 +1,7 @@
 --- 
-title: "📝 SK슈더스 루키즈 28기 오리엔테이션 강의 노트 (1일차)"
+title: "SK Rookies 28기: 보안 전문가를 향한 첫걸음"
 date: 2023-10-23
-excerpt: "장소: SK슈더스 판교 본사 및 온라인"
+excerpt: "SK Rookies 28기 교육 과정의 커리큘럼을 소개하고, 향후 6개월간 진행될 보안 전문가 양성 로드맵을 안내합니다."
 categories:
   - SK_Rookies
   - 00_안내사항
