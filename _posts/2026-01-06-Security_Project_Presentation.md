@@ -1,9 +1,8 @@
---- 
-title: "보안 프로젝트 발표회: 팀별 분석 및 기술 시연"
+---
+title: "📝 보안 프로젝트 발표회 종합 학습 노트 (2일차 미니 프로젝트)"
 date: 2026-01-06
-excerpt: "미니 프로젝트 최종 발표회를 통해 각 팀의 보안 분석 결과와 기술 구현 내용을 공유하고 피드백을 나눕니다."
+excerpt: "SK Shielders Rookies 교육생들의 2차 미니 프로젝트 발표회 내용을 정리하고, 교육, 의료, 금융 등 다양한 도메인의 보안 진단 시스템 구축 사례를 공유합니다."
 categories:
-  - SK_Rookies
   - Project-Security
 tags:
   - Project-Security
@@ -4065,7 +4064,7 @@ config:
 
 # 진단 로직
 check:
-  command: "cat &#123;&#123; config_path &#125;&#125; | grep '^PermitRootLogin'"
+  command: "cat {{ config_path }} | grep '^PermitRootLogin'"
   expected_output: "PermitRootLogin no"
   severity_map:
     good: "PermitRootLogin no"
@@ -8228,10 +8227,10 @@ class ReportGenerator:
 
     <div class="stats">
         <h2>통계</h2>
-        <p>총 스캐너 수: &#123;&#123; stats.total_scanners &#125;&#125;개</p>
-        <p>취약: <span class="vulnerable">&#123;&#123; stats.vulnerable &#125;&#125;개</span></p>
-        <p>안전: <span class="safe">&#123;&#123; stats.safe &#125;&#125;개</span></p>
-        <p>취약률: &#123;&#123; "%.2f"|format(stats.vulnerability_rate) &#125;&#125;%</p>
+        <p>총 스캐너 수: {{ stats.total_scanners }}개</p>
+        <p>취약: <span class="vulnerable">{{ stats.vulnerable }}개</span></p>
+        <p>안전: <span class="safe">{{ stats.safe }}개</span></p>
+        <p>취약률: {{ "%.2f"|format(stats.vulnerability_rate) }}%</p>
     </div>
 
     <h2>상세 결과</h2>
@@ -8241,17 +8240,17 @@ class ReportGenerator:
             <th>상태</th>
             <th>증거</th>
         </tr>
-        &#123;% for scanner, results in scan_results.items() %&#125;
-            &#123;% for result in results %&#125;
+        {% for scanner, results in scan_results.items() %}
+            {% for result in results %}
             <tr>
-                <td>&#123;&#123; result.get('check_name', result.get('endpoint')) &#125;&#125;</td>
-                <td class="&#123;&#123; 'vulnerable' if result.get('vulnerable') else 'safe' &#125;&#125;">
-                    &#123;&#123; '취약' if result.get('vulnerable') else '안전' &#125;&#125;
+                <td>{{ result.get('check_name', result.get('endpoint')) }}</td>
+                <td class="{{ 'vulnerable' if result.get('vulnerable') else 'safe' }}">
+                    {{ '취약' if result.get('vulnerable') else '안전' }}
                 </td>
-                <td>&#123;&#123; result.get('evidence', '-')[:100] &#125;&#125;</td>
+                <td>{{ result.get('evidence', '-')[:100] }}</td>
             </tr>
-            &#123;% endfor %&#125;
-        &#123;% endfor %&#125;
+            {% endfor %}
+        {% endfor %}
     </table>
 </body>
 </html>
@@ -17164,8 +17163,8 @@ def get_user():
 
 # 8. XSS 방지 (Jinja2 자동 이스케이프)
 # templates/user.html
-# &#123;&#123; username &#125;&#125;  <!-- 자동으로 HTML 이스케이프 -->
-# &#123;&#123; description | safe &#125;&#125;  <!-- safe 필터는 주의해서 사용 -->
+# {{ username }}  <!-- 자동으로 HTML 이스케이프 -->
+# {{ description | safe }}  <!-- safe 필터는 주의해서 사용 -->
 ```
 
 ## 7.4 강사 종합 평가 및 피드백

@@ -1,7 +1,7 @@
 --- 
 title: "네트워크 보안: Wireshark를 활용한 프로토콜 분석"
 date: 2025-12-02
-excerpt: "- 강의 주제: TCP/IP 프로토콜 분석, 포트 스캐닝, HTTP/TLS, 네트워크 보안 시스템"
+excerpt: "Wireshark를 활용하여 TCP/IP 프로토콜의 동작 원리를 심층 분석하고, Nmap을 이용한 포트 스캐닝 및 네트워크 보안 점검 기법을 상세히 학습합니다."
 categories:
   - SK_Rookies
   - Linux-Network
