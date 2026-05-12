@@ -109,10 +109,49 @@
       <div class="panel">
         <h2>
           생성된 페이로드
-          <span class="count-badge" id="countBadge">0</span>
+          <span class="count-badge" id="countBadge">5</span>
         </h2>
         <div class="payload-list" id="payloadList">
-          <div class="empty-state">컨텍스트를 선택하고 "페이로드 생성"을 클릭하세요.</div>
+          <div class="payload-card">
+            <div class="payload-top">
+              <div class="payload-meta"><span class="tag tag-basic">basic</span></div>
+              <button class="btn-copy" type="button" data-copy="&lt;script&gt;alert(1)&lt;/script&gt;">Copy</button>
+            </div>
+            <div class="payload-code">&lt;script&gt;alert(1)&lt;/script&gt;</div>
+            <div class="payload-note">기본 script 태그</div>
+          </div>
+          <div class="payload-card">
+            <div class="payload-top">
+              <div class="payload-meta"><span class="tag tag-basic">basic</span></div>
+              <button class="btn-copy" type="button" data-copy="&lt;img src=x onerror=&quot;alert(1)&quot;&gt;">Copy</button>
+            </div>
+            <div class="payload-code">&lt;img src=x onerror=&quot;alert(1)&quot;&gt;</div>
+            <div class="payload-note">img onerror 이벤트</div>
+          </div>
+          <div class="payload-card">
+            <div class="payload-top">
+              <div class="payload-meta"><span class="tag tag-basic">basic</span></div>
+              <button class="btn-copy" type="button" data-copy="&lt;svg onload=&quot;alert(1)&quot;&gt;">Copy</button>
+            </div>
+            <div class="payload-code">&lt;svg onload=&quot;alert(1)&quot;&gt;</div>
+            <div class="payload-note">SVG onload</div>
+          </div>
+          <div class="payload-card">
+            <div class="payload-top">
+              <div class="payload-meta"><span class="tag tag-basic">basic</span></div>
+              <button class="btn-copy" type="button" data-copy="&lt;body onload=&quot;alert(1)&quot;&gt;">Copy</button>
+            </div>
+            <div class="payload-code">&lt;body onload=&quot;alert(1)&quot;&gt;</div>
+            <div class="payload-note">body onload</div>
+          </div>
+          <div class="payload-card">
+            <div class="payload-top">
+              <div class="payload-meta"><span class="tag tag-basic">basic</span></div>
+              <button class="btn-copy" type="button" data-copy="&lt;iframe src=&quot;javascript:alert(1)&quot;&gt;">Copy</button>
+            </div>
+            <div class="payload-code">&lt;iframe src=&quot;javascript:alert(1)&quot;&gt;</div>
+            <div class="payload-note">iframe javascript: URI</div>
+          </div>
         </div>
       </div>
     </div>
@@ -132,7 +171,7 @@
       } catch (e) {
         const list = document.getElementById('payloadList');
         document.getElementById('countBadge').textContent = '0';
-        list.innerHTML = `<div class="empty-state">생성 중 오류가 발생했습니다.<br>${escHtml(e.message)}</div>`;
+        list.replaceChildren(makeEmptyState(`생성 중 오류가 발생했습니다. ${e.message}`));
       }
     }
 
@@ -273,22 +312,11 @@
       document.getElementById('countBadge').textContent = payloads.length;
 
       if (payloads.length === 0) {
-        list.innerHTML = '<div class="empty-state">해당 설정으로 생성된 페이로드가 없습니다.</div>';
+        list.replaceChildren(makeEmptyState('해당 설정으로 생성된 페이로드가 없습니다.'));
         return;
       }
 
-      list.innerHTML = payloads.map((p, i) => `
-        <div class="payload-card">
-          <div class="payload-top">
-            <div class="payload-meta">
-              ${p.tags.map(t => `<span class="tag tag-${t === 'bypass' || t === 'encode' || t === 'angular' ? 'bypass' : t === 'ctx' ? 'ctx' : 'basic'}">${t}</span>`).join('')}
-            </div>
-            <button class="btn-copy" onclick="copyPayload(${i})">Copy</button>
-          </div>
-          <div class="payload-code">${escHtml(p.code)}</div>
-          <div class="payload-note">${p.note}</div>
-        </div>
-      `).join('');
+      list.replaceChildren(...payloads.map((p, i) => makePayloadCard(p, i)));
 
       window._payloads = payloads;
     }
@@ -301,6 +329,48 @@
       navigator.clipboard.writeText(window._payloads[i].code).then(() => {
         showToast();
       });
+    }
+
+    function makePayloadCard(payload, index) {
+      const card = document.createElement('div');
+      card.className = 'payload-card';
+
+      const top = document.createElement('div');
+      top.className = 'payload-top';
+
+      const meta = document.createElement('div');
+      meta.className = 'payload-meta';
+      payload.tags.forEach(tag => {
+        const badge = document.createElement('span');
+        badge.className = `tag tag-${tag === 'bypass' || tag === 'encode' || tag === 'angular' ? 'bypass' : tag === 'ctx' ? 'ctx' : 'basic'}`;
+        badge.textContent = tag;
+        meta.appendChild(badge);
+      });
+
+      const copy = document.createElement('button');
+      copy.className = 'btn-copy';
+      copy.type = 'button';
+      copy.textContent = 'Copy';
+      copy.addEventListener('click', () => copyPayload(index));
+
+      const code = document.createElement('div');
+      code.className = 'payload-code';
+      code.textContent = payload.code;
+
+      const note = document.createElement('div');
+      note.className = 'payload-note';
+      note.textContent = payload.note;
+
+      top.append(meta, copy);
+      card.append(top, code, note);
+      return card;
+    }
+
+    function makeEmptyState(message) {
+      const div = document.createElement('div');
+      div.className = 'empty-state';
+      div.textContent = message;
+      return div;
     }
 
     function escHtml(s) {
@@ -323,12 +393,20 @@
     function initXSSBuilder() {
       const sink = document.getElementById('sink');
       const btn = document.getElementById('generateBtn');
+      const list = document.getElementById('payloadList');
       if (sink) {
         sink.addEventListener('change', function() {
           document.getElementById('customGroup').style.display = this.value === 'custom' ? 'block' : 'none';
         });
       }
       if (btn) btn.addEventListener('click', safeGenerateXSSPayloads);
+      if (list) {
+        list.addEventListener('click', event => {
+          const copy = event.target.closest('[data-copy]');
+          if (!copy) return;
+          navigator.clipboard.writeText(copy.getAttribute('data-copy')).then(showToast);
+        });
+      }
       safeGenerateXSSPayloads();
     }
 
