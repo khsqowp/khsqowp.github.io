@@ -1,0 +1,106 @@
+body {
+  background: #f7f8fa !important;
+  color: #191f28 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif !important;
+}
+
+header a {
+  color: #6b7684 !important;
+}
+
+header a:hover,
+h1 {
+  color: #3182f6 !important;
+}
+
+.panel,
+.card,
+.payload-card,
+.preview-wrap,
+.examples,
+.info,
+.preview-box {
+  background: #fff !important;
+  border-color: #e5e8eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+}
+
+.panel h2,
+label,
+.payload-title,
+.payload-note,
+.subtitle,
+.card p,
+.meta-row,
+.hash-cat,
+.opt-note,
+.info {
+  color: #6b7684 !important;
+}
+
+input,
+select,
+textarea {
+  background: #fff !important;
+  border-color: #d1d6db !important;
+  color: #191f28 !important;
+  border-radius: 8px !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #3182f6 !important;
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, .12);
+}
+
+.btn-gen,
+.btn-generate,
+.btn-analyze,
+.btn-id,
+.btn-prev,
+.b-enc,
+.b-dec,
+.b-hash,
+.b-apply,
+.tab.active,
+.btn-copy:hover {
+  background: #3182f6 !important;
+  color: #fff !important;
+  border-color: #3182f6 !important;
+}
+
+.btn-copy,
+.btn-clear,
+.btn-clr,
+.btn-add,
+.b-copy,
+.b-clear,
+.b-swap,
+.cat,
+.tab {
+  background: #f2f4f6 !important;
+  color: #4e5968 !important;
+  border-color: #e5e8eb !important;
+}
+
+.cat.on,
+.cat:hover,
+.tab:hover:not(.active) {
+  background: #e8f3ff !important;
+  color: #1b64da !important;
+  border-color: #b2d4ff !important;
+}
+
+.payload-code,
+code,
+.dir-name,
+.dir-value {
+  color: #1b64da !important;
+}
+
+.toast {
+  background: #191f28 !important;
+  color: #fff !important;
+}

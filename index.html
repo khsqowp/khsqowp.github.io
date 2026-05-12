@@ -5,139 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Security Tools</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      min-height: 100vh;
-      background: #0d1117;
-      color: #e6edf3;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: #58a6ff;
-    }
-
-    .subtitle {
-      color: #8b949e;
-      margin-bottom: 3rem;
-      font-size: 0.95rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      width: 100%;
-      max-width: 1100px;
-      padding: 0 1rem;
-    }
-
-    .card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 2rem 1.5rem;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.2s, transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .card:hover {
-      border-color: #58a6ff;
-      transform: translateY(-3px);
-    }
-
-    .card .icon {
-      font-size: 2.5rem;
-    }
-
-    .card h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-
-    .card p {
-      font-size: 0.85rem;
-      color: #8b949e;
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    .tag {
-      font-size: 0.75rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      background: #1f2d3d;
-      color: #58a6ff;
-      border: 1px solid #1f6feb;
-    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f8fa;color:#191f28;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1120px;margin:0 auto;padding:48px 20px 64px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;margin-bottom:28px}
+    .eyebrow{display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:999px;background:#e8f3ff;color:#1b64da;font-size:13px;font-weight:800;margin-bottom:16px}
+    h1{margin:0 0 14px;font-size:42px;line-height:1.18;letter-spacing:0}
+    .lead{margin:0;color:#4e5968;font-size:17px;line-height:1.7}
+    .hero-card{background:#fff;border:1px solid #e5e8eb;border-radius:8px;padding:22px;box-shadow:0 8px 24px rgba(25,31,40,.08)}
+    .quick{display:grid;gap:10px}
+    .quick a{display:flex;justify-content:space-between;align-items:center;background:#f2f4f6;border-radius:8px;padding:14px 16px;font-weight:800}
+    .quick a.primary{background:#3182f6;color:#fff}
+    .section-title{display:flex;align-items:end;justify-content:space-between;margin:34px 0 14px}
+    .section-title h2{margin:0;font-size:22px}
+    .section-title p{margin:0;color:#8b95a1;font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+    .card{background:#fff;border:1px solid #e5e8eb;border-radius:8px;padding:20px;min-height:154px;display:flex;flex-direction:column;gap:12px;transition:.18s}
+    .card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(25,31,40,.08);border-color:#c9d1d9}
+    .icon{width:38px;height:38px;border-radius:8px;background:#f2f4f6;display:grid;place-items:center;color:#3182f6;font-weight:900}
+    .card h3{margin:0;font-size:17px}
+    .card p{margin:0;color:#6b7684;font-size:14px;line-height:1.55}
+    .tag{margin-top:auto;align-self:flex-start;border-radius:999px;background:#f2f4f6;color:#4e5968;padding:6px 10px;font-size:12px;font-weight:800}
+    @media(max-width:820px){.hero{grid-template-columns:1fr}h1{font-size:34px}.wrap{padding-top:32px}}
   </style>
 </head>
 <body>
-  <h1>Security Tools</h1>
-  <p class="subtitle">PortSwigger 실습용 도구 모음</p>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">PortSwigger Lab Companion</span>
+        <h1>보안 실습을 빠르게 끝내는 진단 도구 모음</h1>
+        <p class="lead">인코딩 체인, 페이로드 생성, 요청 조립, 정책 분석, 해시 식별을 GitHub Pages에서 바로 사용합니다.</p>
+      </div>
+      <div class="hero-card">
+        <div class="quick">
+          <a class="primary" href="workbench.html"><span>Security Workbench</span><span>열기</span></a>
+          <a href="encoder.html"><span>Encoder / Decoder</span><span>→</span></a>
+          <a href="payload.html"><span>Payload Assembler</span><span>→</span></a>
+        </div>
+      </div>
+    </section>
 
-  <div class="grid">
-    <a href="encoder.html" class="card">
-      <div class="icon">🔐</div>
-      <h2>Encoder / Decoder</h2>
-      <p>Base64, URL, HTML, Hex 등 다양한 인코딩/디코딩 변환</p>
-      <span class="tag">Encoding</span>
-    </a>
+    <div class="section-title">
+      <h2>Tools</h2>
+      <p>정적 HTML로 동작</p>
+    </div>
 
-    <a href="csrf.html" class="card">
-      <div class="icon">🎯</div>
-      <h2>CSRF PoC Generator</h2>
-      <p>CSRF 공격용 자동 제출 폼 생성 및 테스트</p>
-      <span class="tag">CSRF</span>
-    </a>
-
-    <a href="clickjacking.html" class="card">
-      <div class="icon">🖼️</div>
-      <h2>Clickjacking PoC</h2>
-      <p>iframe 투명도/위치 조절 및 Decoy UI 생성, 미리보기 지원</p>
-      <span class="tag">Clickjacking</span>
-    </a>
-
-    <a href="xss.html" class="card">
-      <div class="icon">⚡</div>
-      <h2>XSS Payload Builder</h2>
-      <p>컨텍스트별 XSS 페이로드 생성 및 필터 우회 변형</p>
-      <span class="tag">XSS</span>
-    </a>
-
-    <a href="payload.html" class="card">
-      <div class="icon">🧩</div>
-      <h2>Payload Assembler</h2>
-      <p>SQLi / XSS 모듈식 페이로드 조립 및 실행 가능성 분석</p>
-      <span class="tag">SQLi · XSS</span>
-    </a>
-
-    <a href="csp.html" class="card">
-      <div class="icon">🛡️</div>
-      <h2>CSP Analyzer</h2>
-      <p>CSP 헤더 취약점 분석, unsafe-inline / 와일드카드 등 자동 탐지</p>
-      <span class="tag">CSP</span>
-    </a>
-
-    <a href="hash_id.html" class="card">
-      <div class="icon">🔍</div>
-      <h2>Hash Identifier</h2>
-      <p>해시 타입 자동 식별 및 hashcat 모드 / John 포맷 제공</p>
-      <span class="tag">Hash</span>
-    </a>
-  </div>
+    <div class="grid">
+      <a href="workbench.html" class="card">
+        <div class="icon">WB</div>
+        <h3>Security Workbench</h3>
+        <p>Recipe, Request Builder, URL/SSRF Helper, History, Scratchpad 통합 작업대</p>
+        <span class="tag">Workflow</span>
+      </a>
+      <a href="encoder.html" class="card">
+        <div class="icon">EN</div>
+        <h3>Encoder / Decoder</h3>
+        <p>Base64, URL, HTML Entity, Hex, JWT, AES, Hash 등 변환 도구</p>
+        <span class="tag">Encoding</span>
+      </a>
+      <a href="csrf.html" class="card">
+        <div class="icon">CS</div>
+        <h3>CSRF PoC Generator</h3>
+        <p>폼 기반 CSRF PoC와 자동 제출 HTML 생성</p>
+        <span class="tag">CSRF</span>
+      </a>
+      <a href="clickjacking.html" class="card">
+        <div class="icon">CJ</div>
+        <h3>Clickjacking PoC</h3>
+        <p>iframe 투명도, 위치, decoy UI를 조절하는 PoC 생성기</p>
+        <span class="tag">Clickjacking</span>
+      </a>
+      <a href="xss.html" class="card">
+        <div class="icon">XS</div>
+        <h3>XSS Payload Builder</h3>
+        <p>컨텍스트별 XSS 페이로드와 필터 우회 변형 생성</p>
+        <span class="tag">XSS</span>
+      </a>
+      <a href="payload.html" class="card">
+        <div class="icon">PL</div>
+        <h3>Payload Assembler</h3>
+        <p>SQLi / XSS 페이로드 조립과 실행 가능성 분석</p>
+        <span class="tag">SQLi · XSS</span>
+      </a>
+      <a href="csp.html" class="card">
+        <div class="icon">CP</div>
+        <h3>CSP Analyzer</h3>
+        <p>CSP 헤더의 unsafe-inline, wildcard, 누락 directive 탐지</p>
+        <span class="tag">CSP</span>
+      </a>
+      <a href="hash_id.html" class="card">
+        <div class="icon">HI</div>
+        <h3>Hash Identifier</h3>
+        <p>해시 타입 후보, hashcat mode, John format 식별</p>
+        <span class="tag">Hash</span>
+      </a>
+    </div>
+  </main>
 </body>
 </html>
