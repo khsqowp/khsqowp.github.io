@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encoder / Decoder – Security Tools</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{min-height:100vh;background:#0d1117;color:#e6edf3;font-family:'Segoe UI',sans-serif;padding:1.5rem 1rem}
+    header{display:flex;align-items:center;gap:1rem;max-width:1000px;margin:0 auto 1.5rem}
+    header a{color:#8b949e;text-decoration:none;font-size:.9rem}
+    header a:hover{color:#58a6ff}
+    h1{font-size:1.5rem;color:#58a6ff}
+    .wrap{max-width:1000px;margin:0 auto}
+
+    /* Category tabs */
+    .cats{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem}
+    .cat{padding:.4rem 1.1rem;border-radius:20px;border:1px solid #30363d;background:#161b22;
+         color:#8b949e;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .15s}
+    .cat:hover,.cat.on{background:#1f2d3d;border-color:#58a6ff;color:#58a6ff}
+
+    /* Op selector */
+    .op-bar{display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem;flex-wrap:wrap}
+    .op-bar label{font-size:.8rem;color:#8b949e;white-space:nowrap}
+    select{background:#161b22;border:1px solid #30363d;border-radius:8px;color:#e6edf3;
+           font-size:.9rem;padding:.45rem .75rem;outline:none;cursor:pointer;min-width:220px}
+    select:focus{border-color:#58a6ff}
+
+    /* Options */
+    .opts{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:.9rem}
+    .opt{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:160px}
+    .opt label{font-size:.75rem;color:#8b949e}
+    .opt input{background:#161b22;border:1px solid #30363d;border-radius:8px;
+               color:#e6edf3;font-size:.85rem;padding:.4rem .65rem;outline:none;font-family:'Courier New',monospace}
+    .opt input:focus{border-color:#58a6ff}
+    .opt-note{font-size:.75rem;color:#8b949e;align-self:flex-end;padding-bottom:.4rem}
+
+    /* I/O */
+    .io{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.9rem}
+    @media(max-width:640px){.io{grid-template-columns:1fr}}
+    .io-col label{display:block;font-size:.8rem;color:#8b949e;margin-bottom:.35rem}
+    textarea{width:100%;height:160px;background:#0d1117;border:1px solid #30363d;border-radius:8px;
+             color:#e6edf3;font-family:'Courier New',monospace;font-size:.85rem;
+             padding:.7rem;resize:vertical;outline:none;transition:border-color .2s}
+    textarea:focus{border-color:#58a6ff}
+    #out{color:#a5d6ff}
+
+    /* Buttons */
+    .btns{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem}
+    button{padding:.45rem 1.2rem;border-radius:8px;border:none;cursor:pointer;
+           font-size:.88rem;font-weight:600;transition:opacity .15s}
+    button:hover{opacity:.82}
+    button:disabled{opacity:.4;cursor:not-allowed}
+    .b-enc{background:#238636;color:#fff}
+    .b-dec{background:#1f6feb;color:#fff}
+    .b-hash{background:#8957e5;color:#fff}
+    .b-apply{background:#e3b341;color:#000}
+    .b-swap{background:#3d3200;color:#e3b341;border:1px solid #e3b341}
+    .b-copy{background:#30363d;color:#e6edf3}
+    .b-clear{background:#21262d;color:#8b949e;border:1px solid #30363d}
+
+    /* Info */
+    .info{font-size:.8rem;color:#8b949e;padding:.65rem .85rem;background:#161b22;
+          border-radius:8px;border-left:3px solid #30363d;line-height:1.5}
+
+    /* Toast */
+    .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#238636;color:#fff;
+           padding:.5rem 1.1rem;border-radius:8px;font-size:.85rem;
+           opacity:0;transition:opacity .3s;pointer-events:none}
+    .toast.show{opacity:1}
+    .err{color:#f85149!important}
+  </style>
+</head>
+<body>
+<header>
+  <a href="index.html">← 홈</a>
+  <h1>Encoder / Decoder</h1>
+</header>
+
+<div class="wrap">
+  <div class="cats" id="cats"></div>
+  <div class="op-bar">
+    <label>Operation</label>
+    <select id="opSel" onchange="onOpChange()"></select>
+  </div>
+  <div class="opts" id="opts"></div>
+  <div class="io">
+    <div class="io-col"><label>Input</label><textarea id="inp" placeholder="입력..."></textarea></div>
+    <div class="io-col"><label>Output</label><textarea id="out" placeholder="결과..." readonly></textarea></div>
+  </div>
+  <div class="btns" id="btns"></div>
+  <div class="info" id="info"></div>
+</div>
+<div class="toast" id="toast">복사 완료!</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   MD5 (Pure JS, RFC 1321)
+───────────────────────────────────────────── */
+const MD5 = (() => {
+  const S = [7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,
+             5, 9,14,20,5, 9,14,20,5, 9,14,20,5, 9,14,20,
+             4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,
+             6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21];
+  const K = new Int32Array(64);
+  for (let i=0;i<64;i++) K[i]=(Math.abs(Math.sin(i+1))*0x100000000)|0;
+  const add=(a,b)=>(a+b)|0, rotl=(n,s)=>(n<<s)|(n>>>(32-s));
+  return str=>{
+    const msg=new TextEncoder().encode(str), len=msg.length;
+    const padLen=(56-((len+1)%64)+64)%64;
+    const buf=new Uint8Array(len+1+padLen+8);
+    buf.set(msg); buf[len]=0x80;
+    const dv=new DataView(buf.buffer);
+    dv.setUint32(buf.length-8,(len*8)>>>0,true);
+    dv.setUint32(buf.length-4,Math.floor(len/0x20000000)>>>0,true);
+    let a=0x67452301|0,b=0xefcdab89|0,c=0x98badcfe|0,d=0x10325476|0;
+    for(let i=0;i<buf.length;i+=64){
+      const M=new Int32Array(16);
+      for(let j=0;j<16;j++) M[j]=dv.getInt32(i+j*4,true);
+      let A=a,B=b,C=c,D=d;
+      for(let j=0;j<64;j++){
+        let F,g;
+        if(j<16){F=(B&C)|(~B&D);g=j;}
+        else if(j<32){F=(D&B)|(~D&C);g=(5*j+1)%16;}
+        else if(j<48){F=B^C^D;g=(3*j+5)%16;}
+        else{F=C^(B|~D);g=(7*j)%16;}
+        const t=D;D=C;C=B;B=add(B,rotl(add(add(A,F),add(K[j],M[g])),S[j]));A=t;
+      }
+      a=add(a,A);b=add(b,B);c=add(c,C);d=add(d,D);
+    }
+    return[a,b,c,d].map(v=>{const u=v>>>0;return('0'.repeat(7)+(u.toString(16))).slice(-8).match(/.{2}/g).reverse().join('')}).join('');
+  };
+})();
+
+/* ─────────────────────────────────────────────
+   Base32
+───────────────────────────────────────────── */
+const B32='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function base32enc(str){
+  const b=new TextEncoder().encode(str);
+  let bits=0,val=0,out='';
+  for(const byte of b){val=(val<<8)|byte;bits+=8;while(bits>=5){out+=B32[(val>>>(bits-5))&31];bits-=5;}}
+  if(bits>0)out+=B32[(val<<(5-bits))&31];
+  while(out.length%8)out+='=';
+  return out;
+}
+function base32dec(str){
+  str=str.toUpperCase().replace(/=+$/,'');
+  let bits=0,val=0;const out=[];
+  for(const c of str){const i=B32.indexOf(c);if(i<0)throw new Error('Invalid Base32: '+c);val=(val<<5)|i;bits+=5;if(bits>=8){out.push((val>>>(bits-8))&0xff);bits-=8;}}
+  return new TextDecoder().decode(new Uint8Array(out));
+}
+
+/* ─────────────────────────────────────────────
+   Base58
+───────────────────────────────────────────── */
+const B58='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function base58enc(str){
+  const bytes=new TextEncoder().encode(str);
+  let n=0n;for(const b of bytes)n=n*256n+BigInt(b);
+  let res='';while(n>0n){res=B58[Number(n%58n)]+res;n=n/58n;}
+  for(const b of bytes){if(b!==0)break;res='1'+res;}
+  return res||'1';
+}
+function base58dec(str){
+  let n=0n;
+  for(const c of str){const i=B58.indexOf(c);if(i<0)throw new Error('Invalid Base58: '+c);n=n*58n+BigInt(i);}
+  const bytes=[];while(n>0n){bytes.unshift(Number(n&255n));n>>=8n;}
+  for(const c of str){if(c!=='1')break;bytes.unshift(0);}
+  return new TextDecoder().decode(new Uint8Array(bytes));
+}
+
+/* ─────────────────────────────────────────────
+   ASCII85 (Base85)
+───────────────────────────────────────────── */
+function base85enc(str){
+  const bytes=new TextEncoder().encode(str);
+  let out='<~';
+  for(let i=0;i<bytes.length;i+=4){
+    const pad=Math.max(0,i+4-bytes.length);
+    let v=0;
+    for(let j=0;j<4;j++)v=(v*256+(bytes[i+j]||0))>>>0;
+    if(v===0&&pad===0){out+='z';continue;}
+    let g='';for(let j=0;j<5;j++){g=String.fromCharCode(v%85+33)+g;v=Math.floor(v/85);}
+    out+=g.slice(0,5-pad);
+  }
+  return out+'~>';
+}
+function base85dec(str){
+  str=str.replace(/^<~/,'').replace(/~>$/,'').replace(/\s/g,'');
+  const bytes=[];
+  for(let i=0;i<str.length;){
+    if(str[i]==='z'){bytes.push(0,0,0,0);i++;continue;}
+    const chunk=str.slice(i,i+5),pad=5-chunk.length;
+    let v=0;
+    const p=chunk.padEnd(5,'u');
+    for(let j=0;j<5;j++){const c=p.charCodeAt(j)-33;if(c<0||c>84)throw new Error('Invalid ASCII85');v=v*85+c;}
+    for(let j=0;j<4-pad;j++)bytes.push((v>>>(24-j*8))&0xff);
+    i+=5;
+  }
+  return new TextDecoder().decode(new Uint8Array(bytes));
+}
+
+/* ─────────────────────────────────────────────
+   Morse Code
+───────────────────────────────────────────── */
+const MORSE={A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',
+K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',
+V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..',0:'-----',1:'.----',2:'..---',3:'...--',
+4:'....-',5:'.....',6:'-....',7:'--...',8:'---..',9:'----.','.':'.-.-.-',',':'--..--',
+'?':'..--..','/':'-..-.','@':'.--.-.','=':'-...-',' ':'/'};
+const MORSE_R=Object.fromEntries(Object.entries(MORSE).map(([k,v])=>[v,k]));
+function morseEnc(s){return s.toUpperCase().split('').map(c=>MORSE[c]||'').filter(Boolean).join(' ');}
+function morseDec(s){return s.split('/').map(w=>w.trim().split(' ').map(c=>MORSE_R[c]||'?').join('')).join(' ');}
+
+/* ─────────────────────────────────────────────
+   Utility helpers
+───────────────────────────────────────────── */
+function hexToBytes(hex){hex=hex.replace(/\s/g,'');if(hex.length%2)throw new Error('Hex length must be even');return Uint8Array.from(hex.match(/.{2}/g).map(h=>parseInt(h,16)));}
+function bytesToHex(buf){return Array.from(buf).map(b=>b.toString(16).padStart(2,'0')).join('');}
+function b64urlEnc(str){return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
+function b64urlDec(str){str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';return decodeURIComponent(escape(atob(str)));}
+
+async function sha(algo,str){
+  const buf=await crypto.subtle.digest(algo,new TextEncoder().encode(str));
+  return bytesToHex(new Uint8Array(buf));
+}
+async function hmacHash(algo,key,str){
+  const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(key),{name:'HMAC',hash:algo},false,['sign']);
+  const sig=await crypto.subtle.sign('HMAC',k,new TextEncoder().encode(str));
+  return bytesToHex(new Uint8Array(sig));
+}
+async function aesOp(mode,op,keyHex,ivHex,data){
+  const name=mode==='gcm'?'AES-GCM':'AES-CBC';
+  const keyBytes=hexToBytes(keyHex);
+  const ivBytes=hexToBytes(ivHex);
+  const key=await crypto.subtle.importKey('raw',keyBytes,{name},false,[op]);
+  const cfg={name,iv:ivBytes};
+  if(op==='encrypt'){
+    const enc=await crypto.subtle.encrypt(cfg,key,new TextEncoder().encode(data));
+    return bytesToHex(new Uint8Array(enc));
+  }else{
+    const dec=await crypto.subtle.decrypt(cfg,key,hexToBytes(data));
+    return new TextDecoder().decode(dec);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   XOR cipher
+───────────────────────────────────────────── */
+function xorCipher(str,hexKey){
+  const bytes=new TextEncoder().encode(str);
+  const key=hexToBytes(hexKey);
+  const res=bytes.map((b,i)=>b^key[i%key.length]);
+  return bytesToHex(res);
+}
+function xorDec(hexStr,hexKey){
+  const bytes=hexToBytes(hexStr);
+  const key=hexToBytes(hexKey);
+  const res=bytes.map((b,i)=>b^key[i%key.length]);
+  return new TextDecoder().decode(res);
+}
+
+/* ─────────────────────────────────────────────
+   Classical ciphers
+───────────────────────────────────────────── */
+function caesar(str,shift,enc){
+  shift=((enc?shift:-shift)%26+26)%26;
+  return str.replace(/[A-Za-z]/g,c=>{const base=c<='Z'?65:97;return String.fromCharCode(((c.charCodeAt(0)-base+shift)%26)+base);});
+}
+function vigenere(str,key,enc){
+  key=key.toUpperCase().replace(/[^A-Z]/g,'');
+  if(!key)throw new Error('Key must contain letters');
+  let ki=0;
+  return str.replace(/[A-Za-z]/g,c=>{
+    const base=c<='Z'?65:97,s=key.charCodeAt(ki++%key.length)-65;
+    return String.fromCharCode(((c.charCodeAt(0)-base+(enc?s:26-s))%26)+base);
+  });
+}
+function rot13(s){return s.replace(/[A-Za-z]/g,c=>{const b=c<='Z'?65:97;return String.fromCharCode(((c.charCodeAt(0)-b+13)%26)+b);});}
+function rot47(s){return s.replace(/[!-~]/g,c=>String.fromCharCode(((c.charCodeAt(0)-33+47)%94)+33));}
+
+/* ─────────────────────────────────────────────
+   JWT helpers
+───────────────────────────────────────────── */
+function jwtParse(token){
+  const p=token.trim().split('.');
+  if(p.length<2)throw new Error('JWT 형식이 아닙니다');
+  const dec=s=>{try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(s.length/4)*4,'=')))));}catch{return'(파싱 실패)';}};
+  return`=== HEADER ===\n${JSON.stringify(dec(p[0]),null,2)}\n\n=== PAYLOAD ===\n${JSON.stringify(dec(p[1]),null,2)}\n\n=== SIGNATURE ===\n${p[2]||'(없음)'}`;
+}
+async function jwtSign(payloadStr,secret){
+  let payload;try{payload=JSON.parse(payloadStr);}catch{throw new Error('Payload must be valid JSON');}
+  const h=b64urlEnc(JSON.stringify({alg:'HS256',typ:'JWT'}));
+  const p=b64urlEnc(JSON.stringify(payload));
+  const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);
+  const sig=await crypto.subtle.sign('HMAC',k,new TextEncoder().encode(`${h}.${p}`));
+  const s=btoa(String.fromCharCode(...new Uint8Array(sig))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  return`${h}.${p}.${s}`;
+}
+async function jwtVerify(token,secret){
+  const p=token.trim().split('.');
+  if(p.length!==3)throw new Error('Invalid JWT');
+  const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['verify']);
+  const sig=Uint8Array.from(atob(p[2].replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(p[2].length/4)*4,'=')),c=>c.charCodeAt(0));
+  const valid=await crypto.subtle.verify('HMAC',k,sig,new TextEncoder().encode(`${p[0]}.${p[1]}`));
+  return(valid?'✅ VALID':'❌ INVALID')+'\n\n'+jwtParse(token);
+}
+
+/* ─────────────────────────────────────────────
+   String ops
+───────────────────────────────────────────── */
+function countStats(s){const words=s.trim()?s.trim().split(/\s+/).length:0;return`Characters : ${s.length}\nWords      : ${words}\nLines      : ${s.split('\n').length}\nBytes (UTF-8): ${new TextEncoder().encode(s).length}`;}
+function escapeStr(s){return s.replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/\r/g,'\\r').replace(/\t/g,'\\t').replace(/"/g,'\\"').replace(/'/g,"\\'");}
+function unescapeStr(s){return s.replace(/\\n/g,'\n').replace(/\\r/g,'\r').replace(/\\t/g,'\t').replace(/\\"/g,'"').replace(/\\'/g,"'").replace(/\\\\/g,'\\');}
+
+/* ─────────────────────────────────────────────
+   JWT None Algorithm
+───────────────────────────────────────────── */
+function jwtNone(payloadStr){
+  let payload;try{payload=JSON.parse(payloadStr);}catch{throw new Error('Payload must be valid JSON');}
+  const h=b64urlEnc(JSON.stringify({alg:'none',typ:'JWT'}));
+  const p=b64urlEnc(JSON.stringify(payload));
+  return`${h}.${p}.`;
+}
+
+/* ─────────────────────────────────────────────
+   IP Address Encoder (SSRF bypass)
+───────────────────────────────────────────── */
+function ipEncode(ip){
+  ip=ip.trim();
+  const parts=ip.split('.');
+  if(parts.length!==4||parts.some(p=>isNaN(p)||Number(p)<0||Number(p)>255))throw new Error('유효한 IPv4 주소를 입력하세요 (예: 127.0.0.1)');
+  const [a,b,c,d]=parts.map(Number);
+  const dec=(a*16777216+b*65536+c*256+d)>>>0;
+  const hex='0x'+dec.toString(16).padStart(8,'0');
+  const octDot=[a,b,c,d].map(n=>'0'+n.toString(8)).join('.');
+  const hexDot=[a,b,c,d].map(n=>'0x'+n.toString(16)).join('.');
+  const ipv6m=`::ffff:${a.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}:${c.toString(16).padStart(2,'0')}${d.toString(16).padStart(2,'0')}`;
+  return[
+    `Dotted Decimal   : ${ip}`,
+    `Decimal (Long)   : ${dec}`,
+    `Hex (Long)       : ${hex}`,
+    `Octal (Dotted)   : ${octDot}`,
+    `Hex (Dotted)     : ${hexDot}`,
+    `Short a.b.(c*256+d): ${a}.${b}.${c*256+d}`,
+    `Short a.(b*65536+.): ${a}.${b*65536+c*256+d}`,
+    `IPv6 Mapped      : ${ipv6m}`,
+    `IPv6 ::ffff:     : ::ffff:${ip}`,
+    `Double URL-enc   : http://${encodeURIComponent(encodeURIComponent(ip))}/`,
+  ].join('\n');
+}
+function decToIp(s){
+  s=s.trim();
+  let n;
+  if(/^0x[0-9a-fA-F]+$/i.test(s))n=parseInt(s,16);
+  else if(/^\d+$/.test(s))n=parseInt(s,10);
+  else throw new Error('10진수 또는 0x Hex 정수 입력 (예: 2130706433 또는 0x7f000001)');
+  if(n<0||n>4294967295)throw new Error('유효 범위 초과 (0 ~ 4294967295)');
+  return`${(n>>>24)&0xff}.${(n>>>16)&0xff}.${(n>>>8)&0xff}.${n&0xff}`;
+}
+
+/* ─────────────────────────────────────────────
+   Markup formatting
+───────────────────────────────────────────── */
+const VOID_TAGS=new Set(['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']);
+function formatMarkup(src){
+  const compact=src.trim().replace(/>\s+</g,'><');
+  const tokens=compact.match(/<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<[^>]+>|[^<]+/g)||[];
+  let depth=0;
+  const lines=[];
+  for(const raw of tokens){
+    const token=raw.trim();
+    if(!token)continue;
+    const close=/^<\//.test(token);
+    const declaration=/^<\?|^<![^-]/.test(token);
+    const tagName=(token.match(/^<\/?\s*([^\s>/]+)/)||[])[1]?.toLowerCase();
+    const selfClose=/\/>$/.test(token)||VOID_TAGS.has(tagName);
+    if(close)depth=Math.max(depth-1,0);
+    lines.push('  '.repeat(depth)+token);
+    if(/^<[^!?/][^>]*>$/.test(token)&&!selfClose&&!declaration)depth++;
+  }
+  return lines.join('\n');
+}
+function minifyMarkup(src){
+  return src
+    .replace(/<!--(?!\[if|\s*ko)([\s\S]*?)-->/g,'')
+    .replace(/>\s+</g,'><')
+    .replace(/\s{2,}/g,' ')
+    .trim();
+}
+
+/* ─────────────────────────────────────────────
+   Operations registry
+───────────────────────────────────────────── */
+const OPS = {
+  encoding:[
+    {id:'base64',name:'Base64 (Standard)',mode:'dual',info:'RFC 4648 표준 Base64. SQL/XSS 페이로드 우회에 자주 사용.',
+     enc:s=>btoa(unescape(encodeURIComponent(s))),dec:s=>decodeURIComponent(escape(atob(s)))},
+    {id:'base64url',name:'Base64 (URL-safe)',mode:'dual',info:'URL-safe Base64 (+→-, /→_, 패딩 없음). JWT 서명 등에 사용.',
+     enc:s=>b64urlEnc(s),dec:s=>b64urlDec(s)},
+    {id:'base32',name:'Base32',mode:'dual',info:'RFC 4648 Base32. A–Z, 2–7 문자 사용. DNS 레이블 등에 활용.',
+     enc:s=>base32enc(s),dec:s=>base32dec(s)},
+    {id:'base58',name:'Base58',mode:'dual',info:'Bitcoin Base58. 혼동 문자(0, O, I, l) 제외.',
+     enc:s=>base58enc(s),dec:s=>base58dec(s)},
+    {id:'base85',name:'Base85 (ASCII85)',mode:'dual',info:'Adobe ASCII85. <~ ... ~> 형식으로 출력.',
+     enc:s=>base85enc(s),dec:s=>base85dec(s)},
+    {id:'url',name:'URL Encoding',mode:'dual',info:'encodeURIComponent 방식. 특수문자를 %xx 형태로 변환.',
+     enc:s=>encodeURIComponent(s),dec:s=>decodeURIComponent(s)},
+    {id:'url2',name:'URL Encoding (Double)',mode:'dual',info:'이중 URL 인코딩. WAF 우회 시 사용 (%25xx).',
+     enc:s=>encodeURIComponent(encodeURIComponent(s)),dec:s=>decodeURIComponent(decodeURIComponent(s))},
+    {id:'html',name:'HTML Entity',mode:'dual',info:'HTML 특수문자를 엔티티로 변환. XSS 필터 우회에 활용.',
+     enc:s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;'),
+     dec:s=>{const t=document.createElement('textarea');t.innerHTML=s;return t.value;}},
+    {id:'hex',name:'Hex',mode:'dual',info:'각 바이트를 16진수 2자리로 표현.',
+     enc:s=>bytesToHex(new TextEncoder().encode(s)),dec:s=>new TextDecoder().decode(hexToBytes(s))},
+    {id:'binary',name:'Binary',mode:'dual',info:'각 바이트를 8비트 이진수로 표현. 공백으로 구분.',
+     enc:s=>Array.from(new TextEncoder().encode(s)).map(b=>b.toString(2).padStart(8,'0')).join(' '),
+     dec:s=>new TextDecoder().decode(new Uint8Array(s.trim().split(/\s+/).map(b=>parseInt(b,2))))},
+    {id:'octal',name:'Octal',mode:'dual',info:'각 바이트를 8진수로 표현. 공백으로 구분.',
+     enc:s=>Array.from(new TextEncoder().encode(s)).map(b=>b.toString(8).padStart(3,'0')).join(' '),
+     dec:s=>new TextDecoder().decode(new Uint8Array(s.trim().split(/\s+/).map(b=>parseInt(b,8))))},
+    {id:'charcode',name:'Charcode (Decimal)',mode:'dual',info:'각 문자의 Unicode 코드포인트를 십진수로 표현. JS String.fromCharCode() 활용.',
+     enc:s=>[...s].map(c=>c.charCodeAt(0)).join(' '),dec:s=>s.trim().split(/\s+/).map(n=>String.fromCharCode(parseInt(n))).join('')},
+    {id:'unicode',name:'Unicode Escape',mode:'dual',info:'\\uXXXX 형태의 Unicode 이스케이프. JS XSS 우회에 활용.',
+     enc:s=>[...s].map(c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0')).join(''),
+     dec:s=>s.replace(/\\u([0-9a-fA-F]{4})/g,(_,c)=>String.fromCharCode(parseInt(c,16)))},
+    {id:'rot13',name:'ROT13',mode:'single',info:'ROT13. 알파벳을 13칸 순환. 인코딩=디코딩 동일.',
+     enc:s=>rot13(s)},
+    {id:'rot47',name:'ROT47',mode:'single',info:'ROT47. !~(ASCII 33–126) 범위를 47칸 순환.',
+     enc:s=>rot47(s)},
+    {id:'morse',name:'Morse Code',mode:'dual',info:'모스 부호 변환. 단어 구분: /, 문자 구분: 공백.',
+     enc:s=>morseEnc(s),dec:s=>morseDec(s)},
+    {id:'jsesc',name:'JS String Escape',mode:'dual',info:'JavaScript 문자열 이스케이프 (\\n, \\t, \\\\, \\" 등).',
+     enc:s=>escapeStr(s),dec:s=>unescapeStr(s)},
+    {id:'html_dec',name:'HTML Entity (Decimal)',mode:'dual',info:'각 문자를 &#65; 십진수 HTML 엔티티로 변환. XSS 필터 우회에 활용.',
+     enc:s=>[...s].map(c=>`&#${c.codePointAt(0)};`).join(''),
+     dec:s=>s.replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(parseInt(n)))},
+    {id:'html_hex',name:'HTML Entity (Hex)',mode:'dual',info:'각 문자를 &#x41; 16진수 HTML 엔티티로 변환. XSS 필터 우회에 활용.',
+     enc:s=>[...s].map(c=>`&#x${c.codePointAt(0).toString(16)};`).join(''),
+     dec:s=>s.replace(/&#x([0-9a-fA-F]+);/gi,(_,h)=>String.fromCodePoint(parseInt(h,16)))},
+    {id:'fullwidth',name:'Unicode Full-Width',mode:'dual',info:'ASCII 문자를 전각(Full-Width) 유니코드로 변환 (U+FF01~FF5E). WAF 우회 기법.',
+     enc:s=>[...s].map(c=>{const n=c.charCodeAt(0);return n===32?'　':(n>=33&&n<=126)?String.fromCharCode(n+0xFEE0):c;}).join(''),
+     dec:s=>[...s].map(c=>{const n=c.charCodeAt(0);return n===0x3000?' ':(n>=0xFF01&&n<=0xFF5E)?String.fromCharCode(n-0xFEE0):c;}).join('')},
+    {id:'unicode_es6',name:'Unicode \\u{XXXX} (ES6)',mode:'dual',info:'ES6 스타일 \\u{41} 유니코드 이스케이프. 서로게이트 쌍 없이 전체 코드포인트 지원.',
+     enc:s=>[...s].map(c=>`\\u{${c.codePointAt(0).toString(16)}}`).join(''),
+     dec:s=>s.replace(/\\u\{([0-9a-fA-F]+)\}/gi,(_,h)=>String.fromCodePoint(parseInt(h,16)))},
+  ],
+  hashing:[
+    {id:'md5',name:'MD5',mode:'hash',info:'MD5 해시 (128비트). 비밀번호 크랙 연습에 자주 등장. [단방향]',
+     enc:s=>MD5(s)},
+    {id:'sha1',name:'SHA-1',mode:'hash',info:'SHA-1 (160비트). 취약하지만 레거시 시스템에서 사용. [단방향]',
+     enc:async s=>sha('SHA-1',s)},
+    {id:'sha256',name:'SHA-256',mode:'hash',info:'SHA-256 (256비트). HMAC, 서명 검증에 표준. [단방향]',
+     enc:async s=>sha('SHA-256',s)},
+    {id:'sha384',name:'SHA-384',mode:'hash',info:'SHA-384 (384비트). [단방향]',
+     enc:async s=>sha('SHA-384',s)},
+    {id:'sha512',name:'SHA-512',mode:'hash',info:'SHA-512 (512비트). [단방향]',
+     enc:async s=>sha('SHA-512',s)},
+    {id:'hmac256',name:'HMAC-SHA256',mode:'hash',opts:[{id:'key',label:'Secret Key',ph:'비밀키 입력'}],
+     info:'HMAC-SHA256. 키가 필요한 메시지 인증 코드. JWT HS256 서명에 사용.',
+     enc:async(s,o)=>{if(!o.key)throw new Error('Secret Key 필요');return hmacHash('SHA-256',o.key,s);}},
+    {id:'hmac512',name:'HMAC-SHA512',mode:'hash',opts:[{id:'key',label:'Secret Key',ph:'비밀키 입력'}],
+     info:'HMAC-SHA512.',
+     enc:async(s,o)=>{if(!o.key)throw new Error('Secret Key 필요');return hmacHash('SHA-512',o.key,s);}},
+  ],
+  crypto:[
+    {id:'xor',name:'XOR Cipher',mode:'dual',opts:[{id:'key',label:'Key (Hex)',ph:'예: deadbeef'}],
+     info:'XOR 암호화. 키(hex)와 각 바이트를 XOR. 암호화=복호화 동일 구조. 출력은 hex로 표시.',
+     enc:(s,o)=>{if(!o.key)throw new Error('Hex key 필요');return xorCipher(s,o.key);},
+     dec:(s,o)=>{if(!o.key)throw new Error('Hex key 필요');return xorDec(s,o.key);}},
+    {id:'caesar',name:'Caesar Cipher',mode:'dual',opts:[{id:'shift',label:'Shift (0–25)',ph:'예: 13'}],
+     info:'Caesar 치환 암호. 알파벳을 n칸 이동. 비알파벳 문자는 그대로.',
+     enc:(s,o)=>caesar(s,((parseInt(o.shift)||0)%26+26)%26,true),
+     dec:(s,o)=>caesar(s,((parseInt(o.shift)||0)%26+26)%26,false)},
+    {id:'vigenere',name:'Vigenère Cipher',mode:'dual',opts:[{id:'key',label:'Key (alpha)',ph:'예: SECRET'}],
+     info:'Vigenère 다중 치환 암호. 키 문자열 반복 적용.',
+     enc:(s,o)=>{if(!o.key)throw new Error('Key 필요');return vigenere(s,o.key,true);},
+     dec:(s,o)=>{if(!o.key)throw new Error('Key 필요');return vigenere(s,o.key,false);}},
+    {id:'aes_cbc',name:'AES-CBC',mode:'dual',
+     opts:[{id:'key',label:'Key (Hex)',ph:'16/24/32 바이트 hex'},{id:'iv',label:'IV (Hex)',ph:'16 바이트 hex'}],
+     info:'AES-CBC 암호화/복호화. 키: 128/192/256비트 hex, IV: 128비트 hex. 출력은 hex.',
+     enc:async(s,o)=>{if(!o.key||!o.iv)throw new Error('Key, IV 필요');return aesOp('cbc','encrypt',o.key,o.iv,s);},
+     dec:async(s,o)=>{if(!o.key||!o.iv)throw new Error('Key, IV 필요');return aesOp('cbc','decrypt',o.key,o.iv,s);}},
+    {id:'aes_gcm',name:'AES-GCM',mode:'dual',
+     opts:[{id:'key',label:'Key (Hex)',ph:'16/24/32 바이트 hex'},{id:'iv',label:'IV (Hex)',ph:'12 바이트 hex 권장'}],
+     info:'AES-GCM 인증 암호화. 키: 128/192/256비트 hex, IV: 12/16바이트 hex. 출력은 hex.',
+     enc:async(s,o)=>{if(!o.key||!o.iv)throw new Error('Key, IV 필요');return aesOp('gcm','encrypt',o.key,o.iv,s);},
+     dec:async(s,o)=>{if(!o.key||!o.iv)throw new Error('Key, IV 필요');return aesOp('gcm','decrypt',o.key,o.iv,s);}},
+  ],
+  string:[
+    {id:'upper',name:'To Uppercase',mode:'single',info:'전체 소문자를 대문자로 변환.',enc:s=>s.toUpperCase()},
+    {id:'lower',name:'To Lowercase',mode:'single',info:'전체 대문자를 소문자로 변환.',enc:s=>s.toLowerCase()},
+    {id:'reverse',name:'Reverse',mode:'single',info:'문자열을 역순으로 반전.',enc:s=>[...s].reverse().join('')},
+    {id:'strip_html',name:'Strip HTML Tags',mode:'single',info:'HTML 태그를 제거하고 텍스트만 추출.',
+     enc:s=>{const d=document.createElement('div');d.innerHTML=s;return d.textContent||d.innerText||'';}},
+    {id:'remove_ws',name:'Remove Whitespace',mode:'single',info:'공백, 탭, 줄바꿈 등 모든 공백 문자 제거.',enc:s=>s.replace(/\s/g,'')},
+    {id:'trim',name:'Trim Whitespace',mode:'single',info:'앞뒤 공백 제거, 연속 공백을 단일 공백으로.',enc:s=>s.trim().replace(/\s+/g,' ')},
+    {id:'count',name:'Count Characters',mode:'single',info:'문자 수, 단어 수, 줄 수, 바이트 수를 계산.',enc:s=>countStats(s)},
+    {id:'freq',name:'Frequency Analysis',mode:'single',info:'각 문자의 빈도 분석. Caesar/Vigenère 해독 보조.',
+     enc:s=>{const freq={};for(const c of s.toUpperCase())if(/[A-Z]/.test(c))freq[c]=(freq[c]||0)+1;
+       const total=Object.values(freq).reduce((a,b)=>a+b,0)||1;
+       return Object.entries(freq).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`${c}: ${n.toString().padStart(4)} (${(n/total*100).toFixed(1)}%)`).join('\n');}},
+  ],
+  jwt:[
+    {id:'jwt_dec',name:'JWT Decode',mode:'single',info:'JWT 토큰을 디코딩하여 header/payload 확인. 서명은 검증하지 않음.',
+     enc:s=>jwtParse(s)},
+    {id:'jwt_sign',name:'JWT Sign (HS256)',mode:'hash',opts:[{id:'key',label:'Secret Key',ph:'서명 키'}],
+     info:'JSON payload를 HS256 방식으로 서명하여 JWT 생성. Input에 JSON 입력.',
+     enc:async(s,o)=>{if(!o.key)throw new Error('Secret Key 필요');return jwtSign(s,o.key);}},
+    {id:'jwt_verify',name:'JWT Verify (HS256)',mode:'hash',opts:[{id:'key',label:'Secret Key',ph:'서명 키'}],
+     info:'JWT 서명을 HS256으로 검증. Input에 JWT 토큰 입력.',
+     enc:async(s,o)=>{if(!o.key)throw new Error('Secret Key 필요');return jwtVerify(s,o.key);}},
+    {id:'jwt_none',name:'JWT None Algorithm',mode:'single',info:'alg:none으로 서명 없는 JWT 생성. PortSwigger JWT 랩 공격 기법. Input에 JSON payload 입력.',
+     enc:s=>jwtNone(s)},
+  ],
+  ip:[
+    {id:'ip_enc',name:'IP → All Formats',mode:'single',info:'IPv4 주소를 SSRF 필터 우회용 다양한 형식으로 변환 (Decimal, Hex, Octal, IPv6 등).',
+     enc:s=>ipEncode(s)},
+    {id:'ip_dec',name:'Decimal/Hex → IP',mode:'single',info:'10진수 또는 0x Hex 정수를 IPv4 dotted 형식으로 변환.',
+     enc:s=>decToIp(s)},
+  ],
+  format:[
+    {id:'json_pretty',name:'JSON Pretty',mode:'single',info:'JSON을 들여쓰기 포맷으로 정렬. API 응답/페이로드 분석 시 활용.',
+     enc:s=>JSON.stringify(JSON.parse(s),null,2)},
+    {id:'json_min',name:'JSON Minify',mode:'single',info:'JSON 공백을 제거. 페이로드 전송 시 활용.',
+     enc:s=>JSON.stringify(JSON.parse(s))},
+    {id:'html_pretty',name:'HTML Pretty',mode:'single',info:'HTML 태그를 줄 단위로 정렬. 응답 분석이나 PoC 확인 시 활용.',
+     enc:s=>formatMarkup(s)},
+    {id:'html_min',name:'HTML Minify',mode:'single',info:'HTML 주석과 불필요한 공백을 줄여 한 줄에 가깝게 압축.',
+     enc:s=>minifyMarkup(s)},
+    {id:'xml_pretty',name:'XML Pretty',mode:'single',info:'XML/SVG 태그를 들여쓰기 형태로 정렬. XXE, SVG, SOAP 응답 분석에 활용.',
+     enc:s=>formatMarkup(s)},
+    {id:'xml_min',name:'XML Minify',mode:'single',info:'XML/SVG 태그 사이 공백을 제거해 압축.',
+     enc:s=>minifyMarkup(s)},
+    {id:'b64_hex',name:'Base64 → Hex',mode:'single',info:'Base64 문자열을 Hex로 변환.',
+     enc:s=>{const b=atob(s.replace(/-/g,'+').replace(/_/g,'/').replace(/\s/g,''));let out='';for(let i=0;i<b.length;i++)out+=b.charCodeAt(i).toString(16).padStart(2,'0');return out;}},
+    {id:'hex_b64',name:'Hex → Base64',mode:'single',info:'Hex 문자열을 Base64로 변환.',
+     enc:s=>{const bytes=hexToBytes(s);let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin);}},
+  ],
+};
+
+/* ─────────────────────────────────────────────
+   UI Logic
+───────────────────────────────────────────── */
+let currentCat='encoding';
+const catLabels={encoding:'Encoding',hashing:'Hashing',crypto:'Crypto',string:'String',jwt:'JWT',ip:'IP Encode',format:'Format'};
+
+function init(){
+  // Category tabs
+  const catsEl=document.getElementById('cats');
+  Object.keys(OPS).forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.className='cat'+(cat==='encoding'?' on':'');
+    btn.textContent=catLabels[cat];
+    btn.onclick=()=>setCat(cat);
+    catsEl.appendChild(btn);
+  });
+  setCat('encoding');
+}
+
+function setCat(cat){
+  currentCat=cat;
+  document.querySelectorAll('.cat').forEach((b,i)=>b.classList.toggle('on',Object.keys(OPS)[i]===cat));
+  const sel=document.getElementById('opSel');
+  sel.innerHTML='';
+  OPS[cat].forEach(op=>{
+    const o=document.createElement('option');
+    o.value=op.id;o.textContent=op.name;
+    sel.appendChild(o);
+  });
+  onOpChange();
+}
+
+function getOp(){return OPS[currentCat].find(o=>o.id===document.getElementById('opSel').value);}
+
+function onOpChange(){
+  const op=getOp();if(!op)return;
+  // Options
+  const optsEl=document.getElementById('opts');
+  optsEl.innerHTML='';
+  (op.opts||[]).forEach(opt=>{
+    const div=document.createElement('div');div.className='opt';
+    div.innerHTML=`<label>${opt.label}</label><input type="text" id="opt_${opt.id}" placeholder="${opt.ph||''}">`;
+    optsEl.appendChild(div);
+  });
+  // Buttons
+  const btnsEl=document.getElementById('btns');
+  btnsEl.innerHTML='';
+  const addBtn=(cls,txt,fn)=>{const b=document.createElement('button');b.className=cls;b.textContent=txt;b.onclick=fn;btnsEl.appendChild(b);return b;};
+  if(op.mode==='dual'){
+    addBtn('b-enc','Encode ▶',()=>run('enc'));
+    addBtn('b-dec','◀ Decode',()=>run('dec'));
+  }else if(op.mode==='hash'){
+    addBtn('b-hash','Hash / Sign',()=>run('enc'));
+  }else{
+    addBtn('b-apply','Apply',()=>run('enc'));
+  }
+  addBtn('b-swap','⇄ Swap',swap);
+  addBtn('b-copy','Copy',copyOut);
+  addBtn('b-clear','Clear',clearAll);
+  // Info
+  document.getElementById('info').textContent=op.info||'';
+}
+
+function getOpts(){
+  const op=getOp();const o={};
+  (op.opts||[]).forEach(opt=>{const el=document.getElementById('opt_'+opt.id);if(el)o[opt.id]=el.value.trim();});
+  return o;
+}
+
+async function run(type){
+  const op=getOp();if(!op)return;
+  const input=document.getElementById('inp').value;
+  const out=document.getElementById('out');
+  const fn=type==='enc'?op.enc:op.dec;
+  if(!fn){out.value='(이 방향은 지원하지 않음)';return;}
+  const btns=document.querySelectorAll('#btns button');
+  btns.forEach(b=>b.disabled=true);
+  out.className='';
+  try{
+    const res=await Promise.resolve(fn(input,getOpts()));
+    out.value=typeof res==='string'?res:JSON.stringify(res,null,2);
+  }catch(e){
+    out.value='Error: '+e.message;
+    out.className='err';
+  }finally{
+    btns.forEach(b=>b.disabled=false);
+  }
+}
+
+function swap(){
+  const i=document.getElementById('inp'),o=document.getElementById('out');
+  i.value=o.value;o.value='';o.className='';
+}
+function copyOut(){
+  const v=document.getElementById('out').value;
+  if(!v)return;
+  navigator.clipboard.writeText(v).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500);});
+}
+function clearAll(){document.getElementById('inp').value='';document.getElementById('out').value='';document.getElementById('out').className='';}
+
+init();
+</script>
+</body>
+</html>

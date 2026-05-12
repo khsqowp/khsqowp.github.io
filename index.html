@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Tools</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #58a6ff;
+    }
+
+    .subtitle {
+      color: #8b949e;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1100px;
+      padding: 0 1rem;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card:hover {
+      border-color: #58a6ff;
+      transform: translateY(-3px);
+    }
+
+    .card .icon {
+      font-size: 2.5rem;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+      color: #8b949e;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      background: #1f2d3d;
+      color: #58a6ff;
+      border: 1px solid #1f6feb;
+    }
+  </style>
+</head>
+<body>
+  <h1>Security Tools</h1>
+  <p class="subtitle">PortSwigger 실습용 도구 모음</p>
+
+  <div class="grid">
+    <a href="encoder.html" class="card">
+      <div class="icon">🔐</div>
+      <h2>Encoder / Decoder</h2>
+      <p>Base64, URL, HTML, Hex 등 다양한 인코딩/디코딩 변환</p>
+      <span class="tag">Encoding</span>
+    </a>
+
+    <a href="csrf.html" class="card">
+      <div class="icon">🎯</div>
+      <h2>CSRF PoC Generator</h2>
+      <p>CSRF 공격용 자동 제출 폼 생성 및 테스트</p>
+      <span class="tag">CSRF</span>
+    </a>
+
+    <a href="clickjacking.html" class="card">
+      <div class="icon">🖼️</div>
+      <h2>Clickjacking PoC</h2>
+      <p>iframe 투명도/위치 조절 및 Decoy UI 생성, 미리보기 지원</p>
+      <span class="tag">Clickjacking</span>
+    </a>
+
+    <a href="xss.html" class="card">
+      <div class="icon">⚡</div>
+      <h2>XSS Payload Builder</h2>
+      <p>컨텍스트별 XSS 페이로드 생성 및 필터 우회 변형</p>
+      <span class="tag">XSS</span>
+    </a>
+
+    <a href="payload.html" class="card">
+      <div class="icon">🧩</div>
+      <h2>Payload Assembler</h2>
+      <p>SQLi / XSS 모듈식 페이로드 조립 및 실행 가능성 분석</p>
+      <span class="tag">SQLi · XSS</span>
+    </a>
+
+    <a href="csp.html" class="card">
+      <div class="icon">🛡️</div>
+      <h2>CSP Analyzer</h2>
+      <p>CSP 헤더 취약점 분석, unsafe-inline / 와일드카드 등 자동 탐지</p>
+      <span class="tag">CSP</span>
+    </a>
+
+    <a href="hash_id.html" class="card">
+      <div class="icon">🔍</div>
+      <h2>Hash Identifier</h2>
+      <p>해시 타입 자동 식별 및 hashcat 모드 / John 포맷 제공</p>
+      <span class="tag">Hash</span>
+    </a>
+  </div>
+</body>
+</html>

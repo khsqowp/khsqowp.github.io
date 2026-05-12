@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hash Identifier</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { min-height: 100vh; background: #0d1117; color: #e6edf3; font-family: 'Segoe UI', sans-serif; padding: 2rem 1rem; }
+    header { display: flex; align-items: center; gap: 1rem; max-width: 960px; margin: 0 auto 2rem; }
+    header a { color: #8b949e; text-decoration: none; font-size: 0.9rem; }
+    header a:hover { color: #58a6ff; }
+    h1 { font-size: 1.6rem; color: #58a6ff; }
+    .container { max-width: 960px; margin: 0 auto; }
+    .panel { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .panel h2 { font-size: 1rem; color: #8b949e; margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid #30363d; }
+    label { display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 0.4rem; }
+    input[type=text] { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+                       color: #e6edf3; font-size: 0.9rem; padding: 0.6rem 0.75rem; outline: none;
+                       font-family: 'Courier New', monospace; transition: border-color 0.2s; }
+    input:focus { border-color: #58a6ff; }
+    button { padding: 0.5rem 1.4rem; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: opacity 0.2s; }
+    button:hover { opacity: 0.85; }
+    .btn-id   { background: #1f6feb; color: #fff; margin-top: 1rem; }
+    .btn-clr  { background: #30363d; color: #e6edf3; margin-top: 1rem; margin-left: 0.5rem; }
+    .meta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem; font-size: 0.82rem; color: #8b949e; }
+    .meta-row span { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 0.3rem 0.75rem; }
+    .meta-row .val { color: #79c0ff; }
+    .result-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .result-table th { text-align: left; color: #8b949e; font-weight: 600; padding: 0.5rem 0.75rem; border-bottom: 1px solid #30363d; }
+    .result-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #21262d; vertical-align: middle; }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table tr:hover td { background: #1c2128; }
+    .conf-high  { color: #3fb950; font-weight: 600; }
+    .conf-med   { color: #d29922; font-weight: 600; }
+    .conf-low   { color: #8b949e; }
+    .hash-name  { color: #e6edf3; font-weight: 600; }
+    .hash-cat   { font-size: 0.75rem; color: #8b949e; }
+    code { font-family: 'Courier New', monospace; background: #0d1117; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.82rem; }
+    .no-match { color: #8b949e; font-style: italic; padding: 1rem 0; text-align: center; }
+    .examples { margin-top: 1rem; }
+    .examples p { font-size: 0.8rem; color: #8b949e; margin-bottom: 0.5rem; }
+    .ex-hash { font-family: 'Courier New', monospace; font-size: 0.78rem; color: #79c0ff; cursor: pointer; display: inline-block; margin: 0.2rem 0; }
+    .ex-hash:hover { color: #58a6ff; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">← 홈</a>
+    <h1>Hash Identifier</h1>
+  </header>
+
+  <div class="container">
+    <div class="panel">
+      <h2>해시 입력</h2>
+      <label>해시 값을 붙여넣으세요</label>
+      <input type="text" id="hashInput" placeholder="5f4dcc3b5aa765d61d8327deb882cf99" oninput="autoId()">
+
+      <div class="examples">
+        <p>예시 클릭:</p>
+        <span class="ex-hash" onclick="loadEx('5f4dcc3b5aa765d61d8327deb882cf99')">5f4dcc3b5aa765d61d8327deb882cf99 (MD5)</span><br>
+        <span class="ex-hash" onclick="loadEx('5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8')">5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 (SHA-1)</span><br>
+        <span class="ex-hash" onclick="loadEx('5e884898da28047151d0e56f8dc6292773603d0d48472574fc2e0fa5')">5e884898da28047151d0e56f8dc6292773603d0d48472574fc2e0fa5 (SHA-224)</span><br>
+        <span class="ex-hash" onclick="loadEx('5e884898da28047151d0e56f8dc6292773603d0d48472574fc2e0fa563a96f08')">5e884898da28047151d0e56f8dc6292773603d0d48472574fc2e0fa563a96f08 (SHA-256)</span><br>
+        <span class="ex-hash" onclick="loadEx('$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy')">$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy (bcrypt)</span><br>
+        <span class="ex-hash" onclick="loadEx('$1$abc$8e2nfBGQBMRZGHPpuAFX8.')">$1$abc$8e2nfBGQBMRZGHPpuAFX8. (MD5crypt)</span><br>
+        <span class="ex-hash" onclick="loadEx('{SHA}W6ph5Mm5Pz8GgiULbPgzG37mj9g=')">&#123;SHA&#125;W6ph5Mm5Pz8GgiULbPgzG37mj9g= (LDAP SHA1)</span>
+      </div>
+
+      <button class="btn-id" onclick="identify()">식별</button>
+      <button class="btn-clr" onclick="clearAll()">초기화</button>
+    </div>
+
+    <div id="results" style="display:none">
+      <div class="panel">
+        <h2>해시 정보</h2>
+        <div class="meta-row" id="metaRow"></div>
+
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>Hash Type</th>
+              <th>Hashcat Mode</th>
+              <th>John Format</th>
+              <th>비고</th>
+              <th>신뢰도</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DB = [
+      // prefix-based (highest priority)
+      { name:'bcrypt',       cat:'Password',  hc:'3200',  john:'bcrypt',     regex:/^\$2[ayb]\$\d{2}\$/,       conf:'high',  note:'Blowfish 기반 패스워드 해시' },
+      { name:'scrypt',       cat:'Password',  hc:'8900',  john:'scrypt',     regex:/^\$s0\$/,                   conf:'high',  note:'메모리 하드 KDF' },
+      { name:'Argon2',       cat:'Password',  hc:'35381', john:'argon2',     regex:/^\$argon2/,                  conf:'high',  note:'메모리 하드 KDF, 권장 방식' },
+      { name:'MD5crypt',     cat:'Password',  hc:'500',   john:'md5crypt',   regex:/^\$1\$/,                    conf:'high',  note:'Unix MD5 패스워드 해시' },
+      { name:'SHA512crypt',  cat:'Password',  hc:'1800',  john:'sha512crypt',regex:/^\$6\$/,                    conf:'high',  note:'Unix SHA-512 패스워드 해시' },
+      { name:'SHA256crypt',  cat:'Password',  hc:'7400',  john:'sha256crypt',regex:/^\$5\$/,                    conf:'high',  note:'Unix SHA-256 패스워드 해시' },
+      { name:'LDAP SHA1',    cat:'LDAP',      hc:'101',   john:'dynamic_26', regex:/^\{SHA\}/i,                 conf:'high',  note:'LDAP 서버 패스워드 저장 방식' },
+      { name:'LDAP MD5',     cat:'LDAP',      hc:'1000',  john:'dynamic_4',  regex:/^\{MD5\}/i,                 conf:'high',  note:'LDAP MD5 패스워드' },
+      { name:'MySQL 3.x',    cat:'Database',  hc:'200',   john:'mysql',      regex:/^[0-9a-f]{16}$/i,           conf:'med',   note:'MySQL 3.x/4.x 구버전 해시 (16자)' },
+      // length-based
+      { name:'MD5',          cat:'Crypto',    hc:'0',     john:'raw-md5',    len:32,  charset:'hex', conf:'high', note:'범용 해시, 패스워드 저장 부적합' },
+      { name:'MD4',          cat:'Crypto',    hc:'900',   john:'raw-md4',    len:32,  charset:'hex', conf:'med',  note:'MD5 전신, 더 취약' },
+      { name:'SHA-1',        cat:'Crypto',    hc:'100',   john:'raw-sha1',   len:40,  charset:'hex', conf:'high', note:'SHA 패밀리 첫 번째 표준' },
+      { name:'SHA-224',      cat:'Crypto',    hc:'1300',  john:'raw-sha224', len:56,  charset:'hex', conf:'high', note:'SHA-2 패밀리' },
+      { name:'SHA-256',      cat:'Crypto',    hc:'1400',  john:'raw-sha256', len:64,  charset:'hex', conf:'high', note:'SHA-2 패밀리, 가장 많이 사용' },
+      { name:'SHA-384',      cat:'Crypto',    hc:'10800', john:'raw-sha384', len:96,  charset:'hex', conf:'high', note:'SHA-2 패밀리' },
+      { name:'SHA-512',      cat:'Crypto',    hc:'1700',  john:'raw-sha512', len:128, charset:'hex', conf:'high', note:'SHA-2 패밀리' },
+      { name:'SHA3-256',     cat:'Crypto',    hc:'17300', john:'raw-keccak-256', len:64, charset:'hex', conf:'med', note:'SHA-3 패밀리 (Keccak)' },
+      { name:'SHA3-512',     cat:'Crypto',    hc:'17500', john:'raw-keccak-512', len:128,charset:'hex', conf:'med', note:'SHA-3 패밀리 (Keccak)' },
+      { name:'RIPEMD-160',   cat:'Crypto',    hc:'6000',  john:'ripemd-160', len:40,  charset:'hex', conf:'med',  note:'Bitcoin 주소 생성에 사용' },
+      { name:'Whirlpool',    cat:'Crypto',    hc:'6100',  john:'whirlpool',  len:128, charset:'hex', conf:'med',  note:'ISO/IEC 10118-3 표준' },
+      { name:'MySQL 4.1+',   cat:'Database',  hc:'300',   john:'mysql-sha1', len:40,  charset:'hex', conf:'med',  note:'MySQL 4.1 이상 패스워드 해시' },
+      { name:'MD5 (Base64)', cat:'Crypto',    hc:'0',     john:'raw-md5',    len:24,  charset:'b64', conf:'med',  note:'MD5 결과를 Base64로 인코딩' },
+      { name:'SHA-1 (Base64)',cat:'Crypto',   hc:'100',   john:'raw-sha1',   len:28,  charset:'b64', conf:'med',  note:'SHA-1 결과를 Base64로 인코딩' },
+      { name:'NTLM',         cat:'Windows',   hc:'1000',  john:'nt',         len:32,  charset:'hex', conf:'med',  note:'Windows NT/AD 패스워드 해시, MD4 기반' },
+      { name:'LM',           cat:'Windows',   hc:'3000',  john:'lm',         len:32,  charset:'hex', conf:'low',  note:'구형 Windows LAN Manager 해시, 매우 취약' },
+      { name:'CRC32',        cat:'Checksum',  hc:'11500', john:'crc32',      len:8,   charset:'hex', conf:'low',  note:'에러 검출용 체크섬' },
+      { name:'Adler32',      cat:'Checksum',  hc:'-',     john:'-',          len:8,   charset:'hex', conf:'low',  note:'zlib에서 사용하는 체크섬' },
+    ];
+
+    function isHex(s) { return /^[0-9a-fA-F]+$/.test(s); }
+    function isB64(s) { return /^[A-Za-z0-9+/]+=*$/.test(s); }
+
+    function identify() {
+      const raw = document.getElementById('hashInput').value.trim();
+      if (!raw) { alert('해시를 입력하세요.'); return; }
+
+      const len = raw.length;
+      const hexOk = isHex(raw);
+      const b64Ok = isB64(raw);
+
+      const matches = [];
+
+      for (const entry of DB) {
+        // regex-based
+        if (entry.regex && entry.regex.test(raw)) {
+          matches.push({ ...entry, matchType: 'prefix' });
+          continue;
+        }
+        // length+charset based
+        if (entry.len !== undefined) {
+          if (entry.len !== len) continue;
+          if (entry.charset === 'hex' && !hexOk) continue;
+          if (entry.charset === 'b64' && !b64Ok) continue;
+          matches.push({ ...entry, matchType: 'length' });
+        }
+      }
+
+      // sort: high conf first
+      matches.sort((a, b) => {
+        const o = { high: 0, med: 1, low: 2 };
+        return (o[a.conf] || 2) - (o[b.conf] || 2);
+      });
+
+      document.getElementById('results').style.display = 'block';
+
+      document.getElementById('metaRow').innerHTML = `
+        <span>길이: <span class="val">${len}</span></span>
+        <span>HEX: <span class="val">${hexOk ? '✓' : '✗'}</span></span>
+        <span>Base64: <span class="val">${b64Ok ? '✓' : '✗'}</span></span>
+        <span>매칭: <span class="val">${matches.length}개</span></span>
+      `;
+
+      const tbody = document.getElementById('resultBody');
+      if (matches.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="no-match">일치하는 해시 타입을 찾을 수 없습니다.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = matches.map(m => `
+        <tr>
+          <td>
+            <div class="hash-name">${m.name}</div>
+            <div class="hash-cat">${m.cat}</div>
+          </td>
+          <td><code>${m.hc}</code></td>
+          <td><code>${m.john}</code></td>
+          <td style="color:#8b949e;font-size:0.8rem">${m.note}</td>
+          <td class="conf-${m.conf === 'high' ? 'high' : m.conf === 'med' ? 'med' : 'low'}">
+            ${ m.conf === 'high' ? '높음' : m.conf === 'med' ? '보통' : '낮음' }
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function autoId() {
+      const v = document.getElementById('hashInput').value.trim();
+      if (v.length >= 8) identify();
+      else document.getElementById('results').style.display = 'none';
+    }
+
+    function loadEx(v) {
+      document.getElementById('hashInput').value = v;
+      identify();
+    }
+
+    function clearAll() {
+      document.getElementById('hashInput').value = '';
+      document.getElementById('results').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
