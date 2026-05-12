@@ -102,7 +102,7 @@
           </div>
         </div>
 
-        <button class="btn-gen" onclick="safeGenerateXSSPayloads()">페이로드 생성</button>
+        <button class="btn-gen" id="generateBtn" type="button">페이로드 생성</button>
       </div>
 
       <!-- 결과 -->
@@ -119,10 +119,6 @@
   </div>
 
   <script>
-    document.getElementById('sink').addEventListener('change', function() {
-      document.getElementById('customGroup').style.display = this.value === 'custom' ? 'block' : 'none';
-    });
-
     function getJS() {
       const sink = document.getElementById('sink').value;
       if (sink === 'alert') return 'alert(1)';
@@ -322,6 +318,24 @@
       }
       t.style.opacity = '1';
       setTimeout(() => { t.style.opacity = '0'; }, 1500);
+    }
+
+    function initXSSBuilder() {
+      const sink = document.getElementById('sink');
+      const btn = document.getElementById('generateBtn');
+      if (sink) {
+        sink.addEventListener('change', function() {
+          document.getElementById('customGroup').style.display = this.value === 'custom' ? 'block' : 'none';
+        });
+      }
+      if (btn) btn.addEventListener('click', safeGenerateXSSPayloads);
+      safeGenerateXSSPayloads();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initXSSBuilder);
+    } else {
+      initXSSBuilder();
     }
   </script>
 </body>
