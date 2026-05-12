@@ -102,7 +102,7 @@
           </div>
         </div>
 
-        <button class="btn-gen" onclick="generate()">페이로드 생성</button>
+        <button class="btn-gen" onclick="safeGenerateXSSPayloads()">페이로드 생성</button>
       </div>
 
       <!-- 결과 -->
@@ -130,7 +130,21 @@
       return document.getElementById('customPayload').value || 'alert(1)';
     }
 
+    function safeGenerateXSSPayloads() {
+      try {
+        generateXSSPayloads();
+      } catch (e) {
+        const list = document.getElementById('payloadList');
+        document.getElementById('countBadge').textContent = '0';
+        list.innerHTML = `<div class="empty-state">생성 중 오류가 발생했습니다.<br>${escHtml(e.message)}</div>`;
+      }
+    }
+
     function generate() {
+      safeGenerateXSSPayloads();
+    }
+
+    function generateXSSPayloads() {
       const ctx  = document.getElementById('ctx').value;
       const js   = getJS();
       const fCase   = document.getElementById('f_case').checked;
@@ -282,6 +296,10 @@
 
       window._payloads = payloads;
     }
+
+    window.safeGenerateXSSPayloads = safeGenerateXSSPayloads;
+    window.generateXSSPayloads = generateXSSPayloads;
+    window.generate = generate;
 
     function copyPayload(i) {
       navigator.clipboard.writeText(window._payloads[i].code).then(() => {

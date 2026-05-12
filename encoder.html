@@ -62,6 +62,18 @@
     /* Info */
     .info{font-size:.8rem;color:#8b949e;padding:.65rem .85rem;background:#161b22;
           border-radius:8px;border-left:3px solid #30363d;line-height:1.5}
+    .stack-panel{margin-top:1rem;background:#161b22;border:1px solid #30363d;border-radius:12px;padding:1rem}
+    .stack-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:.9rem}
+    .stack-head h2{font-size:1rem;color:#e6edf3;margin:0 0 .3rem}
+    .stack-head p{font-size:.8rem;color:#8b949e;margin:0;line-height:1.5}
+    .stack-row{display:grid;grid-template-columns:minmax(220px,1fr) minmax(220px,1fr);gap:.75rem;margin-bottom:.75rem}
+    @media(max-width:700px){.stack-row{grid-template-columns:1fr}}
+    .stack-steps{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0}
+    .stack-step{display:grid;grid-template-columns:auto 1fr auto;gap:.65rem;align-items:center;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:.55rem .65rem}
+    .stack-step strong{color:#58a6ff}
+    .stack-step span{font-size:.82rem;color:#8b949e}
+    .stack-step button{padding:.3rem .65rem;font-size:.78rem}
+    .recipe-tools{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.65rem}
 
     /* Toast */
     .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#238636;color:#fff;
@@ -91,6 +103,34 @@
   </div>
   <div class="btns" id="btns"></div>
   <div class="info" id="info"></div>
+
+  <div class="stack-panel">
+    <div class="stack-head">
+      <div>
+        <h2>Operation Stack / Recipe</h2>
+        <p>CyberChef처럼 여러 작업을 순서대로 쌓아 실행합니다. 예: user → user:MD5(password) → Base64</p>
+      </div>
+      <button class="b-copy" onclick="loadBasicAuthExample()">Basic MD5 예제</button>
+    </div>
+    <div class="stack-row">
+      <div>
+        <label>Stack Operation</label>
+        <select id="stackOp" onchange="onStackOpChange()"></select>
+      </div>
+      <div>
+        <label>Saved Recipe</label>
+        <select id="savedRecipe" onchange="loadSavedRecipe()"></select>
+      </div>
+    </div>
+    <div class="opts" id="stackOpts"></div>
+    <div class="recipe-tools">
+      <button class="b-enc" onclick="addStackStep()">스텝 추가</button>
+      <button class="b-dec" onclick="runStack()">스택 실행</button>
+      <button class="b-copy" onclick="saveStackRecipe()">Recipe 저장</button>
+      <button class="b-clear" onclick="clearStack()">스택 비우기</button>
+    </div>
+    <div class="stack-steps" id="stackSteps"></div>
+  </div>
 </div>
 <div class="toast" id="toast">복사 완료!</div>
 
@@ -546,6 +586,8 @@ const OPS = {
 ───────────────────────────────────────────── */
 let currentCat='encoding';
 const catLabels={encoding:'Encoding',hashing:'Hashing',crypto:'Crypto',string:'String',jwt:'JWT',ip:'IP Encode',format:'Format'};
+let stackSteps=[];
+let stackOps=[];
 
 function init(){
   // Category tabs
@@ -558,6 +600,7 @@ function init(){
     catsEl.appendChild(btn);
   });
   setCat('encoding');
+  initStack();
 }
 
 function setCat(cat){
@@ -640,6 +683,204 @@ function copyOut(){
   navigator.clipboard.writeText(v).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500);});
 }
 function clearAll(){document.getElementById('inp').value='';document.getElementById('out').value='';document.getElementById('out').className='';}
+
+function initStack(){
+  stackOps=buildStackOps();
+  const sel=document.getElementById('stackOp');
+  sel.innerHTML=stackOps.map(op=>`<option value="${op.id}">${op.name}</option>`).join('');
+  onStackOpChange();
+  renderStack();
+  renderSavedRecipes();
+}
+
+function buildStackOps(){
+  const list=[
+    {
+      id:'special:basic_md5',
+      name:'Template: user:MD5(password)',
+      info:'현재 입력값을 user로 보고, 옵션 password를 MD5 처리해 user:md5 형태로 조합합니다.',
+      opts:[{id:'password',label:'Password',ph:'비밀번호'}],
+      run:(value,o)=>`${value}:${MD5(o.password||'')}`
+    },
+    {
+      id:'special:append',
+      name:'Text: Append',
+      info:'현재 값 뒤에 지정 텍스트를 붙입니다.',
+      opts:[{id:'text',label:'Append Text',ph:'뒤에 붙일 값'}],
+      run:(value,o)=>value+(o.text||'')
+    },
+    {
+      id:'special:prepend',
+      name:'Text: Prepend',
+      info:'현재 값 앞에 지정 텍스트를 붙입니다.',
+      opts:[{id:'text',label:'Prepend Text',ph:'앞에 붙일 값'}],
+      run:(value,o)=>(o.text||'')+value
+    },
+    {
+      id:'special:template',
+      name:'Text: Template',
+      info:'{{value}}를 현재 값으로 치환합니다. 예: id={{value}}&role=user',
+      opts:[{id:'template',label:'Template',ph:'{{value}}'}],
+      run:(value,o)=>(o.template||'{{value}}').replace(/\{\{value\}\}/g,value)
+    },
+  ];
+  Object.entries(OPS).forEach(([cat,ops])=>{
+    ops.forEach(op=>{
+      if(op.enc){
+        list.push({
+          id:`${cat}:${op.id}:enc`,
+          name:`${catLabels[cat]} / ${op.name} / ${op.mode==='hash'?'Hash·Sign':'Encode·Apply'}`,
+          info:op.info,
+          opts:op.opts||[],
+          run:(value,o)=>op.enc(value,o)
+        });
+      }
+      if(op.dec){
+        list.push({
+          id:`${cat}:${op.id}:dec`,
+          name:`${catLabels[cat]} / ${op.name} / Decode`,
+          info:op.info,
+          opts:op.opts||[],
+          run:(value,o)=>op.dec(value,o)
+        });
+      }
+    });
+  });
+  return list;
+}
+
+function getStackOp(id=document.getElementById('stackOp').value){
+  return stackOps.find(op=>op.id===id);
+}
+
+function onStackOpChange(){
+  const op=getStackOp();
+  const box=document.getElementById('stackOpts');
+  box.innerHTML='';
+  (op?.opts||[]).forEach(opt=>{
+    const div=document.createElement('div');
+    div.className='opt';
+    div.innerHTML=`<label>${opt.label}</label><input type="text" id="stack_${opt.id}" placeholder="${opt.ph||''}">`;
+    box.appendChild(div);
+  });
+}
+
+function getStackOpts(op){
+  const opts={};
+  (op.opts||[]).forEach(opt=>{
+    const el=document.getElementById('stack_'+opt.id);
+    opts[opt.id]=el?el.value:'';
+  });
+  return opts;
+}
+
+function addStackStep(){
+  const op=getStackOp();
+  if(!op)return;
+  stackSteps.push({id:op.id, opts:getStackOpts(op)});
+  renderStack();
+}
+
+function removeStackStep(i){
+  stackSteps.splice(i,1);
+  renderStack();
+}
+
+function renderStack(){
+  const box=document.getElementById('stackSteps');
+  if(!stackSteps.length){
+    box.innerHTML='<div class="stack-step"><strong>0</strong><span>아직 스텝이 없습니다. 위에서 Operation을 선택해 추가하세요.</span><span></span></div>';
+    return;
+  }
+  box.innerHTML=stackSteps.map((step,i)=>{
+    const op=getStackOp(step.id);
+    const optText=Object.entries(step.opts||{}).filter(([,v])=>v).map(([k,v])=>`${k}=${v}`).join(', ');
+    return `<div class="stack-step"><strong>${i+1}</strong><span>${op?.name||step.id}${optText?` · ${escapeHtml(optText)}`:''}</span><button class="b-clear" onclick="removeStackStep(${i})">삭제</button></div>`;
+  }).join('');
+}
+
+async function runStack(){
+  const out=document.getElementById('out');
+  let value=document.getElementById('inp').value;
+  out.className='';
+  try{
+    for(const step of stackSteps){
+      const op=getStackOp(step.id);
+      if(!op)throw new Error(`Unknown stack operation: ${step.id}`);
+      value=await Promise.resolve(op.run(value,step.opts||{}));
+    }
+    out.value=value;
+    rememberStackRun(value);
+  }catch(e){
+    out.value='Error: '+e.message;
+    out.className='err';
+  }
+}
+
+function clearStack(){
+  stackSteps=[];
+  renderStack();
+}
+
+function loadBasicAuthExample(){
+  document.getElementById('inp').value='wiener';
+  stackSteps=[
+    {id:'special:basic_md5',opts:{password:'peter'}},
+    {id:'encoding:base64:enc',opts:{}},
+  ];
+  renderStack();
+  runStack();
+}
+
+function saveStackRecipe(){
+  if(!stackSteps.length)return;
+  const name=prompt('Recipe 이름', 'user:MD5(password) → Base64') || 'Recipe';
+  const recipes=getRecipes();
+  recipes.unshift({name,steps:stackSteps,createdAt:Date.now()});
+  localStorage.setItem('encoderRecipes',JSON.stringify(recipes.slice(0,20)));
+  renderSavedRecipes();
+  showToast('Recipe 저장 완료!');
+}
+
+function getRecipes(){
+  try{return JSON.parse(localStorage.getItem('encoderRecipes'))||[]}catch{return []}
+}
+
+function renderSavedRecipes(){
+  const sel=document.getElementById('savedRecipe');
+  const recipes=getRecipes();
+  sel.innerHTML='<option value="">저장된 Recipe 선택</option>'+recipes.map((r,i)=>`<option value="${i}">${escapeHtml(r.name)}</option>`).join('');
+}
+
+function loadSavedRecipe(){
+  const sel=document.getElementById('savedRecipe');
+  if(sel.value==='')return;
+  const recipe=getRecipes()[Number(sel.value)];
+  if(!recipe)return;
+  stackSteps=recipe.steps.map(s=>({id:s.id,opts:{...(s.opts||{})}}));
+  renderStack();
+}
+
+function rememberStackRun(value){
+  const history=getStackHistory();
+  history.unshift({value,steps:stackSteps,createdAt:Date.now()});
+  localStorage.setItem('encoderStackHistory',JSON.stringify(history.slice(0,20)));
+}
+
+function getStackHistory(){
+  try{return JSON.parse(localStorage.getItem('encoderStackHistory'))||[]}catch{return []}
+}
+
+function showToast(msg='복사 완료!'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1500);
+}
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 init();
 </script>

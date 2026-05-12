@@ -19,7 +19,9 @@ h1 {
 .preview-wrap,
 .examples,
 .info,
-.preview-box {
+.preview-box,
+.stack-panel,
+.stack-step {
   background: #fff !important;
   border-color: #e5e8eb !important;
   border-radius: 8px !important;
@@ -35,8 +37,18 @@ label,
 .meta-row,
 .hash-cat,
 .opt-note,
-.info {
+.info,
+.stack-head p,
+.stack-step span {
   color: #6b7684 !important;
+}
+
+.stack-head h2 {
+  color: #191f28 !important;
+}
+
+.stack-step strong {
+  color: #3182f6 !important;
 }
 
 input,
