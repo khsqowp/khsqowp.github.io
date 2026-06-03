@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>취약점 진단 가이드</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f8fa;color:#191f28;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1120px;margin:0 auto;padding:40px 20px 64px}
+    .topnav{display:flex;align-items:center;gap:8px;margin-bottom:24px;font-size:13px;color:#8b95a1}
+    .topnav a{color:#3182f6}.topnav span{color:#c9d1d9}
+    .page-head{margin-bottom:32px}
+    .eyebrow{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:#e8f3ff;color:#1b64da;font-size:12px;font-weight:800;margin-bottom:12px}
+    .page-head h1{margin:0 0 10px;font-size:30px;font-weight:900;letter-spacing:-.01em}
+    .page-head p{margin:0;color:#4e5968;font-size:15px;line-height:1.7;max-width:640px}
+    .how{background:#fff;border:1px solid #e5e8eb;border-radius:8px;padding:20px 24px;margin-bottom:32px;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+    .how-step{padding:0 16px;border-right:1px solid #f2f4f6;display:flex;flex-direction:column;gap:6px}
+    .how-step:last-child{border-right:none}
+    .how-num{width:28px;height:28px;border-radius:50%;background:#3182f6;color:#fff;font-size:13px;font-weight:900;display:grid;place-items:center}
+    .how-title{font-size:13px;font-weight:800}
+    .how-desc{font-size:12px;color:#8b95a1;line-height:1.55}
+    .section-title{display:flex;align-items:end;justify-content:space-between;margin:0 0 16px}
+    .section-title h2{margin:0;font-size:20px;font-weight:900}
+    .section-title p{margin:0;color:#8b95a1;font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+    .card{background:#fff;border:1px solid #e5e8eb;border-radius:10px;padding:22px;min-height:160px;display:flex;flex-direction:column;gap:10px;transition:.18s;position:relative}
+    .card:hover:not(.soon){transform:translateY(-2px);box-shadow:0 8px 22px rgba(25,31,40,.08);border-color:#c9d1d9}
+    .card.soon{cursor:default;opacity:.7}
+    .icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:15px;font-weight:900;flex-shrink:0}
+    .icon-xss{background:#ffe3e3;color:#c92a2a}
+    .icon-sqli{background:#fff4e6;color:#e8590c}
+    .icon-csrf{background:#d3f9d8;color:#2f9e44}
+    .icon-ci{background:#f3d9fa;color:#862e9c}
+    .icon-pt{background:#e7f5ff;color:#1864ab}
+    .icon-ssrf{background:#fff9db;color:#e67700}
+    .card h3{margin:0;font-size:16px;font-weight:900}
+    .card p{margin:0;color:#6b7684;font-size:13px;line-height:1.55}
+    .tag{margin-top:auto;align-self:flex-start;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800}
+    .tag-xss{background:#ffe3e3;color:#c92a2a}
+    .tag-sqli{background:#fff4e6;color:#e8590c}
+    .tag-csrf{background:#d3f9d8;color:#2f9e44}
+    .tag-coming{background:#f2f4f6;color:#8b95a1}
+    .soon-badge{position:absolute;top:12px;right:12px;background:#f2f4f6;color:#8b95a1;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px}
+    .intro-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px}
+    .intro-box{background:#fff;border:1px solid #e5e8eb;border-radius:8px;padding:18px 20px}
+    .intro-box h3{margin:0 0 10px;font-size:14px;font-weight:900;color:#4e5968;text-transform:uppercase;letter-spacing:.04em}
+    .intro-box ul{margin:0;padding-left:18px;color:#4e5968;font-size:13px;line-height:1.8}
+    @media(max-width:720px){.how{grid-template-columns:1fr 1fr}.intro-row{grid-template-columns:1fr}.how-step{border-right:none;border-bottom:1px solid #f2f4f6;padding:12px 0}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topnav">
+      <a href="index.html">홈</a><span>/</span>
+      <span>취약점 진단 가이드</span>
+    </nav>
+
+    <div class="page-head">
+      <span class="eyebrow">Vulnerability Diagnosis</span>
+      <h1>취약점 진단 가이드</h1>
+      <p>아키텍처 파악부터 센티넬 프로브, 결과 분류, 페이로드 생성까지 — 취약점 유형별 단계별 진단 마법사를 제공합니다. PortSwigger 랩 실습에 최적화되어 있습니다.</p>
+    </div>
+
+    <div class="how">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <div class="how-title">아키텍처 파악</div>
+        <div class="how-desc">파라미터 타입, 입력 위치, 기술 스택을 파악합니다.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <div class="how-title">센티넬 프로브</div>
+        <div class="how-desc">특수문자·키워드 필터링 여부를 테스트합니다.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <div class="how-title">취약점 분류</div>
+        <div class="how-desc">응답 패턴으로 취약점 유형을 식별합니다.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">4</div>
+        <div class="how-title">페이로드 생성</div>
+        <div class="how-desc">컨텍스트에 맞는 페이로드와 우회 변형을 제공합니다.</div>
+      </div>
+    </div>
+
+    <div class="intro-row">
+      <div class="intro-box">
+        <h3>진단 대상</h3>
+        <ul>
+          <li>PortSwigger Web Security Academy 랩</li>
+          <li>CTF 웹 취약점 문제</li>
+          <li>개인 환경 실습 / 버그바운티 학습</li>
+          <li>내부 보안 검토 (허가된 환경)</li>
+        </ul>
+      </div>
+      <div class="intro-box">
+        <h3>사용 방법</h3>
+        <ul>
+          <li>취약점 유형 카드를 선택합니다</li>
+          <li>각 단계의 안내를 따라 진행합니다</li>
+          <li>프로브 결과를 기록하면 자동 추론됩니다</li>
+          <li>생성된 페이로드를 클릭하여 복사합니다</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <h2>취약점 유형 선택</h2>
+      <p>진단할 취약점을 선택하세요</p>
+    </div>
+
+    <div class="grid">
+      <a href="vuln_xss.html" class="card">
+        <div class="icon icon-xss">XSS</div>
+        <h3>Cross-Site Scripting (XSS)</h3>
+        <p>컨텍스트 식별, 문자 필터 프로브, Reflected·Stored·DOM 페이로드 생성 및 우회 변형</p>
+        <span class="tag tag-xss">XSS · 4단계</span>
+      </a>
+
+      <a href="vuln_sqli.html" class="card">
+        <div class="icon icon-sqli">SQLi</div>
+        <h3>SQL Injection</h3>
+        <p>파라미터 타입별 프로브, Error/UNION/Blind/Time/OOB 분류, DBMS별 익스플로잇 페이로드</p>
+        <span class="tag tag-sqli">SQLi · 4단계</span>
+      </a>
+
+      <div class="card soon">
+        <span class="soon-badge">준비 중</span>
+        <div class="icon icon-csrf">CS</div>
+        <h3>CSRF</h3>
+        <p>SameSite 쿠키, Referer 검증 우회, PoC HTML 생성</p>
+        <span class="tag tag-coming">Coming Soon</span>
+      </div>
+
+      <div class="card soon">
+        <span class="soon-badge">준비 중</span>
+        <div class="icon icon-pt">PT</div>
+        <h3>Path Traversal</h3>
+        <p>인코딩 우회, 플랫폼별 경로 표현, 파일 포함 페이로드</p>
+        <span class="tag tag-coming">Coming Soon</span>
+      </div>
+
+      <div class="card soon">
+        <span class="soon-badge">준비 중</span>
+        <div class="icon icon-ssrf">SS</div>
+        <h3>SSRF</h3>
+        <p>내부 IP 열거, 프로토콜 우회, DNS rebinding 기법</p>
+        <span class="tag tag-coming">Coming Soon</span>
+      </div>
+
+      <div class="card soon">
+        <span class="soon-badge">준비 중</span>
+        <div class="icon icon-ci">CI</div>
+        <h3>Command Injection</h3>
+        <p>OS별 명령 구분자, 인코딩 우회, Blind CI 페이로드</p>
+        <span class="tag tag-coming">Coming Soon</span>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
